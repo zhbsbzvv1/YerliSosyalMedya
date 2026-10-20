@@ -3,342 +3,1365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yankı - Google ile Giriş</title>
+
+    <title>YerliSosyalMedya</title>
 
     <style>
+        :root {
+            --bg: #0f1015;
+            --panel: #191a23;
+            --panel2: #22232e;
+            --border: #343541;
+            --text: #f4f4f5;
+            --muted: #a1a1b0;
+            --accent: #8b5cf6;
+            --accent2: #6d28d9;
+            --danger: #ef4444;
+            --green: #22c55e;
+        }
+
         * {
             box-sizing: border-box;
         }
 
         body {
             margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #101018;
-            color: white;
+            background: var(--bg);
+            color: var(--text);
             font-family: Arial, sans-serif;
         }
 
-        .container {
-            width: 90%;
-            max-width: 400px;
-            padding: 32px;
-            background: #1c1c29;
-            border: 1px solid #333347;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 15px 50px #0005;
-        }
-
-        .logo {
-            font-size: 38px;
-            font-weight: bold;
-            color: #a78bfa;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            margin-bottom: 10px;
-        }
-
-        p {
-            color: #b8b8c9;
-            line-height: 1.5;
+        button,
+        input,
+        textarea {
+            font: inherit;
         }
 
         button {
-            width: 100%;
-            padding: 14px;
-            margin-top: 12px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: bold;
             cursor: pointer;
         }
 
-        #googleLogin {
-            background: white;
-            color: #222;
-        }
-
-        #logout {
-            background: #7c3aed;
-            color: white;
-        }
-
         button:disabled {
-            opacity: 0.6;
+            opacity: .6;
             cursor: wait;
-        }
-
-        #profile {
-            display: none;
-            margin-top: 25px;
-        }
-
-        #avatar {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid #a78bfa;
-        }
-
-        #userName {
-            overflow-wrap: anywhere;
-        }
-
-        #userEmail {
-            overflow-wrap: anywhere;
-        }
-
-        #status {
-            font-size: 14px;
-            margin-top: 18px;
-            overflow-wrap: anywhere;
         }
 
         .hidden {
             display: none !important;
+        }
+
+        .topbar {
+            height: 70px;
+            padding: 0 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            border-bottom: 1px solid var(--border);
+            background: var(--panel);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand {
+            color: #b69cff;
+            font-size: 23px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .button {
+            border: none;
+            border-radius: 9px;
+            padding: 11px 16px;
+            background: var(--accent);
+            color: white;
+            font-weight: bold;
+        }
+
+        .button:hover {
+            background: var(--accent2);
+        }
+
+        .button.secondary {
+            background: var(--panel2);
+            border: 1px solid var(--border);
+        }
+
+        .button.danger {
+            background: #7f1d1d;
+        }
+
+        .page {
+            width: min(1100px, 94%);
+            margin: 30px auto;
+        }
+
+        .login-card {
+            width: min(430px, 100%);
+            margin: 70px auto;
+            background: var(--panel);
+            padding: 32px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        .login-card h1 {
+            color: #b69cff;
+        }
+
+        .muted {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .google-button {
+            width: 100%;
+            margin-top: 18px;
+            padding: 14px;
+            border: 0;
+            border-radius: 10px;
+            background: white;
+            color: #222;
+            font-weight: bold;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 90px;
+        }
+
+        .user-summary {
+            text-align: center;
+        }
+
+        .avatar {
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--panel2);
+        }
+
+        .avatar.small {
+            width: 42px;
+            height: 42px;
+        }
+
+        .profile-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-line div {
+            min-width: 0;
+        }
+
+        .profile-line strong,
+        .profile-line small {
+            display: block;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-line small {
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #101117;
+            color: var(--text);
+            outline: none;
+        }
+
+        .input:focus,
+        textarea:focus {
+            border-color: var(--accent);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-box .input {
+            min-width: 0;
+        }
+
+        .section-title {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .feed-post {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 18px;
+        }
+
+        .post-content {
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        .post-image {
+            display: block;
+            width: 100%;
+            max-height: 550px;
+            object-fit: contain;
+            margin-top: 14px;
+            border-radius: 10px;
+            background: #101117;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .post-date {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        .list-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item .button {
+            margin-top: 8px;
+        }
+
+        .status {
+            margin-top: 15px;
+            color: #c4b5fd;
+            overflow-wrap: anywhere;
+            line-height: 1.5;
+        }
+
+        .status.error {
+            color: #fca5a5;
+        }
+
+        .empty {
+            padding: 20px 0;
+            text-align: center;
+            color: var(--muted);
+        }
+
+        .profile-details {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .profile-details h2 {
+            margin-bottom: 5px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 14px;
+            color: var(--muted);
+        }
+
+        .stats strong {
+            color: white;
+        }
+
+        .small-note {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 760px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .topbar {
+                padding: 0 4%;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .page {
+                margin-top: 18px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
+<header class="topbar">
+    <div class="brand">YerliSosyalMedya</div>
 
-        <div class="logo">YANKI</div>
+    <div class="top-actions">
+        <span id="headerUser" class="muted"></span>
 
-        <h2>Yankı'ya Hoş Geldin</h2>
+        <button id="headerLogin" class="button">
+            Giriş yap
+        </button>
 
-        <p>
-            Google hesabınla giriş yap ve sosyal dünyaya katıl.
+        <button id="headerLogout" class="button secondary hidden">
+            Çıkış
+        </button>
+    </div>
+</header>
+
+
+<!-- GİRİŞ EKRANI -->
+
+<section id="loginScreen" class="page">
+
+    <div class="login-card">
+
+        <h1>YerliSosyalMedya</h1>
+
+        <p class="muted">
+            Türkiye'nin sosyal medya platformuna hoş geldin.
+            Google hesabınla güvenli şekilde giriş yap.
         </p>
 
-        <button id="googleLogin">
+        <button id="googleLogin" class="google-button">
             Google ile giriş yap
         </button>
 
-        <div id="profile">
+        <p class="small-note">
+            Giriş yaparak Google hesabının kimlik bilgilerini
+            Firebase Authentication üzerinden doğrulamış olursun.
+        </p>
 
-            <img id="avatar" src="" alt="Profil fotoğrafı">
-
-            <h2 id="userName"></h2>
-
-            <p id="userEmail"></p>
-
-            <p id="userUid"></p>
-
-            <button id="logout">
-                Çıkış yap
-            </button>
-
-        </div>
-
-        <p id="status"></p>
+        <div id="loginStatus" class="status"></div>
 
     </div>
 
-    <script type="module">
-
-        import { initializeApp }
-            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-        import {
-            getAuth,
-            GoogleAuthProvider,
-            signInWithPopup,
-            signOut,
-            onAuthStateChanged
-        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+</section>
 
 
-        // FIREBASE PROJE BİLGİLERİ
+<!-- ANA UYGULAMA -->
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDxuNuS-DJ_d4Fyn-X9-9u_X4NawKes-dMY",
-            authDomain: "zhbsbzvv1-a7db1.firebaseapp.com",
-            projectId: "zhbsbzvv1-a7db1",
-            storageBucket: "zhbsbzvv1-a7db1.firebasestorage.app",
-            messagingSenderId: "436517529062",
-            appId: "1:436517529062:web:d7412c0eadcc843604a227",
-            measurementId: "G-Q3NNYV89ER"
+<main id="appScreen" class="page hidden">
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <section class="panel user-summary">
+
+                <img id="myAvatar" class="avatar" alt="Profil fotoğrafı">
+
+                <h2 id="myName">Kullanıcı</h2>
+
+                <p id="myEmail" class="muted"></p>
+
+                <div class="stats">
+                    <span>
+                        <strong id="myFollowers">0</strong>
+                        takipçi
+                    </span>
+
+                    <span>
+                        <strong id="myFollowing">0</strong>
+                        takip
+                    </span>
+                </div>
+
+            </section>
+
+            <section class="panel">
+
+                <h3 class="section-title">Kullanıcı ara</h3>
+
+                <div class="search-box">
+
+                    <input
+                        id="searchInput"
+                        class="input"
+                        type="text"
+                        placeholder="İsim veya kullanıcı adı"
+                    >
+
+                    <button id="searchButton" class="button">
+                        Ara
+                    </button>
+
+                </div>
+
+                <div id="searchResults"></div>
+
+            </section>
+
+            <section class="panel">
+
+                <h3 class="section-title">Hesap</h3>
+
+                <p class="small-note">
+                    Profil bilgilerin Firebase'de saklanır.
+                    Diğer kullanıcıların verilerine erişim
+                    Firestore güvenlik kurallarına bağlıdır.
+                </p>
+
+                <button id="sidebarLogout" class="button danger">
+                    Güvenli çıkış yap
+                </button>
+
+            </section>
+
+        </aside>
+
+
+        <section class="feed">
+
+            <section class="panel">
+
+                <h2 class="section-title">Gönderi oluştur</h2>
+
+                <textarea
+                    id="postText"
+                    maxlength="3000"
+                    placeholder="Aklından neler geçiyor?"
+                ></textarea>
+
+                <div style="margin-top:12px">
+                    <label for="postImage" class="muted">
+                        Fotoğraf ekle (isteğe bağlı)
+                    </label>
+
+                    <input
+                        id="postImage"
+                        class="input"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        style="margin-top:8px"
+                    >
+                </div>
+
+                <button
+                    id="publishButton"
+                    class="button"
+                    style="margin-top:14px"
+                >
+                    Gönderiyi paylaş
+                </button>
+
+                <div id="postStatus" class="status"></div>
+
+            </section>
+
+
+            <section class="panel">
+
+                <h2 class="section-title">Akış</h2>
+
+                <p class="muted">
+                    En yeni gönderiler burada görünür.
+                </p>
+
+                <div id="feedPosts">
+                    <div class="empty">Gönderiler yükleniyor...</div>
+                </div>
+
+            </section>
+
+
+            <section class="panel">
+
+                <h2 class="section-title">Profil bilgileri</h2>
+
+                <div class="profile-details">
+
+                    <img
+                        id="profileAvatar"
+                        class="avatar"
+                        alt="Profil fotoğrafı"
+                    >
+
+                    <div>
+                        <h2 id="profileName"></h2>
+                        <p id="profileEmail" class="muted"></p>
+                        <p id="profileUid" class="small-note"></p>
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<script type="module">
+
+    import {
+        initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import {
+        getAuth,
+        GoogleAuthProvider,
+        signInWithPopup,
+        signOut,
+        onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        collection,
+        addDoc,
+        getDocs,
+        query,
+        orderBy,
+        limit,
+        serverTimestamp,
+        runTransaction
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    import {
+        getStorage,
+        ref,
+        uploadBytes,
+        getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+
+    // ==========================================
+    // FIREBASE AYARLARI
+    // ==========================================
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDxuNuS-DJ_d4Fyn-X9-9u_X4NawKes-dMY",
+        authDomain: "zhbsbzvv1-a7db1.firebaseapp.com",
+        projectId: "zhbsbzvv1-a7db1",
+        storageBucket: "zhbsbzvv1-a7db1.firebasestorage.app",
+        messagingSenderId: "436517529062",
+        appId: "1:436517529062:web:d7412c0eadcc843604a227",
+        measurementId: "G-Q3NNYV89ER"
+    };
+
+
+    // ==========================================
+    // FIREBASE BAŞLAT
+    // ==========================================
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+    const db = getFirestore(app);
+
+    const storage = getStorage(app);
+
+    const provider = new GoogleAuthProvider();
+
+    provider.setCustomParameters({
+        prompt: "select_account"
+    });
+
+
+    // ==========================================
+    // HTML ELEMANLARI
+    // ==========================================
+
+    const loginScreen = document.getElementById("loginScreen");
+    const appScreen = document.getElementById("appScreen");
+
+    const googleLogin = document.getElementById("googleLogin");
+    const headerLogin = document.getElementById("headerLogin");
+
+    const headerLogout = document.getElementById("headerLogout");
+    const sidebarLogout = document.getElementById("sidebarLogout");
+
+    const loginStatus = document.getElementById("loginStatus");
+    const postStatus = document.getElementById("postStatus");
+
+    const headerUser = document.getElementById("headerUser");
+
+    const myAvatar = document.getElementById("myAvatar");
+    const myName = document.getElementById("myName");
+    const myEmail = document.getElementById("myEmail");
+
+    const myFollowers = document.getElementById("myFollowers");
+    const myFollowing = document.getElementById("myFollowing");
+
+    const profileAvatar = document.getElementById("profileAvatar");
+    const profileName = document.getElementById("profileName");
+    const profileEmail = document.getElementById("profileEmail");
+    const profileUid = document.getElementById("profileUid");
+
+    const searchInput = document.getElementById("searchInput");
+    const searchButton = document.getElementById("searchButton");
+    const searchResults = document.getElementById("searchResults");
+
+    const postText = document.getElementById("postText");
+    const postImage = document.getElementById("postImage");
+    const publishButton = document.getElementById("publishButton");
+    const feedPosts = document.getElementById("feedPosts");
+
+
+    let currentUser = null;
+
+
+    // ==========================================
+    // YARDIMCI FONKSİYONLAR
+    // ==========================================
+
+    function setStatus(element, message, isError = false) {
+        element.textContent = message;
+        element.classList.toggle("error", isError);
+    }
+
+
+    function escapeText(value) {
+        return String(value ?? "");
+    }
+
+
+    function formatDate(timestamp) {
+        if (!timestamp || typeof timestamp.toDate !== "function") {
+            return "Az önce";
+        }
+
+        return timestamp.toDate().toLocaleString("tr-TR");
+    }
+
+
+    function getErrorMessage(error) {
+
+        console.error(error);
+
+        const messages = {
+            "auth/api-key-not-valid":
+                "Firebase API anahtarı geçersiz. Proje ayarlarını kontrol et.",
+
+            "auth/unauthorized-domain":
+                "Bu alan adı Firebase Authentication ayarlarında yetkilendirilmemiş.",
+
+            "auth/operation-not-allowed":
+                "Firebase Console'dan Google girişini etkinleştir.",
+
+            "auth/popup-closed-by-user":
+                "Google giriş penceresi kapatıldı.",
+
+            "permission-denied":
+                "Firestore güvenlik kuralları bu işleme izin vermiyor.",
+
+            "storage/unauthorized":
+                "Firebase Storage güvenlik kuralları dosya yüklemeye izin vermiyor."
         };
 
-
-        // FIREBASE BAŞLAT
-
-        const app = initializeApp(firebaseConfig);
-
-        const auth = getAuth(app);
-
-        const provider = new GoogleAuthProvider();
-
-        provider.setCustomParameters({
-            prompt: "select_account"
-        });
+        return messages[error.code] ||
+            error.message ||
+            "Bilinmeyen bir hata oluştu.";
+    }
 
 
-        // HTML ELEMANLARI
+    // ==========================================
+    // GOOGLE İLE GİRİŞ
+    // ==========================================
 
-        const googleLoginButton =
-            document.getElementById("googleLogin");
+    async function loginWithGoogle() {
 
-        const logoutButton =
-            document.getElementById("logout");
+        googleLogin.disabled = true;
 
-        const profile =
-            document.getElementById("profile");
+        setStatus(loginStatus, "Google giriş ekranı açılıyor...");
 
-        const avatar =
-            document.getElementById("avatar");
+        try {
 
-        const userName =
-            document.getElementById("userName");
+            await signInWithPopup(auth, provider);
 
-        const userEmail =
-            document.getElementById("userEmail");
+            setStatus(loginStatus, "Giriş başarılı.");
 
-        const userUid =
-            document.getElementById("userUid");
+        } catch (error) {
 
-        const status =
-            document.getElementById("status");
+            setStatus(
+                loginStatus,
+                getErrorMessage(error),
+                true
+            );
+
+        } finally {
+
+            googleLogin.disabled = false;
+
+        }
+
+    }
 
 
-        // GOOGLE İLE GİRİŞ
+    googleLogin.addEventListener("click", loginWithGoogle);
+    headerLogin.addEventListener("click", loginWithGoogle);
 
-        googleLoginButton.addEventListener("click", async () => {
 
-            googleLoginButton.disabled = true;
+    // ==========================================
+    // ÇIKIŞ
+    // ==========================================
 
-            status.textContent = "Google giriş ekranı açılıyor...";
+    async function logoutUser() {
 
-            try {
+        try {
 
-                const result = await signInWithPopup(
-                    auth,
-                    provider
+            await signOut(auth);
+
+            setStatus(loginStatus, "Çıkış yaptın.");
+
+        } catch (error) {
+
+            alert(getErrorMessage(error));
+
+        }
+
+    }
+
+
+    headerLogout.addEventListener("click", logoutUser);
+    sidebarLogout.addEventListener("click", logoutUser);
+
+
+    // ==========================================
+    // PROFİLİ FIRESTORE'A KAYDET
+    // ==========================================
+
+    async function saveUserProfile(user) {
+
+        const userRef = doc(db, "users", user.uid);
+
+        const existing = await getDoc(userRef);
+
+        const profileData = {
+            uid: user.uid,
+            displayName: user.displayName || "Kullanıcı",
+            email: user.email || "",
+            photoURL: user.photoURL || "",
+            updatedAt: serverTimestamp()
+        };
+
+        if (!existing.exists()) {
+
+            profileData.createdAt = serverTimestamp();
+            profileData.followersCount = 0;
+            profileData.followingCount = 0;
+
+            await setDoc(userRef, profileData);
+
+        } else {
+
+            await setDoc(userRef, profileData, {
+                merge: true
+            });
+
+        }
+
+    }
+
+
+    // ==========================================
+    // PROFİLİ EKRANDA GÖSTER
+    // ==========================================
+
+    async function renderProfile(user) {
+
+        const name = user.displayName || "Kullanıcı";
+        const email = user.email || "";
+        const photo = user.photoURL ||
+            "https://www.gravatar.com/avatar/?d=mp";
+
+        myAvatar.src = photo;
+        myName.textContent = name;
+        myEmail.textContent = email;
+
+        profileAvatar.src = photo;
+        profileName.textContent = name;
+        profileEmail.textContent = email;
+        profileUid.textContent = "UID: " + user.uid;
+
+        headerUser.textContent = name;
+
+        try {
+
+            const snapshot = await getDoc(
+                doc(db, "users", user.uid)
+            );
+
+            if (snapshot.exists()) {
+
+                const data = snapshot.data();
+
+                myFollowers.textContent =
+                    data.followersCount || 0;
+
+                myFollowing.textContent =
+                    data.followingCount || 0;
+
+            }
+
+        } catch (error) {
+
+            console.error("Profil bilgisi alınamadı:", error);
+
+        }
+
+    }
+
+
+    // ==========================================
+    // GÖNDERİ PAYLAŞ
+    // ==========================================
+
+    publishButton.addEventListener("click", async () => {
+
+        if (!currentUser) {
+            setStatus(postStatus, "Önce giriş yapmalısın.", true);
+            return;
+        }
+
+        const text = postText.value.trim();
+        const file = postImage.files[0];
+
+        if (!text && !file) {
+            setStatus(postStatus, "Bir yazı veya fotoğraf ekle.", true);
+            return;
+        }
+
+        if (file && !file.type.startsWith("image/")) {
+            setStatus(postStatus, "Yalnızca resim dosyaları yüklenebilir.", true);
+            return;
+        }
+
+        if (file && file.size > 5 * 1024 * 1024) {
+            setStatus(postStatus, "Fotoğraf en fazla 5 MB olabilir.", true);
+            return;
+        }
+
+        publishButton.disabled = true;
+
+        setStatus(postStatus, "Gönderi hazırlanıyor...");
+
+        try {
+
+            let imageURL = "";
+
+            if (file) {
+
+                const safeName = file.name.replace(
+                    /[^a-zA-Z0-9._-]/g,
+                    "_"
                 );
 
-                const user = result.user;
+                const imageRef = ref(
+                    storage,
+                    `postImages/${currentUser.uid}/${Date.now()}_${safeName}`
+                );
 
-                console.log("Kullanıcı UID:", user.uid);
-                console.log("E-posta:", user.email);
-                console.log("Ad:", user.displayName);
-                console.log("Fotoğraf:", user.photoURL);
+                await uploadBytes(imageRef, file);
 
-                status.textContent = "Giriş başarılı!";
+                imageURL = await getDownloadURL(imageRef);
 
-            } catch (error) {
+            }
 
-                console.error("Google giriş hatası:", error);
+            await addDoc(collection(db, "posts"), {
 
-                if (error.code === "auth/popup-closed-by-user") {
+                uid: currentUser.uid,
 
-                    status.textContent =
-                        "Giriş penceresi kapatıldı.";
+                displayName:
+                    currentUser.displayName || "Kullanıcı",
 
-                } else if (
-                    error.code === "auth/unauthorized-domain"
-                ) {
+                photoURL:
+                    currentUser.photoURL || "",
 
-                    status.textContent =
-                        "Bu alan adı Firebase'de yetkilendirilmemiş.";
+                text: text,
 
-                } else if (
-                    error.code === "auth/operation-not-allowed"
-                ) {
+                imageURL: imageURL,
 
-                    status.textContent =
-                        "Firebase Console'dan Google girişini etkinleştir.";
+                likes: [],
 
-                } else {
+                createdAt: serverTimestamp()
 
-                    status.textContent =
-                        "Giriş başarısız: " + error.message;
+            });
+
+            postText.value = "";
+            postImage.value = "";
+
+            setStatus(postStatus, "Gönderin başarıyla paylaşıldı.");
+
+            await loadPosts();
+
+        } catch (error) {
+
+            setStatus(
+                postStatus,
+                getErrorMessage(error),
+                true
+            );
+
+        } finally {
+
+            publishButton.disabled = false;
+
+        }
+
+    });
+
+
+    // ==========================================
+    // GÖNDERİLERİ YÜKLE
+    // ==========================================
+
+    async function loadPosts() {
+
+        feedPosts.replaceChildren();
+
+        const loading = document.createElement("div");
+
+        loading.className = "empty";
+        loading.textContent = "Gönderiler yükleniyor...";
+
+        feedPosts.appendChild(loading);
+
+        try {
+
+            const postsQuery = query(
+                collection(db, "posts"),
+                orderBy("createdAt", "desc"),
+                limit(50)
+            );
+
+            const snapshot = await getDocs(postsQuery);
+
+            feedPosts.replaceChildren();
+
+            if (snapshot.empty) {
+
+                const empty = document.createElement("div");
+
+                empty.className = "empty";
+                empty.textContent = "Henüz gönderi yok. İlk gönderiyi sen paylaş!";
+
+                feedPosts.appendChild(empty);
+
+                return;
+
+            }
+
+            snapshot.forEach((postDocument) => {
+
+                const post = postDocument.data();
+
+                const postId = postDocument.id;
+
+                const card = document.createElement("article");
+
+                card.className = "feed-post";
+
+                const header = document.createElement("div");
+
+                header.className = "profile-line";
+
+                const avatar = document.createElement("img");
+
+                avatar.className = "avatar small";
+                avatar.alt = "Profil fotoğrafı";
+                avatar.src = post.photoURL ||
+                    "https://www.gravatar.com/avatar/?d=mp";
+
+                const details = document.createElement("div");
+
+                const name = document.createElement("strong");
+
+                name.textContent =
+                    post.displayName || "Kullanıcı";
+
+                const date = document.createElement("small");
+
+                date.textContent = formatDate(post.createdAt);
+
+                details.append(name, date);
+
+                header.append(avatar, details);
+
+                const content = document.createElement("p");
+
+                content.className = "post-content";
+                content.textContent = post.text || "";
+
+                card.append(header);
+
+                if (post.text) {
+                    card.append(content);
+                }
+
+                if (post.imageURL) {
+
+                    const image = document.createElement("img");
+
+                    image.className = "post-image";
+                    image.src = post.imageURL;
+                    image.alt = "Gönderi fotoğrafı";
+                    image.loading = "lazy";
+
+                    card.append(image);
 
                 }
 
-            } finally {
+                const actions = document.createElement("div");
 
-                googleLoginButton.disabled = false;
+                actions.className = "post-actions";
 
-            }
+                const likeButton = document.createElement("button");
 
-        });
+                likeButton.className = "button secondary";
+
+                const likes = Array.isArray(post.likes)
+                    ? post.likes
+                    : [];
+
+                likeButton.textContent =
+                    (likes.includes(currentUser.uid) ? "♥" : "♡") +
+                    " Beğen (" + likes.length + ")";
+
+                likeButton.addEventListener("click", async () => {
+
+                    likeButton.disabled = true;
+
+                    try {
+
+                        const postRef = doc(db, "posts", postId);
+
+                        await runTransaction(db, async (transaction) => {
+
+                            const fresh = await transaction.get(postRef);
+
+                            if (!fresh.exists()) {
+                                throw new Error("Gönderi bulunamadı.");
+                            }
+
+                            const freshData = fresh.data();
+
+                            const currentLikes =
+                                Array.isArray(freshData.likes)
+                                    ? freshData.likes
+                                    : [];
+
+                            let nextLikes;
+
+                            if (currentLikes.includes(currentUser.uid)) {
+
+                                nextLikes = currentLikes.filter(
+                                    uid => uid !== currentUser.uid
+                                );
+
+                            } else {
+
+                                nextLikes = [
+                                    ...currentLikes,
+                                    currentUser.uid
+                                ];
+
+                            }
+
+                            transaction.update(postRef, {
+                                likes: nextLikes
+                            });
+
+                        });
+
+                        await loadPosts();
+
+                    } catch (error) {
+
+                        alert(getErrorMessage(error));
+
+                    } finally {
+
+                        likeButton.disabled = false;
+
+                    }
+
+                });
+
+                actions.append(likeButton);
+
+                card.append(actions);
+
+                feedPosts.append(card);
+
+            });
+
+        } catch (error) {
+
+            feedPosts.replaceChildren();
+
+            const message = document.createElement("p");
+
+            message.className = "status error";
+            message.textContent =
+                "Gönderiler yüklenemedi: " + getErrorMessage(error);
+
+            feedPosts.append(message);
+
+        }
+
+    }
 
 
-        // OTURUMU KAPAT
+    // ==========================================
+    // KULLANICI ARA
+    // ==========================================
 
-        logoutButton.addEventListener("click", async () => {
+    async function searchUsers() {
 
-            try {
+        if (!currentUser) {
+            return;
+        }
 
-                await signOut(auth);
+        const term = searchInput.value.trim().toLocaleLowerCase("tr-TR");
 
-                status.textContent = "Oturum kapatıldı.";
+        searchResults.replaceChildren();
 
-            } catch (error) {
+        if (!term) {
 
-                console.error("Çıkış hatası:", error);
+            const message = document.createElement("p");
 
-                status.textContent =
-                    "Çıkış yapılamadı: " + error.message;
+            message.className = "small-note";
+            message.textContent = "Aramak için bir isim yaz.";
 
-            }
+            searchResults.append(message);
 
-        });
+            return;
 
+        }
 
-        // KULLANICI GİRİŞ DURUMUNU TAKİP ET
+        const loading = document.createElement("p");
 
-        onAuthStateChanged(auth, (user) => {
+        loading.className = "small-note";
+        loading.textContent = "Kullanıcılar aranıyor...";
 
-            if (user) {
+        searchResults.append(loading);
 
-                googleLoginButton.classList.add("hidden");
+        try {
 
-                profile.style.display = "block";
+            const snapshot = await getDocs(
+                query(
+                    collection(db, "users"),
+                    limit(100)
+                )
+            );
 
-                avatar.src =
-                    user.photoURL ||
+            searchResults.replaceChildren();
+
+            let found = 0;
+
+            snapshot.forEach((userDocument) => {
+
+                const user = userDocument.data();
+
+                if (user.uid === currentUser.uid) {
+                    return;
+                }
+
+                const name =
+                    String(user.displayName || "Kullanıcı");
+
+                const email =
+                    String(user.email || "");
+
+                const matches =
+                    name.toLocaleLowerCase("tr-TR").includes(term) ||
+                    email.toLocaleLowerCase("tr-TR").includes(term);
+
+                if (!matches) {
+                    return;
+                }
+
+                found++;
+
+                const row = document.createElement("div");
+
+                row.className = "list-item";
+
+                const line = document.createElement("div");
+
+                line.className = "profile-line";
+
+                const image = document.createElement("img");
+
+                image.className = "avatar small";
+                image.alt = "";
+                image.src = user.photoURL ||
                     "https://www.gravatar.com/avatar/?d=mp";
 
-                userName.textContent =
-                    user.displayName || "İsimsiz kullanıcı";
+                const text = document.createElement("div");
 
-                userEmail.textContent =
-                    user.email || "E-posta bulunamadı";
+                const display = document.createElement("strong");
 
-                userUid.textContent =
-                    "Kullanıcı ID: " + user.uid;
+                display.textContent = name;
 
-                status.textContent = "Hesabın açık.";
+                const emailText = document.createElement("small");
 
-            } else {
+                emailText.textContent = email;
 
-                googleLoginButton.classList.remove("hidden");
+                text.append(display, emailText);
 
-                profile.style.display = "none";
+                line.append(image, text);
 
-                avatar.src = "";
+                row.append(line);
 
-                userName.textContent = "";
+                searchResults.append(row);
 
-                userEmail.textContent = "";
+            });
 
-                userUid.textContent = "";
+            if (found === 0) {
+
+                const message = document.createElement("p");
+
+                message.className = "small-note";
+                message.textContent = "Kullanıcı bulunamadı.";
+
+                searchResults.append(message);
 
             }
 
-        });
+        } catch (error) {
 
-    </script>
+            searchResults.replaceChildren();
+
+            const message = document.createElement("p");
+
+            message.className = "status error";
+            message.textContent = getErrorMessage(error);
+
+            searchResults.append(message);
+
+        }
+
+    }
+
+
+    searchButton.addEventListener("click", searchUsers);
+
+    searchInput.addEventListener("keydown", (event) => {
+
+        if (event.key === "Enter") {
+            searchUsers();
+        }
+
+    });
+
+
+    // ==========================================
+    // OTURUM DURUMU
+    // ==========================================
+
+    onAuthStateChanged(auth, async (user) => {
+
+        currentUser = user;
+
+        if (!user) {
+
+            loginScreen.classList.remove("hidden");
+            appScreen.classList.add("hidden");
+
+            headerLogin.classList.remove("hidden");
+            headerLogout.classList.add("hidden");
+
+            headerUser.textContent = "";
+
+            return;
+
+        }
+
+        loginScreen.classList.add("hidden");
+        appScreen.classList.remove("hidden");
+
+        headerLogin.classList.add("hidden");
+        headerLogout.classList.remove("hidden");
+
+        headerUser.textContent =
+            user.displayName || "Kullanıcı";
+
+        try {
+
+            await saveUserProfile(user);
+
+            await renderProfile(user);
+
+            await loadPosts();
+
+        } catch (error) {
+
+            console.error("Profil hazırlanamadı:", error);
+
+            alert(
+                "Profil yüklenemedi. Firebase Firestore ve güvenlik kurallarını kontrol et.\n\n" +
+                getErrorMessage(error)
+            );
+
+        }
+
+    });
+
+</script>
 
 </body>
 </html>
