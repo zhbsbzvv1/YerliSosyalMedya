@@ -1,882 +1,823 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="dark h-full">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flow - Social & DM Platform</title>
-
-  <!-- Google Fonts & FontAwesome -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <style>
-    :root {
-      --bg-dark: #090a0f;
-      --panel-bg: rgba(18, 20, 29, 0.85);
-      --panel-border: rgba(255, 255, 255, 0.08);
-      --primary: #00f2fe;
-      --secondary: #4facfe;
-      --accent-purple: #7f00ff;
-      --text-main: #f0f2f8;
-      --text-muted: #8c93a8;
-      --danger: #ff4b5c;
-      --success: #00e676;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(127, 0, 255, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.12) 0%, transparent 40%);
-    }
-
-    .glass-card {
-      background: var(--panel-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--panel-border);
-      border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    }
-
-    .auth-container {
-      width: 100%;
-      max-width: 420px;
-      padding: 40px 30px;
-      margin: 20px;
-      text-align: center;
-      position: relative;
-      z-index: 10;
-    }
-
-    .brand-logo {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-
-    .brand-logo i {
-      font-size: 32px;
-      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .brand-logo h1 {
-      font-weight: 800;
-      font-size: 36px;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #ffffff, var(--primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .auth-subtitle {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 32px;
-    }
-
-    .btn-google {
-      width: 100%;
-      padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
-      font-weight: 700;
-      font-size: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .btn-google:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.2);
-    }
-
-    #app-screen {
-      display: none;
-      width: 100vw;
-      height: 100vh;
-      max-width: 1400px;
-      max-height: 900px;
-      margin: auto;
-      grid-template-columns: 280px 360px 1fr;
-      gap: 16px;
-      padding: 16px;
-    }
-
-    .sidebar {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 24px 16px;
-    }
-
-    .nav-menu {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 24px;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      color: var(--text-muted);
-      text-decoration: none;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .nav-item:hover, .nav-item.active {
-      color: var(--text-main);
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .nav-item.active i {
-      color: var(--primary);
-    }
-
-    .user-profile-badge {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .user-profile-badge:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: #fff;
-      flex-shrink: 0;
-    }
-
-    .chat-list-panel {
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      overflow-y: auto;
-    }
-
-    .search-box {
-      position: relative;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 12px 14px 12px 40px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      color: var(--text-main);
-      font-size: 13px;
-      outline: none;
-    }
-
-    .search-box i {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
-
-    .search-results {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .user-search-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-
-    .user-search-item:hover {
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .chat-items {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .chat-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .chat-item:hover, .chat-item.active {
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .chat-window {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .chat-header {
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--panel-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .chat-messages {
-      flex: 1;
-      padding: 24px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .message {
-      max-width: 65%;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .message.sent { align-self: flex-end; }
-    .message.received { align-self: flex-start; }
-
-    .message-bubble {
-      padding: 12px 16px;
-      border-radius: 18px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .message.sent .message-bubble {
-      background: linear-gradient(135deg, var(--secondary), var(--accent-purple));
-      color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-
-    .message.received .message-bubble {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-bottom-left-radius: 4px;
-    }
-
-    .chat-input-area {
-      padding: 16px 24px;
-      border-top: 1px solid var(--panel-border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .chat-input-area input {
-      flex: 1;
-      padding: 12px 18px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      color: var(--text-main);
-      font-size: 14px;
-      outline: none;
-    }
-
-    .btn-send {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      border: none;
-      color: #000;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-    }
-
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(8px);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .input-group {
-      position: relative;
-      text-align: left;
-    }
-
-    .input-group i {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 15px;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 14px 16px 14px 48px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      color: var(--text-main);
-      font-size: 14px;
-      outline: none;
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #000;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .btn-logout {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--danger);
-      background: rgba(255, 75, 92, 0.1);
-      color: var(--danger);
-      font-weight: 700;
-      border-radius: 12px;
-      cursor: pointer;
-      margin-top: 14px;
-    }
-  </style>
-</head>
-<body>
-
-  <!-- LOGIN SCREEN -->
-  <div id="auth-screen" class="auth-container glass-card">
-    <div class="brand-logo">
-      <i class="fa-solid fa-wind"></i>
-      <h1>Flow</h1>
-    </div>
-    <p class="auth-subtitle">Sohbet ve Mesajlaşma Platformu</p>
-
-    <button class="btn-google" onclick="handleGoogleSignInPopup()">
-      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-      Google ile Giriş Yap
-    </button>
-  </div>
-
-  <!-- INITIAL NICKNAME MODAL -->
-  <div id="google-nickname-modal" class="modal-overlay">
-    <div class="auth-container glass-card">
-      <h2 style="font-size:20px; font-weight:800; margin-bottom:6px;">Kullanıcı Adı Seçin</h2>
-      <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Lütfen profiliniz için benzersiz bir nickname girin.</p>
-      
-      <form onsubmit="handleGoogleNicknameSet(event)" class="auth-form">
-        <div class="input-group">
-          <i class="fa-solid fa-at"></i>
-          <input type="text" id="google-nickname-input" placeholder="Nickname" required>
-        </div>
-        <button type="submit" class="btn-submit">Devam Et</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- SETTINGS MODAL -->
-  <div id="settings-modal" class="modal-overlay">
-    <div class="auth-container glass-card" style="max-width: 480px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="font-size:20px; font-weight:800;">Hesap Ayarları</h2>
-        <i class="fa-solid fa-xmark" style="cursor:pointer; font-size:20px; color:var(--text-muted);" onclick="closeSettingsModal()"></i>
-      </div>
-
-      <div class="auth-form">
-        <div class="input-group">
-          <i class="fa-regular fa-user"></i>
-          <input type="text" id="set-fullname" placeholder="Ad Soyad">
-        </div>
-        <div class="input-group">
-          <i class="fa-solid fa-at"></i>
-          <input type="text" id="set-nickname" placeholder="Nickname">
-        </div>
-        <button id="btn-save-profile" type="button" class="btn-submit">Profil Güncelle</button>
-      </div>
-
-      <button class="btn-logout" onclick="handleSignOut()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
-    </div>
-  </div>
-
-  <!-- MAIN APP SCREEN -->
-  <div id="app-screen">
-    <!-- LEFT SIDEBAR -->
-    <div class="sidebar glass-card">
-      <div>
-        <div class="brand-logo">
-          <i class="fa-solid fa-wind"></i>
-          <h1>Flow</h1>
-        </div>
-        <div class="nav-menu">
-          <a class="nav-item active"><i class="fa-regular fa-paper-plane"></i> <span>Mesajlar</span></a>
-          <a class="nav-item" onclick="openSettingsModal()"><i class="fa-solid fa-gear"></i> <span>Hesap Ayarları</span></a>
-        </div>
-      </div>
-
-      <div class="user-profile-badge" onclick="openSettingsModal()">
-        <div class="avatar" id="user-avatar">?</div>
-        <div class="user-info" style="flex:1; overflow:hidden;">
-          <div id="user-display-name" style="font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Kullanıcı</div>
-          <div id="user-nickname-text" style="font-size:11px; color:var(--primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">@nickname</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- DM LIST & SEARCH PANEL -->
-    <div class="chat-list-panel glass-card">
-      <div style="font-weight:700; font-size:18px;">Direkt Mesajlar</div>
-      
-      <!-- ARAMA ÇUBUĞU -->
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="user-search-input" placeholder="Kullanıcı ara (@nickname)..." oninput="searchUsers(this.value)">
-      </div>
-
-      <!-- ARAMA SONUÇLARI -->
-      <div id="search-results" class="search-results" style="display:none;"></div>
-
-      <!-- RECENT CHATS -->
-      <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-top:10px;">SOHBETLERİNİZ</div>
-      <div class="chat-items" id="dm-chats-list"></div>
-    </div>
-
-    <!-- MAIN CHAT WINDOW -->
-    <div class="chat-window glass-card">
-      <div class="chat-header" id="active-chat-header">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div class="avatar" id="active-chat-avatar">?</div>
-          <div>
-            <div style="font-weight:700; font-size:15px;" id="active-chat-title">Sohbet Seçin</div>
-            <div style="font-size:11px; color:var(--text-muted);" id="active-chat-sub">Özel Sohbet</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="chat-messages" id="chat-messages">
-        <div style="margin:auto; color:var(--text-muted); font-size:13px;">Mesajlaşmak için soldan bir sohbet seçin veya kullanıcı arayın.</div>
-      </div>
-
-      <form class="chat-input-area" onsubmit="sendMessage(event)">
-        <input type="text" id="msg-input" placeholder="Mesajınızı yazın..." autocomplete="off">
-        <button type="submit" class="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
-      </form>
-    </div>
-  </div>
-
-  <!-- FIREBASE SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { 
-      getAuth, 
-      signInWithPopup, 
-      GoogleAuthProvider, 
-      onAuthStateChanged, 
-      updateProfile,
-      signOut 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { 
-      getFirestore,
-      doc, 
-      getDoc, 
-      setDoc, 
-      getDocs,
-      collection, 
-      addDoc, 
-      query, 
-      orderBy, 
-      onSnapshot, 
-      serverTimestamp 
-    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCahsCXVjAJ-Qx-tHcxDX9xiCdqd4GOv-4",
-      authDomain: "zhbsbzvv-6f910.firebaseapp.com",
-      projectId: "zhbsbzvv-6f910",
-      storageBucket: "zhbsbzvv-6f910.firebasestorage.app",
-      messagingSenderId: "1050863909513",
-      appId: "1:1050863909513:web:5c149cedd80a77758c6458",
-      measurementId: "G-7ZHJ34D9X4"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-    const googleProvider = new GoogleAuthProvider();
-
-    let currentUserData = null;
-    let pendingGoogleUser = null;
-    let activeChatUser = null;
-    let currentUnsubscribe = null;
-
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          const userDocRef = doc(db, "users", user.uid);
-          const userDocSnap = await getDoc(userDocRef);
-
-          if (userDocSnap.exists()) {
-            currentUserData = userDocSnap.data();
-            loadAppInterface();
-          } else {
-            pendingGoogleUser = user;
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('google-nickname-modal').style.display = 'flex';
-          }
-        } catch (error) {
-          currentUserData = {
-            fullName: user.displayName || "Kullanıcı",
-            nickname: user.email ? user.email.split('@')[0] : "user",
-            uid: user.uid
-          };
-          loadAppInterface();
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow - Social & DM Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81'
+                        },
+                        dark: {
+                            bg: '#090d16',
+                            card: 'rgba(17, 24, 39, 0.7)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
         }
-      } else {
-        currentUserData = null;
-        document.getElementById('auth-screen').style.display = 'block';
-        document.getElementById('app-screen').style.display = 'none';
-        document.getElementById('google-nickname-modal').style.display = 'none';
-      }
-    });
+    </script>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #090d16;
+            color: #f3f4f6;
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="h-full overflow-hidden flex flex-col antialiased selection:bg-brand-500 selection:text-white">
 
-    window.handleGoogleSignInPopup = async () => {
-      try {
-        await signInWithPopup(auth, googleProvider);
-      } catch (err) {
-        alert("Giriş Hatası: " + err.message);
-      }
-    };
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm"></div>
 
-    window.handleGoogleNicknameSet = async (e) => {
-      e.preventDefault();
-      const nickname = document.getElementById('google-nickname-input').value.trim().toLowerCase();
-      if (!pendingGoogleUser) return;
+    <!-- App Header -->
+    <header class="h-16 border-b border-white/10 glass-panel px-4 flex items-center justify-between shrink-0 z-20">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center text-white font-extrabold text-xl shadow-lg shadow-brand-500/20">
+                <i class="fa-solid font-black fa-bolt"></i>
+            </div>
+            <div>
+                <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">FLOW</h1>
+                <p class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Social & DM Platform</p>
+            </div>
+        </div>
 
-      const uid = pendingGoogleUser.uid;
-      const fullName = pendingGoogleUser.displayName || "Flow Kullanıcısı";
-      const email = pendingGoogleUser.email || "";
+        <!-- Auth / User Info in Header -->
+        <div id="header-user-section" class="flex items-center gap-3">
+            <button id="btn-login" onclick="handleGoogleSignIn()" class="hidden px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-600 text-white font-semibold text-sm transition-all shadow-md shadow-brand-500/20 flex items-center gap-2">
+                <i class="fa-brands fa-google"></i> Google ile Giriş Yap
+            </button>
+            <div id="header-profile" class="hidden flex items-center gap-3 bg-white/5 p-1.5 pr-3 rounded-2xl border border-white/10">
+                <img id="header-avatar" src="" alt="Avatar" class="w-8 h-8 rounded-xl object-cover ring-2 ring-brand-500/30">
+                <div class="text-left hidden sm:block">
+                    <p id="header-display-name" class="text-xs font-bold text-slate-200 leading-tight">...</p>
+                    <p id="header-nickname" class="text-[10px] text-indigo-400 font-medium">@...</p>
+                </div>
+                <button onclick="openSettingsModal()" class="ml-1 w-7 h-7 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 flex items-center justify-center transition" title="Ayarlar">
+                    <i class="fa-solid fa-gear text-xs"></i>
+                </button>
+                <button onclick="handleSignOut()" class="w-7 h-7 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 flex items-center justify-center transition" title="Çıkış Yap">
+                    <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
-      currentUserData = { uid, fullName, nickname, email };
+    <!-- Unauthenticated State View -->
+    <div id="auth-overlay" class="flex-1 flex flex-col items-center justify-center p-6 relative overflow-hidden z-10">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="glass-panel p-8 md:p-12 rounded-3xl max-w-md w-full text-center relative z-10 border border-white/10 shadow-2xl">
+            <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-400 mx-auto flex items-center justify-center text-white text-3xl font-black mb-6 shadow-xl shadow-brand-500/30">
+                <i class="fa-solid fa-comments"></i>
+            </div>
+            <h2 class="text-2xl font-extrabold text-white mb-2">Flow'a Hoş Geldiniz</h2>
+            <p class="text-slate-400 text-sm mb-8 leading-relaxed">Gerçek zamanlı mesajlaşma ve eşsiz kullanıcı adları ile arkadaşlarınızla anında bağlantı kurun.</p>
+            
+            <button onclick="handleGoogleSignIn()" class="w-full py-3.5 px-6 rounded-xl bg-white text-slate-900 font-bold text-sm hover:bg-slate-100 transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-white/10">
+                <i class="fa-brands fa-google text-red-500 text-lg"></i> Google ile Oturum Aç
+            </button>
+            <p class="text-[11px] text-slate-500 mt-4">Devam ederek hizmet şartlarını kabul etmiş olursunuz.</p>
+        </div>
+    </div>
 
-      try {
-        await setDoc(doc(db, "users", uid), currentUserData, { merge: true });
-        document.getElementById('google-nickname-modal').style.display = 'none';
-        loadAppInterface();
-      } catch (err) {
-        console.error("Kullanıcı oluşturma hatası:", err);
-        alert("Profil oluşturulamadı: " + (err.code || err.message) +
-          "\nFirebase Console > Firestore Database > Rules izinlerini kontrol edin.");
-      }
-    };
+    <!-- Main Content Area (Protected) -->
+    <main id="app-main" class="hidden flex-1 flex overflow-hidden relative">
+        
+        <!-- Left Sidebar: Conversations & Search -->
+        <aside class="w-full md:w-80 lg:w-96 border-r border-white/10 glass-panel flex flex-col shrink-0">
+            <!-- Search Bar -->
+            <div class="p-4 border-b border-white/10">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input id="user-search-input" type="text" placeholder="Nick veya isim ile kullanıcı ara..." 
+                        oninput="handleSearch(this.value)"
+                        class="w-full pl-9 pr-8 py-2.5 bg-black/30 border border-white/10 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition">
+                    <button id="search-clear-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
 
-    // Profil güncelleme: Firebase Auth ve Firestore hatalarını açıkça gösterir.
-    document.getElementById('btn-save-profile').addEventListener('click', async () => {
-      const button = document.getElementById('btn-save-profile');
-      const newFullName = document.getElementById('set-fullname').value.trim();
-      const newNickname = document.getElementById('set-nickname').value.trim()
-        .toLowerCase().replace(/^@/, '');
+            <!-- List Tabs Header -->
+            <div id="list-tab-title" class="px-4 py-2 bg-white/[0.02] border-b border-white/5 text-[11px] font-bold tracking-wider text-slate-400 uppercase flex justify-between items-center">
+                <span id="tab-label">Son Mesajlar</span>
+                <span id="results-count" class="text-[10px] text-brand-400 lowercase font-medium"></span>
+            </div>
 
-      if (!auth.currentUser || !currentUserData) {
-        alert("Oturum bilgisi henüz yüklenmedi. Sayfayı yenileyip tekrar deneyin.");
-        return;
-      }
+            <!-- Conversations or Search Results Container -->
+            <div id="chats-and-search-container" class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1">
+                <div class="p-8 text-center text-slate-500 text-xs">
+                    <i class="fa-solid fa-spinner fa-spin text-lg mb-2"></i>
+                    <p>Sohbetler yükleniyor...</p>
+                </div>
+            </div>
+        </aside>
 
-      if (!newFullName || !newNickname) {
-        alert("Lütfen Ad Soyad ve Nickname alanlarını boş bırakmayın!");
-        return;
-      }
+        <!-- Right Main: Active Chat Window -->
+        <section class="hidden md:flex flex-1 flex-col bg-dark-bg/60 relative">
+            
+            <!-- Chat Header -->
+            <div id="chat-header" class="h-16 border-b border-white/10 glass-panel px-6 flex items-center justify-between shrink-0">
+                <div id="chat-header-user-info" class="hidden flex items-center gap-3">
+                    <div class="relative">
+                        <img id="active-chat-avatar" src="" alt="User" class="w-10 h-10 rounded-xl object-cover ring-2 ring-brand-500/20">
+                        <span class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-dark-bg rounded-full"></span>
+                    </div>
+                    <div>
+                        <h2 id="active-chat-name" class="font-bold text-sm text-white">...</h2>
+                        <p id="active-chat-nick" class="text-xs text-brand-400">@...</p>
+                    </div>
+                </div>
+                <div id="chat-header-empty" class="text-xs text-slate-500 italic">
+                    Bir sohbet seçilmedi
+                </div>
+            </div>
 
-      if (!/^[a-z0-9_.]{3,20}$/.test(newNickname)) {
-        alert("Nickname 3-20 karakter olmalı; yalnızca küçük harf, rakam, nokta ve alt çizgi kullanın.");
-        return;
-      }
+            <!-- Messages Stream Area -->
+            <div id="messages-container" class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-4">
+                <div class="h-full flex flex-col items-center justify-center text-slate-500 gap-3">
+                    <div class="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-2xl text-slate-600">
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </div>
+                    <p class="text-xs font-medium">Mesajlaşmaya başlamak için soldaki listeden bir kullanıcı seçin veya arayın.</p>
+                </div>
+            </div>
 
-      button.disabled = true;
-      button.textContent = "Kaydediliyor...";
+            <!-- Message Input Bar -->
+            <div id="chat-input-container" class="hidden p-4 border-t border-white/10 glass-panel">
+                <form onsubmit="handleSendMessage(event)" class="flex items-center gap-2">
+                    <input id="message-input" type="text" placeholder="Mesajınızı yazın..." 
+                        class="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition">
+                    <button type="submit" class="px-5 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-600 text-white font-semibold text-xs shadow-md shadow-brand-500/20 transition flex items-center gap-2 shrink-0">
+                        <span>Gönder</span>
+                        <i class="fa-solid fa-paper-plane text-xs"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
 
-      try {
-        const uid = auth.currentUser.uid;
-        const userDocRef = doc(db, "users", uid);
-        const updatedObj = {
-          uid,
-          fullName: newFullName,
-          nickname: newNickname,
-          email: auth.currentUser.email || currentUserData.email || ""
+    </main>
+
+    <!-- First Time Onboarding Nickname Setup Modal -->
+    <div id="onboarding-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-3xl max-w-md w-full border border-white/10 shadow-2xl relative">
+            <div class="w-14 h-14 rounded-2xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center text-2xl mb-4">
+                <i class="fa-solid fa-at"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-1">Kullanıcı Adı Belirleyin</h3>
+            <p class="text-xs text-slate-400 mb-6">Flow üzerinde benzersiz kullanıcı adınızla tanınacaksınız. Bu adı daha sonra değiştirebilirsiniz.</p>
+
+            <form onsubmit="handleCompleteOnboarding(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Kullanıcı Adı (Nick)</label>
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">@</span>
+                        <input id="onboarding-nickname-input" type="text" required placeholder="ornek_kullanici" 
+                            class="w-full pl-8 pr-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-500">
+                    </div>
+                    <p id="onboarding-error" class="text-[11px] text-red-400 mt-1.5 hidden"></p>
+                </div>
+                <button type="submit" id="onboarding-submit-btn" class="w-full py-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 text-white font-bold text-xs hover:from-brand-500 hover:to-brand-600 transition shadow-lg shadow-brand-500/20">
+                    Tamamla ve Başla
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Profile & Settings Modal -->
+    <div id="settings-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-3xl max-w-md w-full border border-white/10 shadow-2xl relative">
+            <button onclick="closeSettingsModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-sm">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center text-lg font-bold">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">Profil Ayarları</h3>
+                    <p class="text-xs text-slate-400">Giriş bilgilerinizi ve rumuzunuzu güncelleyin</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleSaveSettings(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Ad Soyad (İsim)</label>
+                    <input id="settings-fullname-input" type="text" required placeholder="Adınız" 
+                        class="w-full px-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Kullanıcı Adı (Nick)</label>
+                    <div class="relative">
+                        <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">@</span>
+                        <input id="settings-nickname-input" type="text" required placeholder="nickname" 
+                            class="w-full pl-8 pr-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:border-brand-500">
+                    </div>
+                </div>
+
+                <div id="settings-error" class="hidden p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span id="settings-error-text"></span>
+                </div>
+
+                <div class="pt-2 flex items-center gap-3">
+                    <button type="button" onclick="closeSettingsModal()" class="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-semibold transition">
+                        İptal
+                    </button>
+                    <button type="submit" id="settings-save-btn" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 text-white text-xs font-bold transition shadow-md shadow-brand-500/20">
+                        Kaydet
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Script Section -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithPopup, 
+            GoogleAuthProvider, 
+            signOut, 
+            onAuthStateChanged,
+            signInWithCustomToken,
+            signInAnonymously
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            setDoc, 
+            updateDoc, 
+            collection, 
+            getDocs,
+            onSnapshot, 
+            addDoc, 
+            serverTimestamp,
+            runTransaction,
+            writeBatch
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Environment variables
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'flow-app-default';
+        const firebaseConfig = JSON.parse(__firebase_config);
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Application State
+        let currentUser = null; // Auth object
+        let currentUserProfile = null; // Firestore profile document
+        let activeChatUser = null; // Profile of user being chatted with
+        let messagesUnsubscribe = null;
+        let recentChatsUnsubscribe = null;
+
+        // UI Utility Functions
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgClass = type === 'error' ? 'bg-red-500/90 border-red-400' : type === 'success' ? 'bg-emerald-600/90 border-emerald-400' : 'bg-brand-600/90 border-brand-400';
+            toast.className = `${bgClass} text-white px-4 py-3 rounded-xl border shadow-lg text-xs font-medium backdrop-blur-md flex items-center justify-between gap-3 transition-all transform translate-y-2 opacity-0`;
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="text-white/80 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+            setTimeout(() => {
+                toast.remove();
+            }, 4000);
+        }
+
+        function sanitizeNick(nick) {
+            return (nick || '').trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+        }
+
+        // Firestore Path Helpers (Mandatory Rules Enforced)
+        function getUsersCollectionRef() {
+            return collection(db, 'artifacts', appId, 'public', 'data', 'users');
+        }
+        function getUserDocRef(uid) {
+            return doc(db, 'artifacts', appId, 'public', 'data', 'users', uid);
+        }
+        function getNicknamesCollectionRef() {
+            return collection(db, 'artifacts', appId, 'public', 'data', 'nicknames');
+        }
+        function getNicknameDocRef(cleanNick) {
+            return doc(db, 'artifacts', appId, 'public', 'data', 'nicknames', cleanNick);
+        }
+        function getRecentChatsRef(uid) {
+            return collection(db, 'artifacts', appId, 'public', 'data', `recent_chats_${uid}`);
+        }
+        function getChatRoomMessagesRef(roomId) {
+            return collection(db, 'artifacts', appId, 'public', 'data', `chat_room_${roomId}`);
+        }
+
+        function getRoomId(uid1, uid2) {
+            return [uid1, uid2].sort().join('_');
+        }
+
+        // --- AUTHENTICATION HANDLERS ---
+
+        window.handleGoogleSignIn = async function() {
+            try {
+                await signInWithPopup(auth, googleProvider);
+            } catch (error) {
+                console.error("Login Error:", error);
+                showToast("Google ile giriş yapılamadı: " + error.message, 'error');
+            }
         };
 
-        // Önce Firestore'a kaydet; başarısızsa arayüzde başarı gösterme.
-        await setDoc(userDocRef, updatedObj, { merge: true });
-        await updateProfile(auth.currentUser, { displayName: newFullName });
-
-        currentUserData = { ...currentUserData, ...updatedObj };
-        loadAppInterface();
-        closeSettingsModal();
-        alert("Profil başarıyla güncellendi: @" + newNickname);
-      } catch (err) {
-        console.error("Profil güncelleme hatası:", err);
-        alert("Profil güncellenemedi: " + (err.code || err.message) +
-          "\nFirebase Console > Firestore Database > Rules bölümünü de kontrol edin.");
-      } finally {
-        button.disabled = false;
-        button.textContent = "Profil Güncelle";
-      }
-    });
-
-    function loadAppInterface() {
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('app-screen').style.display = 'grid';
-
-      document.getElementById('user-display-name').innerText = currentUserData.fullName || 'Kullanıcı';
-      document.getElementById('user-nickname-text').innerText = '@' + (currentUserData.nickname || 'user');
-      document.getElementById('user-avatar').innerText = (currentUserData.fullName || 'K').charAt(0).toUpperCase();
-
-      loadRecentDMChats();
-    }
-
-    /* KULLANICI ARAMA SİSTEMİ (ANLIK TÜM KULLANICILARI TARAMA) */
-    window.searchUsers = async (val) => {
-      const resultsDiv = document.getElementById('search-results');
-      const valClean = val.trim().toLowerCase();
-
-      if (!valClean || valClean.length < 1) {
-        resultsDiv.style.display = 'none';
-        resultsDiv.innerHTML = '';
-        return;
-      }
-
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        resultsDiv.innerHTML = '';
-        resultsDiv.style.display = 'flex';
-
-        let count = 0;
-        querySnapshot.forEach((docSnap) => {
-          const u = docSnap.data();
-          if (u.uid !== currentUserData.uid) {
-            const nick = (u.nickname || '').toLowerCase();
-            const name = (u.fullName || '').toLowerCase();
-
-            if (nick.includes(valClean) || name.includes(valClean)) {
-              count++;
-              const item = document.createElement('div');
-              item.className = 'user-search-item';
-              item.onclick = () => {
-                openDMChat(u.uid, u.fullName || 'Kullanıcı', u.nickname || 'user');
-                resultsDiv.style.display = 'none';
-                document.getElementById('user-search-input').value = '';
-              };
-              item.innerHTML = `
-                <div class="avatar" style="width:34px; height:34px; font-size:13px;">${(u.fullName || 'K').charAt(0).toUpperCase()}</div>
-                <div>
-                  <div style="font-size:13px; font-weight:700;">${u.fullName || 'Kullanıcı'}</div>
-                  <div style="font-size:11px; color:var(--primary);">@${u.nickname || 'user'}</div>
-                </div>
-              `;
-              resultsDiv.appendChild(item);
+        window.handleSignOut = async function() {
+            try {
+                if (messagesUnsubscribe) messagesUnsubscribe();
+                if (recentChatsUnsubscribe) recentChatsUnsubscribe();
+                await signOut(auth);
+                showToast("Oturum kapatıldı", 'info');
+            } catch (error) {
+                showToast("Çıkış hatası: " + error.message, 'error');
             }
-          }
-        });
+        };
 
-        if (count === 0) {
-          resultsDiv.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:8px;">Kullanıcı bulunamadı.</div>';
+        // Unique Nickname Reservation Check Transaction
+        async function reserveNickname(cleanNick, uid, oldCleanNick = null) {
+            if (!cleanNick || cleanNick.length < 3) {
+                throw new Error("Kullanıcı adı en az 3 karakter olmalıdır!");
+            }
+
+            const nickDocRef = getNicknameDocRef(cleanNick);
+
+            await runTransaction(db, async (transaction) => {
+                const nickDoc = await transaction.get(nickDocRef);
+                if (nickDoc.exists() && nickDoc.data().uid !== uid) {
+                    throw new Error("Bu kullanıcı adı başka bir hesap tarafından kullanılıyor!");
+                }
+
+                // If updating from an old nickname, delete the previous nickname lock
+                if (oldCleanNick && oldCleanNick !== cleanNick) {
+                    const oldNickDocRef = getNicknameDocRef(oldCleanNick);
+                    transaction.delete(oldNickDocRef);
+                }
+
+                // Claim new nickname
+                transaction.set(nickDocRef, {
+                    uid: uid,
+                    updatedAt: serverTimestamp()
+                });
+            });
         }
-      } catch (e) {
-        console.error("Kullanıcı arama hatası:", e);
-        resultsDiv.style.display = 'flex';
-        resultsDiv.innerHTML = '<div style="font-size:12px;color:var(--danger);padding:8px;">Kullanıcılar yüklenemedi. Firestore Rules izinlerini kontrol edin. (' +
-          String(e.code || e.message).replace(/[<>&"]/g, '') + ')</div>';
-      }
-    };
 
-    /* KALICI DM MESAJLAŞMA */
-    function getChatRoomId(uid1, uid2) {
-      return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
-    }
+        // Auth State Change Observer
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            const mainApp = document.getElementById('app-main');
+            const authOverlay = document.getElementById('auth-overlay');
+            const btnLogin = document.getElementById('btn-login');
+            const headerProfile = document.getElementById('header-profile');
 
-    window.openDMChat = (targetUid, targetName, targetNick) => {
-      activeChatUser = { uid: targetUid, fullName: targetName, nickname: targetNick };
+            if (user) {
+                btnLogin.classList.add('hidden');
+                authOverlay.classList.add('hidden');
+                mainApp.classList.remove('hidden');
 
-      document.getElementById('active-chat-title').innerText = targetName;
-      document.getElementById('active-chat-sub').innerText = '@' + targetNick;
-      document.getElementById('active-chat-avatar').innerText = targetName.charAt(0).toUpperCase();
+                // Load or Initialize User Document
+                const userRef = getUserDocRef(user.uid);
+                const userSnap = await getDoc(userRef);
 
-      listenToPrivateMessages();
-    };
-
-    function listenToPrivateMessages() {
-      if (!activeChatUser) return;
-      if (currentUnsubscribe) currentUnsubscribe();
-
-      const roomId = getChatRoomId(currentUserData.uid, activeChatUser.uid);
-      const q = query(collection(db, "chats", roomId, "messages"), orderBy("createdAt", "asc"));
-
-      currentUnsubscribe = onSnapshot(q, (snapshot) => {
-        const container = document.getElementById('chat-messages');
-        container.innerHTML = '';
-        snapshot.forEach((docSnap) => {
-          const msg = docSnap.data();
-          const isSent = msg.senderUid === currentUserData.uid;
-
-          const msgDiv = document.createElement('div');
-          msgDiv.className = `message ${isSent ? 'sent' : 'received'}`;
-          msgDiv.innerHTML = `<div class="message-bubble">${msg.text}</div>`;
-          container.appendChild(msgDiv);
-        });
-        container.scrollTop = container.scrollHeight;
-      });
-    }
-
-    window.sendMessage = async (e) => {
-      e.preventDefault();
-      const input = document.getElementById('msg-input');
-      const text = input.value.trim();
-      if (!text || !activeChatUser) return;
-
-      input.value = '';
-      const roomId = getChatRoomId(currentUserData.uid, activeChatUser.uid);
-
-      try {
-        await addDoc(collection(db, "chats", roomId, "messages"), {
-          text: text,
-          senderUid: currentUserData.uid,
-          createdAt: serverTimestamp()
+                if (userSnap.exists()) {
+                    currentUserProfile = userSnap.data();
+                    updateHeaderUI();
+                    listenToRecentChats();
+                } else {
+                    // Prompt nickname creation for first time login
+                    document.getElementById('onboarding-modal').classList.remove('hidden');
+                }
+            } else {
+                btnLogin.classList.remove('hidden');
+                headerProfile.classList.add('hidden');
+                authOverlay.classList.remove('hidden');
+                mainApp.classList.add('hidden');
+                currentUserProfile = null;
+            }
         });
 
-        await setDoc(doc(db, "users", currentUserData.uid, "recent_chats", activeChatUser.uid), {
-          targetUid: activeChatUser.uid,
-          targetName: activeChatUser.fullName,
-          targetNick: activeChatUser.nickname,
-          lastMsg: text,
-          updatedAt: serverTimestamp()
-        }, { merge: true });
+        function updateHeaderUI() {
+            if (!currentUserProfile) return;
+            document.getElementById('header-profile').classList.remove('hidden');
+            document.getElementById('header-avatar').src = currentUserProfile.photoURL || `https://placehold.co/100x100/6366f1/ffffff?text=${(currentUserProfile.displayName || 'U')[0]}`;
+            document.getElementById('header-display-name').textContent = currentUserProfile.displayName || 'İsimsiz Kullanıcı';
+            document.getElementById('header-nickname').textContent = `@${currentUserProfile.nickname}`;
+        }
 
-        await setDoc(doc(db, "users", activeChatUser.uid, "recent_chats", currentUserData.uid), {
-          targetUid: currentUserData.uid,
-          targetName: currentUserData.fullName,
-          targetNick: currentUserData.nickname,
-          lastMsg: text,
-          updatedAt: serverTimestamp()
-        }, { merge: true });
+        // --- ONBOARDING HANDLER ---
+        window.handleCompleteOnboarding = async function(e) {
+            e.preventDefault();
+            if (!currentUser) return;
 
-      } catch (err) {
-        console.error("Mesaj Gönderme Hatası:", err);
-      }
-    };
+            const inputNick = document.getElementById('onboarding-nickname-input').value;
+            const errorElement = document.getElementById('onboarding-error');
+            const submitBtn = document.getElementById('onboarding-submit-btn');
+            const cleanNick = sanitizeNick(inputNick);
 
-    function loadRecentDMChats() {
-      const q = query(collection(db, "users", currentUserData.uid, "recent_chats"), orderBy("updatedAt", "desc"));
-      onSnapshot(q, (snapshot) => {
-        const list = document.getElementById('dm-chats-list');
-        list.innerHTML = '';
-        snapshot.forEach((docSnap) => {
-          const chat = docSnap.data();
-          const item = document.createElement('div');
-          item.className = 'chat-item';
-          item.onclick = () => openDMChat(chat.targetUid, chat.targetName, chat.targetNick);
-          item.innerHTML = `
-            <div class="avatar">${(chat.targetName || 'K').charAt(0).toUpperCase()}</div>
-            <div>
-              <div style="font-size:13px; font-weight:700;">${chat.targetName}</div>
-              <div style="font-size:11px; color:var(--text-muted);">${chat.lastMsg || '@' + chat.targetNick}</div>
-            </div>
-          `;
-          list.appendChild(item);
-        });
-      });
-    }
+            errorElement.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Kontrol ediliyor...`;
 
-    window.openSettingsModal = () => {
-      document.getElementById('set-fullname').value = currentUserData.fullName || '';
-      document.getElementById('set-nickname').value = currentUserData.nickname || '';
-      document.getElementById('settings-modal').style.display = 'flex';
-    };
+            try {
+                await reserveNickname(cleanNick, currentUser.uid);
 
-    window.closeSettingsModal = () => {
-      document.getElementById('settings-modal').style.display = 'none';
-    };
+                const profileData = {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName || cleanNick,
+                    nickname: cleanNick,
+                    photoURL: currentUser.photoURL || '',
+                    email: currentUser.email || '',
+                    createdAt: serverTimestamp()
+                };
 
-    window.handleSignOut = () => {
-      closeSettingsModal();
-      signOut(auth);
-    };
-  </script>
+                await setDoc(getUserDocRef(currentUser.uid), profileData);
+                currentUserProfile = profileData;
+
+                document.getElementById('onboarding-modal').classList.add('hidden');
+                updateHeaderUI();
+                listenToRecentChats();
+                showToast("Profiliniz başarıyla oluşturuldu!", 'success');
+            } catch (err) {
+                errorElement.textContent = err.message;
+                errorElement.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Tamamla ve Başla";
+            }
+        };
+
+        // --- PROFILE SETTINGS HANDLER ---
+        window.openSettingsModal = function() {
+            if (!currentUserProfile) return;
+            document.getElementById('settings-fullname-input').value = currentUserProfile.displayName || '';
+            document.getElementById('settings-nickname-input').value = currentUserProfile.nickname || '';
+            document.getElementById('settings-error').classList.add('hidden');
+            document.getElementById('settings-modal').classList.remove('hidden');
+        };
+
+        window.closeSettingsModal = function() {
+            document.getElementById('settings-modal').classList.add('hidden');
+        };
+
+        window.handleSaveSettings = async function(e) {
+            e.preventDefault();
+            if (!currentUser || !currentUserProfile) return;
+
+            const newFullName = document.getElementById('settings-fullname-input').value.trim();
+            const rawNick = document.getElementById('settings-nickname-input').value;
+            const cleanNick = sanitizeNick(rawNick);
+            const errorContainer = document.getElementById('settings-error');
+            const errorText = document.getElementById('settings-error-text');
+            const saveBtn = document.getElementById('settings-save-btn');
+
+            errorContainer.classList.add('hidden');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor...`;
+
+            try {
+                const oldCleanNick = currentUserProfile.nickname;
+
+                // Check and reserve if nickname changed
+                if (cleanNick !== oldCleanNick) {
+                    await reserveNickname(cleanNick, currentUser.uid, oldCleanNick);
+                }
+
+                // Update user doc
+                const updatedData = {
+                    displayName: newFullName,
+                    nickname: cleanNick,
+                    updatedAt: serverTimestamp()
+                };
+
+                await updateDoc(getUserDocRef(currentUser.uid), updatedData);
+                
+                currentUserProfile.displayName = newFullName;
+                currentUserProfile.nickname = cleanNick;
+
+                updateHeaderUI();
+                closeSettingsModal();
+                showToast("Giriş bilgileri ve profil güncellendi!", 'success');
+            } catch (err) {
+                errorText.textContent = err.message;
+                errorContainer.classList.remove('hidden');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = "Kaydet";
+            }
+        };
+
+        // --- SEARCH FUNCTIONALITY ---
+        let searchTimeout = null;
+        window.handleSearch = function(query) {
+            clearTimeout(searchTimeout);
+            const clearBtn = document.getElementById('search-clear-btn');
+            
+            if (query.trim().length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+                listenToRecentChats(); // Return to recent chats if search is cleared
+                return;
+            }
+
+            searchTimeout = setTimeout(() => performUserSearch(query.trim().toLowerCase()), 300);
+        };
+
+        window.clearSearch = function() {
+            document.getElementById('user-search-input').value = '';
+            document.getElementById('search-clear-btn').classList.add('hidden');
+            listenToRecentChats();
+        };
+
+        async function performUserSearch(term) {
+            const container = document.getElementById('chats-and-search-container');
+            document.getElementById('tab-label').textContent = "Arama Sonuçları";
+            
+            container.innerHTML = `
+                <div class="p-6 text-center text-slate-500 text-xs">
+                    <i class="fa-solid fa-spinner fa-spin text-lg mb-2"></i>
+                    <p>Kullanıcılar aranıyor...</p>
+                </div>`;
+
+            try {
+                // Rule 2 compliant: simple collection fetch and memory filter
+                const snap = await getDocs(getUsersCollectionRef());
+                const results = [];
+
+                snap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    if (data.uid !== currentUser.uid) {
+                        const nameMatch = (data.displayName || '').toLowerCase().includes(term);
+                        const nickMatch = (data.nickname || '').toLowerCase().includes(term);
+                        if (nameMatch || nickMatch) {
+                            results.push(data);
+                        }
+                    }
+                });
+
+                document.getElementById('results-count').textContent = `${results.length} sonuç`;
+
+                if (results.length === 0) {
+                    container.innerHTML = `
+                        <div class="p-8 text-center text-slate-500 text-xs">
+                            <i class="fa-solid fa-user-slash text-2xl mb-2 opacity-40"></i>
+                            <p>"${term}" ile eşleşen kullanıcı bulunamadı.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = results.map(user => `
+                    <div onclick="selectChatUser('${user.uid}', '${escape(user.displayName)}', '${user.nickname}', '${user.photoURL || ''}')" 
+                        class="p-3 rounded-2xl hover:bg-white/5 transition cursor-pointer flex items-center justify-between group">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <img src="${user.photoURL || `https://placehold.co/100x100/6366f1/ffffff?text=${(user.displayName||'U')[0]}`}" class="w-10 h-10 rounded-xl object-cover ring-1 ring-white/10">
+                            <div class="truncate">
+                                <h4 class="text-xs font-bold text-white group-hover:text-brand-400 transition truncate">${user.displayName}</h4>
+                                <p class="text-[11px] text-slate-400 truncate">@${user.nickname}</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-slate-600 group-hover:text-white transition"></i>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                console.error("Search error:", err);
+                container.innerHTML = `<div class="p-4 text-xs text-red-400">Arama hatası oluştu.</div>`;
+            }
+        }
+
+        // Helper to safely unescape names
+        function unescape(str) { return decodeURIComponent(str); }
+        function escape(str) { return encodeURIComponent(str || ''); }
+
+        // --- RECENT CHATS LISTENER ---
+        function listenToRecentChats() {
+            if (!currentUser) return;
+            if (recentChatsUnsubscribe) recentChatsUnsubscribe();
+
+            document.getElementById('tab-label').textContent = "Son Mesajlar";
+            document.getElementById('results-count').textContent = "";
+
+            const container = document.getElementById('chats-and-search-container');
+
+            recentChatsUnsubscribe = onSnapshot(getRecentChatsRef(currentUser.uid), (snapshot) => {
+                const chats = [];
+                snapshot.forEach(docSnap => {
+                    chats.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                // Memory sort by timestamp descending
+                chats.sort((a, b) => (b.updatedAt?.toMillis() || 0) - (a.updatedAt?.toMillis() || 0));
+
+                if (chats.length === 0) {
+                    container.innerHTML = `
+                        <div class="p-8 text-center text-slate-500 text-xs">
+                            <i class="fa-regular fa-comments text-2xl mb-2 opacity-40"></i>
+                            <p>Henüz bir mesajlaşmanız yok.</p>
+                            <p class="text-[10px] text-slate-600 mt-1">Arama çubuğunu kullanarak yeni insanlarla tanışın!</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = chats.map(chat => `
+                    <div onclick="selectChatUser('${chat.otherUid}', '${escape(chat.otherName)}', '${chat.otherNick}', '${chat.otherPhoto || ''}')" 
+                        class="p-3 rounded-2xl hover:bg-white/5 transition cursor-pointer flex items-center gap-3 ${activeChatUser?.uid === chat.otherUid ? 'bg-white/10 border border-white/10' : ''}">
+                        <img src="${chat.otherPhoto || `https://placehold.co/100x100/6366f1/ffffff?text=${(chat.otherName||'U')[0]}`}" class="w-10 h-10 rounded-xl object-cover ring-1 ring-white/10 shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-baseline mb-0.5">
+                                <h4 class="text-xs font-bold text-white truncate">${chat.otherName}</h4>
+                                <span class="text-[9px] text-slate-500">${chat.updatedAt ? new Date(chat.updatedAt.toDate()).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ''}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 truncate">${chat.lastMessage || 'Fotoğraf veya mesaj'}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }, (error) => {
+                console.error("Recent chats listener error:", error);
+            });
+        }
+
+        // --- SELECT USER & LOAD CHAT MESSAGES ---
+        window.selectChatUser = function(uid, escapedName, nick, photo) {
+            const name = unescape(escapedName);
+            activeChatUser = { uid, displayName: name, nickname: nick, photoURL: photo };
+
+            // Render Header
+            document.getElementById('chat-header-empty').classList.add('hidden');
+            const infoBox = document.getElementById('chat-header-user-info');
+            infoBox.classList.remove('hidden');
+            
+            document.getElementById('active-chat-avatar').src = photo || `https://placehold.co/100x100/6366f1/ffffff?text=${(name||'U')[0]}`;
+            document.getElementById('active-chat-name').textContent = name;
+            document.getElementById('active-chat-nick').textContent = `@${nick}`;
+
+            document.getElementById('chat-input-container').classList.remove('hidden');
+
+            listenToMessages();
+        };
+
+        function listenToMessages() {
+            if (!currentUser || !activeChatUser) return;
+            if (messagesUnsubscribe) messagesUnsubscribe();
+
+            const roomId = getRoomId(currentUser.uid, activeChatUser.uid);
+            const messagesContainer = document.getElementById('messages-container');
+
+            messagesUnsubscribe = onSnapshot(getChatRoomMessagesRef(roomId), (snapshot) => {
+                const messages = [];
+                snapshot.forEach(docSnap => {
+                    messages.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                // Rule 2 compliant sorting
+                messages.sort((a, b) => (a.createdAt?.toMillis() || 0) - (b.createdAt?.toMillis() || 0));
+
+                if (messages.length === 0) {
+                    messagesContainer.innerHTML = `
+                        <div class="h-full flex flex-col items-center justify-center text-slate-500 gap-2">
+                            <div class="w-12 h-12 rounded-full bg-brand-500/10 text-brand-400 flex items-center justify-center text-xl">
+                                <i class="fa-regular fa-hand-wave"></i>
+                            </div>
+                            <p class="text-xs">Sohbeti başlatmak için ilk mesajı gönderin!</p>
+                        </div>`;
+                    return;
+                }
+
+                messagesContainer.innerHTML = messages.map(msg => {
+                    const isMe = msg.senderUid === currentUser.uid;
+                    const timeStr = msg.createdAt ? new Date(msg.createdAt.toDate()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '';
+                    
+                    return `
+                        <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+                            <div class="max-w-[75%] px-4 py-2.5 rounded-2xl text-xs leading-relaxed ${
+                                isMe 
+                                    ? 'bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-br-none shadow-md shadow-brand-500/10' 
+                                    : 'glass-card text-slate-200 rounded-bl-none border border-white/10'
+                            }">
+                                ${msg.text}
+                            </div>
+                            <span class="text-[9px] text-slate-500 mt-1 px-1">${timeStr}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, (error) => {
+                console.error("Messages listener error:", error);
+            });
+        }
+
+        // --- SEND MESSAGE (RECORD TO BOTH USERS) ---
+        window.handleSendMessage = async function(e) {
+            e.preventDefault();
+            if (!currentUser || !activeChatUser) return;
+
+            const input = document.getElementById('message-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            input.value = '';
+
+            try {
+                const roomId = getRoomId(currentUser.uid, activeChatUser.uid);
+                
+                // 1. Add message to shared room subcollection
+                await addDoc(getChatRoomMessagesRef(roomId), {
+                    senderUid: currentUser.uid,
+                    receiverUid: activeChatUser.uid,
+                    text: text,
+                    createdAt: serverTimestamp()
+                });
+
+                // 2. Dual record in both users' recent_chats
+                const myRecentRef = doc(getRecentChatsRef(currentUser.uid), activeChatUser.uid);
+                const otherRecentRef = doc(getRecentChatsRef(activeChatUser.uid), currentUser.uid);
+
+                const now = serverTimestamp();
+
+                const myPayload = {
+                    otherUid: activeChatUser.uid,
+                    otherName: activeChatUser.displayName,
+                    otherNick: activeChatUser.nickname,
+                    otherPhoto: activeChatUser.photoURL || '',
+                    lastMessage: text,
+                    updatedAt: now
+                };
+
+                const otherPayload = {
+                    otherUid: currentUser.uid,
+                    otherName: currentUserProfile.displayName,
+                    otherNick: currentUserProfile.nickname,
+                    otherPhoto: currentUserProfile.photoURL || '',
+                    lastMessage: text,
+                    updatedAt: now
+                };
+
+                const batch = writeBatch(db);
+                batch.set(myRecentRef, myPayload, { merge: true });
+                batch.set(otherRecentRef, otherPayload, { merge: true });
+                await batch.commit();
+
+            } catch (err) {
+                console.error("Send message error:", err);
+                showToast("Mesaj gönderilemedi: " + err.message, 'error');
+            }
+        };
+    </script>
 </body>
 </html>
