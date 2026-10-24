@@ -37,7 +37,6 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      /* Flow temasına uygun neon arka plan ışıklandırması */
       background-image: 
         radial-gradient(circle at 20% 20%, rgba(127, 0, 255, 0.15) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(0, 242, 254, 0.15) 0%, transparent 50%);
@@ -60,17 +59,14 @@
 
     .logo-wrapper {
       margin-bottom: 30px;
-      position: relative;
-      display: inline-block;
+      display: flex;
+      justify-content: center;
     }
 
-    /* Görselin etrafına parlama efekti veren gölge */
-    .logo-image {
-      width: 140px;
-      height: 140px;
-      border-radius: 32px;
-      object-fit: cover;
-      box-shadow: 0 0 30px rgba(0, 242, 254, 0.4), 0 0 60px rgba(127, 0, 255, 0.3);
+    /* Kırılmaz ve Parlayan SVG Logosu */
+    .logo-svg {
+      width: 130px;
+      height: 130px;
       animation: pulse 3s infinite alternate;
     }
 
@@ -91,7 +87,6 @@
       margin-bottom: 35px;
     }
 
-    /* Yükleniyor (Loading) Animasyonu */
     .loader-dots {
       display: flex;
       justify-content: center;
@@ -109,7 +104,6 @@
     .loader-dots div:nth-child(1) { animation-delay: -0.32s; }
     .loader-dots div:nth-child(2) { animation-delay: -0.16s; }
 
-    /* Animasyon Keyframeleri */
     @keyframes float {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-10px); }
@@ -117,8 +111,8 @@
     }
 
     @keyframes pulse {
-      0% { box-shadow: 0 0 20px rgba(0, 242, 254, 0.3), 0 0 40px rgba(127, 0, 255, 0.2); }
-      100% { box-shadow: 0 0 40px rgba(0, 242, 254, 0.6), 0 0 80px rgba(127, 0, 255, 0.5); }
+      0% { filter: drop-shadow(0 0 15px rgba(0, 242, 254, 0.3)) drop-shadow(0 0 30px rgba(127, 0, 255, 0.2)); }
+      100% { filter: drop-shadow(0 0 35px rgba(0, 242, 254, 0.7)) drop-shadow(0 0 70px rgba(127, 0, 255, 0.6)); }
     }
 
     @keyframes bounce {
@@ -130,9 +124,22 @@
 <body>
 
   <div class="maintenance-container">
+    
     <div class="logo-wrapper">
-      <!-- Sizin için oluşturduğum logonun dosyası buraya çağrılıyor -->
-      <img src="watermarked_img_11297910894081898016.jpg" alt="Flow Logo" class="logo-image">
+      <!-- Dışarıdan dosyaya ihtiyaç duymayan SVG Kodlu Logo -->
+      <svg class="logo-svg" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="flowLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00f2fe" />
+            <stop offset="50%" stop-color="#4facfe" />
+            <stop offset="100%" stop-color="#7f00ff" />
+          </linearGradient>
+        </defs>
+        <path d="M21 2C10.5 2 2 10.5 2 21C2 24.5 3.1 27.8 5 30.5L3 38C2.8 38.8 3.2 39.2 4 39L11.5 37C14.2 38.9 17.5 40 21 40C31.5 40 40 31.5 40 21C40 10.5 31.5 2 21 2Z" fill="url(#flowLogoGrad)" opacity="0.15"/>
+        <path d="M12 21C12 16.5 15.5 13 20 13C25 13 28.5 16 30 20.5" stroke="url(#flowLogoGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M30 21C30 25.5 26.5 29 22 29C17 29 13.5 26 12 21.5" stroke="#7f00ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="21" cy="21" r="3.5" fill="#ffffff" />
+      </svg>
     </div>
     
     <h1>Sistem Bakımda</h1>
