@@ -461,7 +461,7 @@
         <i class="fa-solid fa-xmark" style="cursor:pointer; font-size:20px; color:var(--text-muted);" onclick="closeSettingsModal()"></i>
       </div>
 
-      <form onsubmit="handleUpdateProfile(event)" class="auth-form">
+      <div class="auth-form">
         <div class="input-group">
           <i class="fa-regular fa-user"></i>
           <input type="text" id="set-fullname" placeholder="Ad Soyad" required>
@@ -470,8 +470,8 @@
           <i class="fa-solid fa-at"></i>
           <input type="text" id="set-nickname" placeholder="Nickname" required>
         </div>
-        <button type="submit" class="btn-submit">Profil Güncelle</button>
-      </form>
+        <button type="button" class="btn-submit" onclick="handleUpdateProfile()">Profil Güncelle</button>
+      </div>
 
       <button class="btn-logout" onclick="handleSignOut()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
     </div>
@@ -646,13 +646,15 @@
       loadAppInterface();
     };
 
-    /* PROFİL GÜNCELLEME SİSTEMİ */
-    window.handleUpdateProfile = async (e) => {
-      e.preventDefault();
+    /* DOĞRUDAN VE GARANTİLİ ÇALIŞAN PROFİL GÜNCELLEME FONKSİYONU */
+    window.handleUpdateProfile = async () => {
       const newFullName = document.getElementById('set-fullname').value.trim();
       const newNickname = document.getElementById('set-nickname').value.trim().toLowerCase();
 
-      if (!newFullName || !newNickname) return;
+      if (!newFullName || !newNickname) {
+        alert("Lütfen tüm alanları doldurun!");
+        return;
+      }
 
       try {
         if (auth.currentUser) {
@@ -674,7 +676,7 @@
 
         loadAppInterface();
         closeSettingsModal();
-        alert("Profiliniz ve kullanıcı adınız başarıyla güncellendi!");
+        alert("Profiliniz başarıyla güncellendi!");
       } catch (err) {
         alert("Güncelleme Hatası: " + err.message);
       }
@@ -743,7 +745,7 @@
       }
     };
 
-    /* ÖZEL MESAJLAŞMA SİSTEMİ */
+    /* KALICI DM MESAJLAŞMA */
     function getChatRoomId(uid1, uid2) {
       return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
     }
@@ -854,6 +856,9 @@
       closeSettingsModal();
       signOut(auth);
     };
+
+    // Ekstra güvenlik için pencereleri bağlama
+    window.handleUpdateProfile = handleUpdateProfile;
   </script>
 </body>
 </html>
