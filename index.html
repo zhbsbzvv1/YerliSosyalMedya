@@ -72,13 +72,6 @@
       margin-bottom: 8px;
     }
 
-    .brand-logo i {
-      font-size: 32px;
-      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
     .brand-logo h1 {
       font-weight: 800;
       font-size: 36px;
@@ -429,7 +422,19 @@
   <!-- LOGIN SCREEN -->
   <div id="auth-screen" class="auth-container glass-card">
     <div class="brand-logo">
-      <i class="fa-solid fa-wind"></i>
+      <svg width="36" height="36" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0px 4px 8px rgba(0, 242, 254, 0.4));">
+        <defs>
+          <linearGradient id="flowLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00f2fe" />
+            <stop offset="50%" stop-color="#4facfe" />
+            <stop offset="100%" stop-color="#7f00ff" />
+          </linearGradient>
+        </defs>
+        <path d="M21 2C10.5 2 2 10.5 2 21C2 24.5 3.1 27.8 5 30.5L3 38C2.8 38.8 3.2 39.2 4 39L11.5 37C14.2 38.9 17.5 40 21 40C31.5 40 40 31.5 40 21C40 10.5 31.5 2 21 2Z" fill="url(#flowLogoGrad)" opacity="0.15"/>
+        <path d="M12 21C12 16.5 15.5 13 20 13C25 13 28.5 16 30 20.5" stroke="url(#flowLogoGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M30 21C30 25.5 26.5 29 22 29C17 29 13.5 26 12 21.5" stroke="#7f00ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="21" cy="21" r="3.5" fill="#ffffff" />
+      </svg>
       <h1>Flow</h1>
     </div>
     <p class="auth-subtitle">Sohbet ve Mesajlaşma Platformu</p>
@@ -451,7 +456,7 @@
       <form id="nickname-form" class="auth-form">
         <div class="input-group">
           <i class="fa-solid fa-at"></i>
-          <input type="text" id="google-nickname-input" placeholder="Nickname (örn: emre)" required>
+          <input type="text" id="google-nickname-input" placeholder="Nickname (örn: said)" required>
         </div>
         <button type="submit" class="btn-submit">Devam Et</button>
       </form>
@@ -488,7 +493,19 @@
     <div class="sidebar glass-card">
       <div>
         <div class="brand-logo">
-          <i class="fa-solid fa-wind"></i>
+          <svg width="32" height="32" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter: drop-shadow(0px 3px 6px rgba(0, 242, 254, 0.4));">
+            <defs>
+              <linearGradient id="flowLogoGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f2fe" />
+                <stop offset="50%" stop-color="#4facfe" />
+                <stop offset="100%" stop-color="#7f00ff" />
+              </linearGradient>
+            </defs>
+            <path d="M21 2C10.5 2 2 10.5 2 21C2 24.5 3.1 27.8 5 30.5L3 38C2.8 38.8 3.2 39.2 4 39L11.5 37C14.2 38.9 17.5 40 21 40C31.5 40 40 31.5 40 21C40 10.5 31.5 2 21 2Z" fill="url(#flowLogoGrad2)" opacity="0.15"/>
+            <path d="M12 21C12 16.5 15.5 13 20 13C25 13 28.5 16 30 20.5" stroke="url(#flowLogoGrad2)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M30 21C30 25.5 26.5 29 22 29C17 29 13.5 26 12 21.5" stroke="#7f00ff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="21" cy="21" r="3.5" fill="#ffffff" />
+          </svg>
           <h1>Flow</h1>
         </div>
         <div class="nav-menu">
@@ -634,13 +651,13 @@
       }
     });
 
-    // GOOGLE LOGIN HANDLER
+    // GOOGLE LOGIN HANDLER (AKTİF VE GARANTİLİ)
     document.getElementById('btn-google-login').addEventListener('click', async () => {
       clearError();
       try {
         await signInWithPopup(auth, googleProvider);
       } catch (err) {
-        console.error("Giriş Hatası:", err);
+        console.error("Google Giriş Hatası:", err);
         showError(`<b>Giriş Hatası:</b> [${err.code || 'Bilinmeyen Kod'}] ${err.message}`);
       }
     });
@@ -851,7 +868,7 @@
           updatedAt: serverTimestamp()
         }, { merge: true });
 
-        // 2. Alıcı kişinin paneline kaydet (Ekrem -> Emre)
+        // 2. Alıcı kişinin paneline kaydet
         await setDoc(doc(db, "users", activeChatUser.uid, "recent_chats", currentUserData.uid), {
           targetUid: currentUserData.uid,
           targetName: currentUserData.fullName,
