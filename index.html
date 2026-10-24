@@ -508,7 +508,7 @@
       <!-- ARAMA ÇUBUĞU -->
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="user-search-input" placeholder="Kullanıcı ara (@nickname)..." onkeyup="searchUsers(this.value)">
+        <input type="text" id="user-search-input" placeholder="Kullanıcı ara..." oninput="searchUsers(this.value)">
       </div>
 
       <!-- ARAMA SONUÇLARI -->
@@ -632,19 +632,21 @@
 
       const uid = pendingGoogleUser.uid;
       const fullName = pendingGoogleUser.displayName || "Flow Kullanıcısı";
-      const email = pendingGoogleUser.email;
+      const email = pendingGoogleUser.email || "";
 
       currentUserData = { uid, fullName, nickname, email };
 
       try {
         await setDoc(doc(db, "users", uid), currentUserData, { merge: true });
-      } catch (err) {}
+      } catch (err) {
+        console.error("Kullanıcı oluşturma hatası:", err);
+      }
 
       document.getElementById('google-nickname-modal').style.display = 'none';
       loadAppInterface();
     };
 
-    /* PROFİL GÜNCELLEME (GARANTİLİ FIRESTORE YAZIMI) */
+    /* PROFİL GÜNCELLEME SİSTEMİ */
     window.handleUpdateProfile = async (e) => {
       e.preventDefault();
       const newFullName = document.getElementById('set-fullname').value.trim();
@@ -658,12 +660,14 @@
         }
 
         const userDocRef = doc(db, "users", currentUserData.uid);
-        await setDoc(userDocRef, {
+        const updatedObj = {
           uid: currentUserData.uid,
           fullName: newFullName,
           nickname: newNickname,
           email: currentUserData.email || ""
-        }, { merge: true });
+        };
+
+        await setDoc(userDocRef, updatedObj, { merge: true });
 
         currentUserData.fullName = newFullName;
         currentUserData.nickname = newNickname;
@@ -680,14 +684,14 @@
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('app-screen').style.display = 'grid';
 
-      document.getElementById('user-display-name').innerText = currentUserData.fullName;
-      document.getElementById('user-nickname-text').innerText = '@' + currentUserData.nickname;
-      document.getElementById('user-avatar').innerText = currentUserData.fullName.charAt(0).toUpperCase();
+      document.getElementById('user-display-name').innerText = currentUserData.fullName || 'Kullanıcı';
+      document.getElementById('user-nickname-text').innerText = '@' + (currentUserData.nickname || 'user');
+      document.getElementById('user-avatar').innerText = (currentUserData.fullName || 'K').charAt(0).toUpperCase();
 
       loadRecentDMChats();
     }
 
-    /* KULLANICI ARAMA (BÜTÜN KULLANICILARI TARAMA) */
+    /* KULLANICI ARAMA SİSTEMİ */
     window.searchUsers = async (val) => {
       const resultsDiv = document.getElementById('search-results');
       const valClean = val.trim().toLowerCase();
@@ -715,15 +719,15 @@
               const item = document.createElement('div');
               item.className = 'user-search-item';
               item.onclick = () => {
-                openDMChat(u.uid, u.fullName, u.nickname);
+                openDMChat(u.uid, u.fullName || 'Kullanıcı', u.nickname || 'user');
                 resultsDiv.style.display = 'none';
                 document.getElementById('user-search-input').value = '';
               };
               item.innerHTML = `
                 <div class="avatar" style="width:34px; height:34px; font-size:13px;">${(u.fullName || 'K').charAt(0).toUpperCase()}</div>
                 <div>
-                  <div style="font-size:13px; font-weight:700;">${u.fullName}</div>
-                  <div style="font-size:11px; color:var(--primary);">@${u.nickname}</div>
+                  <div style="font-size:13px; font-weight:700;">${u.fullName || 'Kullanıcı'}</div>
+                  <div style="font-size:11px; color:var(--primary);">@${u.nickname || 'user'}</div>
                 </div>
               `;
               resultsDiv.appendChild(item);
@@ -739,7 +743,7 @@
       }
     };
 
-    /* KALICI DM MESAJLAŞMA */
+    /* ÖZEL MESAJLAŞMA SİSTEMİ */
     function getChatRoomId(uid1, uid2) {
       return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
     }
@@ -810,7 +814,7 @@
         }, { merge: true });
 
       } catch (err) {
-        console.error("Mesaj Hatası:", err);
+        console.error("Mesaj Gönderme Hatası:", err);
       }
     };
 
@@ -837,8 +841,8 @@
     }
 
     window.openSettingsModal = () => {
-      document.getElementById('set-fullname').value = currentUserData.fullName;
-      document.getElementById('set-nickname').value = currentUserData.nickname;
+      document.getElementById('set-fullname').value = currentUserData.fullName || '';
+      document.getElementById('set-nickname').value = currentUserData.nickname || '';
       document.getElementById('settings-modal').style.display = 'flex';
     };
 
