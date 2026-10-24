@@ -464,13 +464,13 @@
       <div class="auth-form">
         <div class="input-group">
           <i class="fa-regular fa-user"></i>
-          <input type="text" id="set-fullname" placeholder="Ad Soyad" required>
+          <input type="text" id="set-fullname" placeholder="Ad Soyad">
         </div>
         <div class="input-group">
           <i class="fa-solid fa-at"></i>
-          <input type="text" id="set-nickname" placeholder="Nickname" required>
+          <input type="text" id="set-nickname" placeholder="Nickname">
         </div>
-        <button type="button" class="btn-submit" onclick="handleUpdateProfile()">Profil Güncelle</button>
+        <button id="btn-save-profile" type="button" class="btn-submit">Profil Güncelle</button>
       </div>
 
       <button class="btn-logout" onclick="handleSignOut()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
@@ -508,7 +508,7 @@
       <!-- ARAMA ÇUBUĞU -->
       <div class="search-box">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="user-search-input" placeholder="Kullanıcı ara..." oninput="searchUsers(this.value)">
+        <input type="text" id="user-search-input" placeholder="Kullanıcı ara (@nickname)..." oninput="searchUsers(this.value)">
       </div>
 
       <!-- ARAMA SONUÇLARI -->
@@ -646,13 +646,13 @@
       loadAppInterface();
     };
 
-    /* DOĞRUDAN VE GARANTİLİ ÇALIŞAN PROFİL GÜNCELLEME FONKSİYONU */
-    window.handleUpdateProfile = async () => {
+    /* DOĞRUDAN DİNLEYİCİ İLE ÇALIŞAN VE HATASIZ PROFİL GÜNCELLEME */
+    document.getElementById('btn-save-profile').addEventListener('click', async () => {
       const newFullName = document.getElementById('set-fullname').value.trim();
       const newNickname = document.getElementById('set-nickname').value.trim().toLowerCase();
 
       if (!newFullName || !newNickname) {
-        alert("Lütfen tüm alanları doldurun!");
+        alert("Lütfen Ad Soyad ve Nickname alanlarını boş bırakmayın!");
         return;
       }
 
@@ -676,11 +676,11 @@
 
         loadAppInterface();
         closeSettingsModal();
-        alert("Profiliniz başarıyla güncellendi!");
+        alert("Profiliniz ve kullanıcı adınız (@" + newNickname + ") başarıyla güncellendi!");
       } catch (err) {
         alert("Güncelleme Hatası: " + err.message);
       }
-    };
+    });
 
     function loadAppInterface() {
       document.getElementById('auth-screen').style.display = 'none';
@@ -693,7 +693,7 @@
       loadRecentDMChats();
     }
 
-    /* KULLANICI ARAMA SİSTEMİ */
+    /* KULLANICI ARAMA SİSTEMİ (ANLIK TÜM KULLANICILARI TARAMA) */
     window.searchUsers = async (val) => {
       const resultsDiv = document.getElementById('search-results');
       const valClean = val.trim().toLowerCase();
@@ -856,9 +856,6 @@
       closeSettingsModal();
       signOut(auth);
     };
-
-    // Ekstra güvenlik için pencereleri bağlama
-    window.handleUpdateProfile = handleUpdateProfile;
   </script>
 </body>
 </html>
