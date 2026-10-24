@@ -1,954 +1,827 @@
 <!DOCTYPE html>
-<html lang="tr" class="dark">
+<html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flow — Next-Gen Social & Chat Platform</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeaSpill - Social & Chat Platform</title>
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              dark: '#0d0f17',
-              card: '#161926',
-              border: '#262b3e',
-              cyan: '#00f2fe',
-              purple: '#9d4edd',
-              pink: '#f72585',
-              accent: '#4cc9f0'
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          }
-        }
-      }
-    }
-  </script>
-
-  <!-- Google Font: Inter -->
+  <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
-    body {
-      background-color: #0d0f17;
-      color: #f1f5f9;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
+    :root {
+      --bg-dark: #090a0f;
+      --panel-bg: rgba(18, 20, 29, 0.75);
+      --panel-border: rgba(255, 255, 255, 0.08);
+      --primary: #00f2fe;
+      --secondary: #4facfe;
+      --accent-purple: #7f00ff;
+      --accent-pink: #e100ff;
+      --text-main: #f0f2f8;
+      --text-muted: #8c93a8;
+      --danger: #ff4b5c;
+      --success: #00e676;
     }
 
-    /* Glassmorphism Classes */
-    .glass-panel {
-      background: rgba(22, 25, 38, 0.75);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(127, 0, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.12) 0%, transparent 40%);
+    }
+
+    /* GLASSMORPHISM CARD */
+    .glass-card {
+      background: var(--panel-bg);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     }
 
-    .glass-card {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+    /* AUTH VIEW */
+    #auth-screen {
+      width: 100%;
+      max-width: 440px;
+      padding: 36px 30px;
+      margin: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
     }
 
-    .glass-input {
-      background: rgba(13, 15, 23, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .glass-input:focus {
-      border-color: #00f2fe;
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.25);
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
     }
 
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(13, 15, 23, 0.5);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #00f2fe;
-    }
-
-    /* Glow Effects */
-    .glow-cyan {
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.35);
-    }
-    .glow-purple {
-      box-shadow: 0 0 20px rgba(157, 78, 221, 0.35);
-    }
-    .text-gradient {
-      background: linear-gradient(135deg, #00f2fe 0%, #4cc9f0 50%, #9d4edd 100%);
+    .brand-logo i {
+      font-size: 28px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    /* Story Ring Gradient Animation */
-    .story-ring {
-      background: linear-gradient(45deg, #f72585, #7209b7, #4361ee, #4cc9f0);
-      padding: 2px;
-      border-radius: 9999px;
+    .brand-logo h1 {
+      font-weight: 800;
+      font-size: 28px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    /* Pulse Dot for Live/Online */
-    .online-badge {
-      width: 12px;
-      height: 12px;
-      background-color: #10b981;
-      border: 2px solid #0d0f17;
+    .auth-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .auth-tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px;
+      border-radius: 14px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .auth-tab.active {
+      background: linear-gradient(135deg, var(--secondary), var(--accent-purple));
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .input-group {
+      position: relative;
+      text-align: left;
+    }
+
+    .input-group i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 14px 16px 14px 48px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .input-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #000;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.4);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-google {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-google:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* MAIN APP INTERFACE */
+    #app-screen {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      max-width: 1400px;
+      max-height: 900px;
+      margin: auto;
+      grid-template-columns: 280px 360px 1fr;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 16px;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-item.active i {
+      color: var(--primary);
+    }
+
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+      position: relative;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .online-indicator {
+      width: 10px;
+      height: 10px;
+      background: var(--success);
+      border: 2px solid var(--bg-dark);
+      border-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    /* CHAT LIST PANEL */
+    .chat-list-panel {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 12px 10px 38px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      color: var(--text-main);
+      font-size: 13px;
+      outline: none;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .chat-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .chat-item:hover, .chat-item.active {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .chat-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .chat-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .chat-time {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .chat-last-msg {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* MAIN CHAT WINDOW */
+    .chat-window {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--panel-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: 65%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .message.sent {
+      align-self: flex-end;
+    }
+
+    .message.received {
+      align-self: flex-start;
+    }
+
+    .message-bubble {
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message.sent .message-bubble {
+      background: linear-gradient(135deg, var(--secondary), var(--accent-purple));
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message.received .message-bubble {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-info {
+      font-size: 10px;
+      color: var(--text-muted);
+      align-self: flex-end;
+    }
+
+    .chat-input-area {
+      padding: 16px 24px;
+      border-top: 1px solid var(--panel-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .btn-send {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border: none;
+      color: #000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-send:hover {
+      transform: scale(1.05);
+    }
+
+    /* ERROR ALERT */
+    .alert-box {
+      background: rgba(255, 75, 92, 0.15);
+      border: 1px solid var(--danger);
+      color: #ff8e9b;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      #app-screen {
+        grid-template-columns: 80px 1fr;
+      }
+      .chat-list-panel { display: none; }
+      .sidebar .brand-logo h1, .nav-item span, .user-info { display: none; }
     }
   </style>
 </head>
-<body class="h-screen w-screen flex flex-col antialiased select-none overflow-hidden">
+<body>
 
-  <!-- Toast Notification System -->
-  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
-
-  <!-- AUTH MODAL / OVERLAY -->
-  <div id="auth-modal" class="fixed inset-0 z-40 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-300">
-    <div class="glass-panel w-full max-w-md rounded-3xl p-8 shadow-2xl relative border border-white/10 glow-purple">
-      
-      <!-- Logo Header -->
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-cyan to-brand-purple mb-3 shadow-lg glow-cyan">
-          <i class="fa-solid font-bold text-3xl text-white fa-bolt"></i>
-        </div>
-        <h1 class="text-3xl font-extrabold tracking-tight text-gradient">FLOW</h1>
-        <p class="text-xs text-slate-400 mt-1">Said Özer Özel Sosyal Ağ ve Sohbet Platformu</p>
-      </div>
-
-      <!-- Auth Tabs -->
-      <div class="flex bg-black/40 p-1 rounded-2xl mb-6 border border-white/5">
-        <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-gradient-to-r from-brand-cyan to-brand-accent text-slate-950 shadow">Giriş Yap</button>
-        <button id="tab-register-btn" onclick="switchAuthTab('register')" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white">Kayıt Ol</button>
-      </div>
-
-      <!-- LOGIN FORM -->
-      <form id="login-form" onsubmit="handleAuthLogin(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1.5">E-Posta Adresi</label>
-          <div class="relative">
-            <i class="fa-solid fa-envelope absolute left-4 top-3.5 text-slate-500 text-sm"></i>
-            <input type="email" id="login-email" required placeholder="ornek@flow.com" class="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:outline-none transition">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1.5">Şifre</label>
-          <div class="relative">
-            <i class="fa-solid fa-lock absolute left-4 top-3.5 text-slate-500 text-sm"></i>
-            <input type="password" id="login-password" required placeholder="••••••••" class="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:outline-none transition">
-          </div>
-        </div>
-
-        <button type="submit" class="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-brand-cyan via-brand-accent to-brand-purple text-slate-950 hover:opacity-90 transition transform active:scale-95 shadow-lg">
-          Sisteme Giriş Yap
-        </button>
-      </form>
-
-      <!-- REGISTER FORM -->
-      <form id="register-form" onsubmit="handleAuthRegister(event)" class="space-y-4 hidden">
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1.5">Ad Soyad</label>
-          <div class="relative">
-            <i class="fa-solid fa-user absolute left-4 top-3.5 text-slate-500 text-sm"></i>
-            <input type="text" id="reg-fullname" required placeholder="Said Özer" class="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:outline-none transition">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1.5">Kullanıcı Adı</label>
-          <div class="relative">
-            <i class="fa-solid fa-at absolute left-4 top-3.5 text-slate-500 text-sm"></i>
-            <input type="text" id="reg-username" required placeholder="saidozer" class="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:outline-none transition">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1.5">E-Posta Adresi</label>
-          <div class="relative">
-            <i class="fa-solid fa-envelope absolute left-4 top-3.5 text-slate-500 text-sm"></i>
-            <input type="email" id="reg-email" required placeholder="saidozer@flow.com" class="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:outline-none transition">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1.5">Şifre</label>
-          <div class="relative">
-            <i class="fa-solid fa-lock absolute left-4 top-3.5 text-slate-500 text-sm"></i>
-            <input type="password" id="reg-password" required placeholder="••••••••" class="w-full glass-input rounded-xl py-3 pl-11 pr-4 text-sm text-white focus:outline-none transition">
-          </div>
-        </div>
-
-        <button type="submit" class="w-full py-3.5 rounded-xl font-bold bg-gradient-to-r from-brand-purple via-brand-pink to-brand-cyan text-white hover:opacity-90 transition transform active:scale-95 shadow-lg">
-          Hesap Oluştur ve Katıl
-        </button>
-      </form>
-
-      <!-- Google & Quick Demo Options -->
-      <div class="mt-6">
-        <div class="relative flex py-2 items-center">
-          <div class="flex-grow border-t border-white/10"></div>
-          <span class="flex-shrink mx-4 text-xs text-slate-500 font-semibold">VEYA</span>
-          <div class="flex-grow border-t border-white/10"></div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3 mt-3">
-          <button onclick="handleGoogleSignIn()" class="flex items-center justify-center gap-2 py-2.5 glass-card rounded-xl hover:bg-white/10 text-xs font-semibold text-slate-200 transition">
-            <i class="fa-brands fa-google text-red-400"></i> Google
-          </button>
-          <button onclick="handleDemoLogin()" class="flex items-center justify-center gap-2 py-2.5 glass-card rounded-xl hover:bg-white/10 text-xs font-semibold text-brand-cyan transition border border-brand-cyan/30">
-            <i class="fa-solid fa-bolt text-brand-cyan"></i> Hızlı Demo
-          </button>
-        </div>
-      </div>
-
-      <div class="mt-6 text-center">
-        <span class="text-[11px] text-slate-500">Firebase Auth & Dynamic Store Entegre Sistemi</span>
-      </div>
-
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen" class="glass-card">
+    <div class="brand-logo">
+      <i class="fa-solid fa-mug-hot"></i>
+      <h1>TeaSpill</h1>
     </div>
+    <p class="auth-subtitle">Gündemi ve sohbeti anında yakala.</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Giriş Yap</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Kayıt Ol</button>
+    </div>
+
+    <div id="auth-alert" class="alert-box"></div>
+
+    <!-- Login Form -->
+    <form id="form-login" class="auth-form" onsubmit="handleEmailAuth(event, 'login')">
+      <div class="input-group">
+        <i class="fa-regular fa-envelope"></i>
+        <input type="email" id="login-email" placeholder="E-Posta Adresi" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="login-password" placeholder="Şifre" required>
+      </div>
+      <button type="submit" class="btn-submit">Giriş Yap</button>
+    </form>
+
+    <!-- Register Form -->
+    <form id="form-register" class="auth-form" style="display: none;" onsubmit="handleEmailAuth(event, 'register')">
+      <div class="input-group">
+        <i class="fa-regular fa-user"></i>
+        <input type="text" id="reg-name" placeholder="Ad Soyad" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-regular fa-envelope"></i>
+        <input type="email" id="reg-email" placeholder="E-Posta Adresi" required>
+      </div>
+      <div class="input-group">
+        <i class="fa-solid fa-lock"></i>
+        <input type="password" id="reg-password" placeholder="Şifre (En az 6 karakter)" required minlength="6">
+      </div>
+      <button type="submit" class="btn-submit">Hesap Oluştur</button>
+    </form>
+
+    <div class="divider">VEYA</div>
+
+    <button class="btn-google" onclick="handleGoogleSignIn()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+      Google ile Devam Et
+    </button>
   </div>
 
-  <!-- MAIN APPLICATION LAYOUT -->
-  <div id="app-container" class="flex-1 flex h-full overflow-hidden relative opacity-30 pointer-events-none transition-all duration-500">
-
-    <!-- DESKTOP / TABLET SIDEBAR NAVIGATION -->
-    <aside class="w-20 md:w-64 glass-panel flex flex-col justify-between border-r border-white/10 z-20 shrink-0">
+  <!-- MAIN APP SCREEN -->
+  <div id="app-screen">
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar glass-card">
       <div>
-        <!-- App Logo & Title -->
-        <div class="p-4 md:p-6 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-cyan to-brand-purple flex items-center justify-center text-white shadow-lg glow-cyan shrink-0">
-            <i class="fa-solid fa-bolt text-xl"></i>
-          </div>
-          <div class="hidden md:block">
-            <h1 class="font-extrabold text-xl leading-none text-gradient">FLOW</h1>
-            <span class="text-[10px] text-slate-400 tracking-widest uppercase">Social Hub</span>
-          </div>
+        <div class="brand-logo">
+          <i class="fa-solid fa-mug-hot"></i>
+          <h1>TeaSpill</h1>
         </div>
-
-        <!-- Navigation Links -->
-        <nav class="px-3 space-y-1.5 mt-4">
-          <button onclick="switchTab('chat')" id="nav-chat" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-slate-300 hover:text-white hover:bg-white/5 transition group active-nav bg-gradient-to-r from-brand-cyan/20 to-transparent border-l-4 border-brand-cyan">
-            <i class="fa-solid fa-comments text-lg group-hover:scale-110 transition text-brand-cyan"></i>
-            <span class="hidden md:inline font-semibold text-sm">Sohbetler</span>
-            <span id="unread-total-badge" class="hidden md:flex ml-auto bg-brand-pink text-white text-[10px] font-bold px-2 py-0.5 rounded-full">3</span>
-          </button>
-
-          <button onclick="switchTab('feed')" id="nav-feed" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition group">
-            <i class="fa-solid fa-square-rss text-lg group-hover:scale-110 transition"></i>
-            <span class="hidden md:inline font-semibold text-sm">Gönderiler</span>
-          </button>
-
-          <button onclick="switchTab('reels')" id="nav-reels" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition group">
-            <i class="fa-solid fa-clapperboard text-lg group-hover:scale-110 transition"></i>
-            <span class="hidden md:inline font-semibold text-sm">Reels Videolar</span>
-            <span class="hidden md:inline-block ml-auto text-[9px] bg-brand-purple/40 text-brand-cyan px-1.5 py-0.5 rounded font-mono">YENİ</span>
-          </button>
-
-          <button onclick="switchTab('explore')" id="nav-explore" class="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-slate-400 hover:text-white hover:bg-white/5 transition group">
-            <i class="fa-solid fa-compass text-lg group-hover:scale-110 transition"></i>
-            <span class="hidden md:inline font-semibold text-sm">Keşfet</span>
-          </button>
-        </nav>
+        <div class="nav-menu">
+          <a class="nav-item active"><i class="fa-regular fa-comment-dots"></i> <span>Sohbetler</span></a>
+          <a class="nav-item"><i class="fa-regular fa-compass"></i> <span>Keşfet</span></a>
+          <a class="nav-item"><i class="fa-regular fa-circle-play"></i> <span>Reels</span></a>
+          <a class="nav-item"><i class="fa-regular fa-heart"></i> <span>Bildirimler</span></a>
+        </div>
       </div>
 
-      <!-- Current User Profile Card -->
-      <div class="p-3 md:p-4 m-2 md:m-3 glass-card rounded-2xl flex items-center justify-between border border-white/5">
-        <div class="flex items-center gap-3 overflow-hidden">
-          <div class="relative shrink-0">
-            <img id="user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="w-10 h-10 rounded-full object-cover ring-2 ring-brand-cyan" alt="Profil">
-            <div class="online-badge absolute bottom-0 right-0"></div>
-          </div>
-          <div class="hidden md:block overflow-hidden">
-            <h4 id="user-display-name" class="font-bold text-xs text-slate-100 truncate">Said Özer</h4>
-            <p id="user-username" class="text-[11px] text-slate-400 truncate">@saidozer</p>
-          </div>
+      <div class="user-profile-badge">
+        <div class="avatar" id="user-avatar">
+          ?
+          <div class="online-indicator"></div>
         </div>
-        <button onclick="logout()" title="Çıkış Yap" class="hidden md:flex text-slate-400 hover:text-red-400 p-2 rounded-xl hover:bg-white/5 transition">
-          <i class="fa-solid fa-right-from-bracket"></i>
-        </button>
+        <div class="user-info" style="flex:1; overflow:hidden;">
+          <div id="user-display-name" style="font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Kullanıcı</div>
+          <div id="user-email-text" style="font-size:11px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">kullanici@mail.com</div>
+        </div>
+        <i class="fa-solid fa-right-from-bracket" style="color:var(--text-muted); cursor:pointer;" onclick="handleSignOut()" title="Çıkış Yap"></i>
       </div>
-    </aside>
-
-    <!-- CONTENT AREA -->
-    <main class="flex-1 flex flex-col h-full bg-brand-dark relative overflow-hidden">
-      
-      <!-- TOP BAR (Global Search & Actions) -->
-      <header class="h-16 border-b border-white/10 glass-panel px-6 flex items-center justify-between shrink-0 z-10">
-        <div class="flex items-center gap-4 flex-1 max-w-md">
-          <div class="relative w-full">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-2.5 text-slate-500 text-sm"></i>
-            <input type="text" placeholder="Sohbet, gönderi veya kullanıcı ara..." class="w-full glass-input rounded-xl py-2 pl-10 pr-4 text-xs text-white focus:outline-none">
-          </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <button onclick="triggerNotificationSim()" class="relative p-2.5 glass-card rounded-xl text-slate-300 hover:text-brand-cyan transition">
-            <i class="fa-regular fa-bell"></i>
-            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-pink rounded-full"></span>
-          </button>
-          <button onclick="createNewPostModal()" class="hidden sm:flex items-center gap-2 bg-gradient-to-r from-brand-cyan to-brand-purple text-slate-950 font-bold px-4 py-2 rounded-xl text-xs hover:opacity-90 transition shadow-lg">
-            <i class="fa-solid fa-plus"></i> Paylaş
-          </button>
-        </div>
-      </header>
-
-      <!-- VIEW PANELS -->
-      <div class="flex-1 flex overflow-hidden relative">
-
-        <!-- 1. CHAT TAB CONTENT (DEFAULT) -->
-        <div id="view-chat" class="flex-1 flex w-full h-full">
-          
-          <!-- Chat List / Channels Sidebar -->
-          <div class="w-full md:w-80 border-r border-white/10 flex flex-col glass-panel shrink-0">
-            <!-- Stories Bar (Inside Chat/Feed Header) -->
-            <div class="p-3 border-b border-white/5">
-              <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 block">Hikayeler</span>
-              <div class="flex gap-3 overflow-x-auto pb-1 no-scrollbar" id="stories-bar">
-                <!-- Dynamic Stories will render here -->
-              </div>
-            </div>
-
-            <!-- Chat Filters / Room Switches -->
-            <div class="p-3 flex gap-2 border-b border-white/5">
-              <button onclick="filterChats('all')" id="chat-filter-all" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-white">Tümü</button>
-              <button onclick="filterChats('dm')" id="chat-filter-dm" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white">Direkt Mesaj</button>
-              <button onclick="filterChats('room')" id="chat-filter-room" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white">Odalar</button>
-            </div>
-
-            <!-- Chat Room / User List -->
-            <div class="flex-1 overflow-y-auto p-2 space-y-1" id="chat-list">
-              <!-- Chat items rendered dynamically -->
-            </div>
-          </div>
-
-          <!-- Active Chat Conversation Box -->
-          <div class="hidden md:flex flex-1 flex-col h-full bg-slate-950/40 relative">
-            
-            <!-- Active Chat Header -->
-            <div class="h-16 border-b border-white/10 glass-panel px-6 flex items-center justify-between shrink-0">
-              <div class="flex items-center gap-3">
-                <div class="relative">
-                  <img id="active-chat-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="w-10 h-10 rounded-full object-cover ring-2 ring-brand-purple">
-                  <span id="active-chat-status-badge" class="online-badge absolute bottom-0 right-0"></span>
-                </div>
-                <div>
-                  <h3 id="active-chat-name" class="font-bold text-sm text-slate-100">Genel Sohbet Odası</h3>
-                  <p id="active-chat-status" class="text-[11px] text-brand-cyan">12 Üye Çevrimiçi • #general</p>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2 text-slate-400">
-                <button class="p-2 hover:text-white hover:bg-white/5 rounded-xl transition"><i class="fa-solid fa-phone"></i></button>
-                <button class="p-2 hover:text-white hover:bg-white/5 rounded-xl transition"><i class="fa-solid fa-video"></i></button>
-                <button class="p-2 hover:text-white hover:bg-white/5 rounded-xl transition"><i class="fa-solid fa-circle-info"></i></button>
-              </div>
-            </div>
-
-            <!-- Messages Scroll Area -->
-            <div id="messages-container" class="flex-1 overflow-y-auto p-6 space-y-4">
-              <!-- Dynamic Messages -->
-            </div>
-
-            <!-- Typing Indicator Bar -->
-            <div id="typing-indicator" class="px-6 py-1 text-[11px] text-slate-400 italic hidden">
-              <span id="typing-user-name">Ahmet</span> yazıyor...
-            </div>
-
-            <!-- Message Input Bar -->
-            <div class="p-4 border-t border-white/10 glass-panel shrink-0">
-              <form onsubmit="sendMessage(event)" class="flex items-center gap-3">
-                <div class="flex items-center gap-1 text-slate-400">
-                  <button type="button" onclick="triggerAudioSim()" class="p-2.5 hover:text-brand-cyan hover:bg-white/5 rounded-xl transition" title="Sesli Mesaj"><i class="fa-solid fa-microphone"></i></button>
-                  <button type="button" onclick="triggerImageUploadSim()" class="p-2.5 hover:text-brand-cyan hover:bg-white/5 rounded-xl transition" title="Fotoğraf Ekle"><i class="fa-regular fa-image"></i></button>
-                </div>
-
-                <input type="text" id="message-input" autocomplete="off" placeholder="Mesajınızı yazın..." class="flex-1 glass-input rounded-2xl py-3 px-4 text-xs text-white focus:outline-none">
-
-                <button type="submit" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-cyan to-brand-purple flex items-center justify-center text-slate-950 font-bold hover:opacity-90 transition shadow-lg shrink-0">
-                  <i class="fa-solid fa-paper-plane text-slate-950"></i>
-                </button>
-              </form>
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- 2. POST FEED TAB CONTENT -->
-        <div id="view-feed" class="hidden flex-1 overflow-y-auto p-6 max-w-2xl mx-auto w-full space-y-6">
-          <div class="text-center py-2">
-            <h2 class="text-xl font-bold text-gradient">Sosyal Akış</h2>
-            <p class="text-xs text-slate-400">Takip ettiğiniz kişilerin son güncellemeleri</p>
-          </div>
-
-          <!-- Feed Posts Container -->
-          <div id="feed-posts-list" class="space-y-6">
-            <!-- Dynamic Posts Rendered Here -->
-          </div>
-        </div>
-
-        <!-- 3. REELS SHORT VIDEOS TAB CONTENT -->
-        <div id="view-reels" class="hidden flex-1 flex justify-center items-center p-4 bg-black/60 relative">
-          <div class="w-full max-w-sm h-[80vh] glass-panel rounded-3xl relative overflow-hidden border border-white/20 flex flex-col justify-end p-6 shadow-2xl">
-            <!-- Background Simulated Video Image -->
-            <img id="reel-bg" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800" class="absolute inset-0 w-full h-full object-cover z-0">
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-0"></div>
-
-            <!-- Video Controls Right Overlay -->
-            <div class="absolute right-4 bottom-20 flex flex-col items-center gap-6 z-10 text-white">
-              <button onclick="toggleReelLike(this)" class="flex flex-col items-center gap-1 group">
-                <div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-xl group-hover:text-brand-pink transition">
-                  <i class="fa-solid fa-heart"></i>
-                </div>
-                <span class="text-xs font-bold">24.5B</span>
-              </button>
-              <button class="flex flex-col items-center gap-1 group">
-                <div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-xl transition">
-                  <i class="fa-solid fa-comment"></i>
-                </div>
-                <span class="text-xs font-bold">1,204</span>
-              </button>
-              <button class="flex flex-col items-center gap-1 group">
-                <div class="w-12 h-12 rounded-full glass-panel flex items-center justify-center text-xl transition">
-                  <i class="fa-solid fa-share"></i>
-                </div>
-                <span class="text-xs font-bold">Paylaş</span>
-              </button>
-            </div>
-
-            <!-- Video Info Bottom Overlay -->
-            <div class="relative z-10 space-y-2">
-              <div class="flex items-center gap-3">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="w-10 h-10 rounded-full object-cover ring-2 ring-brand-cyan">
-                <span class="font-bold text-sm">@saidozer</span>
-                <button class="px-3 py-1 glass-panel rounded-full text-xs font-bold text-brand-cyan border border-brand-cyan/40">Takip Et</button>
-              </div>
-              <p class="text-xs text-slate-200">Flow platformunun ilk Reels video testi! Siber estetik sohbet deneyimi ✨ #flow #saidozer #chat</p>
-              <div class="flex items-center gap-2 text-[11px] text-slate-400">
-                <i class="fa-solid fa-music"></i> Orijinal Ses - Said Özer Prodüksiyon
-              </div>
-            </div>
-
-            <!-- Next Reel Button -->
-            <button onclick="nextReelSim()" class="absolute top-4 right-4 z-10 glass-panel px-3 py-1.5 rounded-full text-xs text-white/80 hover:text-white flex items-center gap-2">
-              Sonraki <i class="fa-solid fa-arrow-down"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- 4. EXPLORE TAB CONTENT -->
-        <div id="view-explore" class="hidden flex-1 overflow-y-auto p-6 max-w-4xl mx-auto w-full">
-          <h2 class="text-xl font-bold text-gradient mb-4">Trendler ve Keşfet</h2>
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="explore-grid">
-            <!-- Dynamic Grid Items -->
-          </div>
-        </div>
-
-      </div>
-
-    </main>
-  </div>
-
-  <!-- MOBILE BOTTOM NAVIGATION BAR -->
-  <div class="md:hidden glass-panel border-t border-white/10 py-2 px-6 flex justify-between items-center z-30 shrink-0">
-    <button onclick="switchTab('chat')" class="flex flex-col items-center gap-1 text-brand-cyan">
-      <i class="fa-solid fa-comments text-lg"></i>
-      <span class="text-[10px]">Sohbet</span>
-    </button>
-    <button onclick="switchTab('feed')" class="flex flex-col items-center gap-1 text-slate-400">
-      <i class="fa-solid fa-square-rss text-lg"></i>
-      <span class="text-[10px]">Akış</span>
-    </button>
-    <button onclick="switchTab('reels')" class="flex flex-col items-center gap-1 text-slate-400">
-      <i class="fa-solid fa-clapperboard text-lg"></i>
-      <span class="text-[10px]">Reels</span>
-    </button>
-    <button onclick="switchTab('explore')" class="flex flex-col items-center gap-1 text-slate-400">
-      <i class="fa-solid fa-compass text-lg"></i>
-      <span class="text-[10px]">Keşfet</span>
-    </button>
-  </div>
-
-  <!-- STORY PREVIEW MODAL -->
-  <div id="story-modal" class="fixed inset-0 z-50 bg-black/90 hidden flex flex-col justify-between p-6 items-center">
-    <div class="w-full max-w-md flex justify-between items-center text-white">
-      <div class="flex items-center gap-3">
-        <img id="story-modal-avatar" src="" class="w-8 h-8 rounded-full object-cover">
-        <span id="story-modal-name" class="font-bold text-xs"></span>
-      </div>
-      <button onclick="closeStoryModal()" class="text-xl p-2"><i class="fa-solid fa-xmark"></i></button>
     </div>
-    <div class="w-full max-w-md h-[70vh] rounded-2xl overflow-hidden glass-panel relative my-auto">
-      <img id="story-modal-img" src="" class="w-full h-full object-cover">
+
+    <!-- CHAT LIST -->
+    <div class="chat-list-panel glass-card">
+      <div style="font-weight:700; font-size:18px;">Mesajlar</div>
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Sohbetlerde ara...">
+      </div>
+      <div class="chat-items">
+        <div class="chat-item active">
+          <div class="avatar">#<div class="online-indicator"></div></div>
+          <div class="chat-info">
+            <div class="chat-name"><span>#genel-sohbet</span> <span class="chat-time">Şimdi</span></div>
+            <div class="chat-last-msg">Herkese açık sohbet kanalı</div>
+          </div>
+        </div>
+        <div class="chat-item">
+          <div class="avatar">T<div class="online-indicator"></div></div>
+          <div class="chat-info">
+            <div class="chat-name"><span>#teknoloji</span> <span class="chat-time">10d</span></div>
+            <div class="chat-last-msg">Yazılım ve uygulama geliştirme</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CHAT WINDOW -->
+    <div class="chat-window glass-card">
+      <div class="chat-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="avatar">#</div>
+          <div>
+            <div style="font-weight:700; font-size:15px;">#genel-sohbet</div>
+            <div style="font-size:11px; color:var(--text-muted);">Canlı Topluluk Odası</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chat-messages">
+        <!-- Messages will be injected here dynamically -->
+      </div>
+
+      <form class="chat-input-area" onsubmit="sendMessage(event)">
+        <input type="text" id="msg-input" placeholder="Mesajınızı yazın..." autocomplete="off">
+        <button type="submit" class="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
+      </form>
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC & FIREBASE INTEGRATION -->
+  <!-- FIREBASE SDKs (v10 Modular) -->
   <script type="module">
-    // Firebase CDN Imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { 
+      getAuth, 
+      createUserWithEmailAndPassword, 
+      signInWithEmailAndPassword, 
+      signInWithRedirect, 
+      getRedirectResult, 
+      GoogleAuthProvider, 
+      onAuthStateChanged, 
+      signOut,
+      updateProfile 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      query, 
+      orderBy, 
+      onSnapshot, 
+      serverTimestamp 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Firebase Config Placeholder (App works in Mock Mode out-of-the-box)
+    // FIREBASE CONFIGURATION
     const firebaseConfig = {
-      apiKey: "DEMO_KEY",
-      authDomain: "flow-app.firebaseapp.com",
-      projectId: "flow-app",
-      storageBucket: "flow-app.appspot.com",
-      messagingSenderId: "0000000000",
-      appId: "1:0000000000:web:0000000000"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
 
-    let app, auth, db;
-    let isFirebaseActive = false;
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const googleProvider = new GoogleAuthProvider();
 
-    try {
-      if (firebaseConfig.apiKey !== "DEMO_KEY") {
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        isFirebaseActive = true;
+    let currentUser = null;
+
+    // Handle Google Redirect Result
+    getRedirectResult(auth).then((result) => {
+      if (result) {
+        console.log("Google Login Successful", result.user);
       }
-    } catch (e) {
-      console.warn("Firebase varsayılan demo modunda çalışıyor.");
-    }
-
-    // STATE MANAGEMENT
-    window.currentUser = null;
-    window.activeChatId = 'general';
-    window.activeFilter = 'all';
-
-    // DEMO MOCK DATA
-    const mockChats = [
-      { id: 'general', name: 'Genel Sohbet Odası', type: 'room', avatar: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=100', unread: 2, status: '12 Üye Çevrimiçi' },
-      { id: 'tech', name: '#yazilim-ve-teknoloji', type: 'room', avatar: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=100', unread: 0, status: '8 Üye Çevrimiçi' },
-      { id: 'dm_ahmet', name: 'Ahmet Yılmaz', type: 'dm', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', unread: 1, status: 'Çevrimiçi' },
-      { id: 'dm_elif', name: 'Elif Kaya', type: 'dm', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100', unread: 0, status: '2sa önce aktifti' }
-    ];
-
-    const mockMessages = {
-      general: [
-        { sender: 'Ahmet Yılmaz', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', text: 'Said Özer bey platform harika görünüyor! Sohbet altyapısı ışık hızında.', time: '14:20', isSelf: false },
-        { sender: 'Elif Kaya', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100', text: 'Reels ve Story entegrasyonu ne zaman tamamen açılacak?', time: '14:22', isSelf: false },
-        { sender: 'Said Özer', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', text: 'Çok yakında! Önce sohbet ve mesajlaşma modülümüzü en yüksek kaliteye ulaştırıyoruz.', time: '14:25', isSelf: true }
-      ],
-      tech: [
-        { sender: 'Caner Demir', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100', text: 'Tailwind ve Firebase v10 CDN kullanımı harika tercih olmuş.', time: '10:15', isSelf: false }
-      ],
-      dm_ahmet: [
-        { sender: 'Ahmet Yılmaz', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', text: 'Selam Said Bey, son projeyi detaylandıralım mı?', time: '12:00', isSelf: false }
-      ]
-    };
-
-    const mockStories = [
-      { name: 'Hikayen', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600' },
-      { name: 'Elif', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100', img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600' },
-      { name: 'Ahmet', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100', img: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600' }
-    ];
-
-    const mockPosts = [
-      {
-        author: 'Said Özer',
-        handle: '@saidozer',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100',
-        content: 'Flow platformumuzun ilk mesajlaşma mimarisi başarıyla kuruldu. Siber karanlık tema ile kullanıcı deneyimi üst seviyede!',
-        image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800',
-        likes: 142,
-        comments: 18,
-        time: '1 saat önce'
-      }
-    ];
-
-    // INITIALIZATION & UI RENDER
-    window.addEventListener('DOMContentLoaded', () => {
-      renderChatList();
-      renderStories();
-      renderFeedPosts();
-      renderExploreGrid();
-      renderActiveMessages();
+    }).catch((error) => {
+      showAlert(error.message);
     });
 
-    // UI SWITCH TABS
-    window.switchAuthTab = function(type) {
-      const loginForm = document.getElementById('login-form');
-      const regForm = document.getElementById('register-form');
-      const loginBtn = document.getElementById('tab-login-btn');
-      const regBtn = document.getElementById('tab-register-btn');
+    // Auth State Observer
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        currentUser = user;
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('app-screen').style.display = 'grid';
+
+        // Update UI Profile
+        const name = user.displayName || user.email.split('@')[0];
+        document.getElementById('user-display-name').innerText = name;
+        document.getElementById('user-email-text').innerText = user.email;
+        document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
+
+        listenToMessages();
+      } else {
+        currentUser = null;
+        document.getElementById('auth-screen').style.display = 'block';
+        document.getElementById('app-screen').style.display = 'none';
+      }
+    });
+
+    // Email Auth (Login & Register)
+    window.handleEmailAuth = async (e, type) => {
+      e.preventDefault();
+      hideAlert();
 
       if (type === 'login') {
-        loginForm.classList.remove('hidden');
-        regForm.classList.add('hidden');
-        loginBtn.className = "flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-gradient-to-r from-brand-cyan to-brand-accent text-slate-950 shadow";
-        regBtn.className = "flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white";
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-password').value;
+        try {
+          await signInWithEmailAndPassword(auth, email, pass);
+        } catch (err) {
+          showAlert("Giriş başarısız: " + err.message);
+        }
       } else {
-        loginForm.classList.add('hidden');
-        regForm.classList.remove('hidden');
-        regBtn.className = "flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-gradient-to-r from-brand-purple to-brand-pink text-white shadow";
-        loginBtn.className = "flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white";
+        const name = document.getElementById('reg-name').value;
+        const email = document.getElementById('reg-email').value;
+        const pass = document.getElementById('reg-password').value;
+        try {
+          const res = await createUserWithEmailAndPassword(auth, email, pass);
+          await updateProfile(res.user, { displayName: name });
+        } catch (err) {
+          showAlert("Kayıt başarısız: " + err.message);
+        }
       }
     };
 
-    window.switchTab = function(tabName) {
-      const views = ['chat', 'feed', 'reels', 'explore'];
-      views.forEach(v => {
-        document.getElementById(`view-${v}`).classList.add('hidden');
-      });
-      document.getElementById(`view-${tabName}`).classList.remove('hidden');
-      showToast(`${tabName.toUpperCase()} sekmesine geçildi.`, 'info');
+    // Google Sign In Redirect
+    window.handleGoogleSignIn = () => {
+      signInWithRedirect(auth, googleProvider);
     };
 
-    // AUTHENTICATION LOGIC
-    window.handleAuthLogin = function(e) {
+    // Sign Out
+    window.handleSignOut = () => {
+      signOut(auth);
+    };
+
+    // Send Message to Firestore
+    window.sendMessage = async (e) => {
       e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      
-      window.currentUser = {
-        displayName: 'Said Özer',
-        username: email.split('@')[0],
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'
-      };
-
-      unlockAppUI();
-      showToast('Hoş geldiniz, Said Özer Bey!', 'success');
-    };
-
-    window.handleAuthRegister = function(e) {
-      e.preventDefault();
-      const fullname = document.getElementById('reg-fullname').value;
-      const username = document.getElementById('reg-username').value;
-
-      window.currentUser = {
-        displayName: fullname,
-        username: `@${username}`,
-        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'
-      };
-
-      unlockAppUI();
-      showToast('Hesabınız başarıyla oluşturuldu!', 'success');
-    };
-
-    window.handleDemoLogin = function() {
-      window.currentUser = {
-        displayName: 'Said Özer (Demo)',
-        username: '@saidozer',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'
-      };
-      unlockAppUI();
-      showToast('Hızlı Demo Modu Aktif Edildi!', 'success');
-    };
-
-    window.handleGoogleSignIn = function() {
-      showToast('Google ile giriş simüle ediliyor...', 'info');
-      setTimeout(() => handleDemoLogin(), 800);
-    };
-
-    function unlockAppUI() {
-      document.getElementById('auth-modal').classList.add('hidden');
-      const app = document.getElementById('app-container');
-      app.classList.remove('opacity-30', 'pointer-events-none');
-      
-      // Update sidebar profile
-      document.getElementById('user-display-name').innerText = window.currentUser.displayName;
-      document.getElementById('user-username').innerText = window.currentUser.username;
-      document.getElementById('user-avatar').src = window.currentUser.avatar;
-    }
-
-    window.logout = function() {
-      document.getElementById('auth-modal').classList.remove('hidden');
-      document.getElementById('app-container').classList.add('opacity-30', 'pointer-events-none');
-      showToast('Çıkış yapıldı.', 'info');
-    };
-
-    // RENDER FUNCTIONS
-    function renderChatList() {
-      const container = document.getElementById('chat-list');
-      container.innerHTML = '';
-
-      mockChats.forEach(chat => {
-        if (window.activeFilter !== 'all' && chat.type !== window.activeFilter) return;
-
-        const isActive = chat.id === window.activeChatId;
-        const item = document.createElement('div');
-        item.onclick = () => selectChat(chat);
-        item.className = `p-3 rounded-2xl flex items-center justify-between cursor-pointer transition ${isActive ? 'bg-white/10 border border-brand-cyan/30' : 'hover:bg-white/5'}`;
-        
-        item.innerHTML = `
-          <div class="flex items-center gap-3">
-            <div class="relative">
-              <img src="${chat.avatar}" class="w-10 h-10 rounded-full object-cover">
-              ${chat.type === 'dm' ? '<div class="online-badge absolute bottom-0 right-0"></div>' : ''}
-            </div>
-            <div>
-              <h4 class="font-bold text-xs text-slate-200">${chat.name}</h4>
-              <p class="text-[10px] text-slate-400">${chat.status}</p>
-            </div>
-          </div>
-          ${chat.unread > 0 ? `<span class="bg-brand-cyan text-slate-950 font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center">${chat.unread}</span>` : ''}
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function selectChat(chat) {
-      window.activeChatId = chat.id;
-      document.getElementById('active-chat-name').innerText = chat.name;
-      document.getElementById('active-chat-avatar').src = chat.avatar;
-      document.getElementById('active-chat-status').innerText = chat.status;
-      chat.unread = 0;
-      renderChatList();
-      renderActiveMessages();
-    }
-
-    function renderActiveMessages() {
-      const container = document.getElementById('messages-container');
-      container.innerHTML = '';
-
-      const msgs = mockMessages[window.activeChatId] || [];
-      msgs.forEach(msg => {
-        const div = document.createElement('div');
-        div.className = `flex items-end gap-2.5 ${msg.isSelf ? 'justify-end' : 'justify-start'}`;
-
-        div.innerHTML = `
-          ${!msg.isSelf ? `<img src="${msg.avatar}" class="w-7 h-7 rounded-full object-cover">` : ''}
-          <div class="max-w-[75%]">
-            ${!msg.isSelf ? `<span class="text-[10px] text-slate-400 ml-1 mb-1 block">${msg.sender}</span>` : ''}
-            <div class="p-3.5 rounded-2xl text-xs leading-relaxed ${msg.isSelf ? 'bg-gradient-to-r from-brand-cyan to-brand-accent text-slate-950 font-medium rounded-br-none shadow-lg' : 'glass-card text-slate-200 rounded-bl-none border border-white/10'}">
-              ${msg.text}
-            </div>
-            <span class="text-[9px] text-slate-500 mt-1 ${msg.isSelf ? 'text-right' : 'text-left'} block">${msg.time}</span>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-
-      container.scrollTop = container.scrollHeight;
-    }
-
-    window.sendMessage = function(e) {
-      e.preventDefault();
-      const input = document.getElementById('message-input');
-      const val = input.value.trim();
-      if (!val) return;
-
-      if (!mockMessages[window.activeChatId]) {
-        mockMessages[window.activeChatId] = [];
-      }
-
-      mockMessages[window.activeChatId].push({
-        sender: window.currentUser ? window.currentUser.displayName : 'Said Özer',
-        avatar: window.currentUser ? window.currentUser.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100',
-        text: val,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        isSelf: true
-      });
+      const input = document.getElementById('msg-input');
+      const text = input.value.trim();
+      if (!text || !currentUser) return;
 
       input.value = '';
-      renderActiveMessages();
-
-      // Simulated Auto Reply
-      setTimeout(() => {
-        simulateIncomingReply();
-      }, 1200);
-    };
-
-    function simulateIncomingReply() {
-      const replies = [
-        "Harika bir güncelleme!",
-        "Flow platformu sohbet entegrasyonu gayet akıcı çalışıyor.",
-        "Aleykümselam Said Bey, mesajınızı aldım."
-      ];
-      const randomReply = replies[Math.floor(Math.random() * replies.length)];
-
-      if (mockMessages[window.activeChatId]) {
-        mockMessages[window.activeChatId].push({
-          sender: 'Sistem Botu',
-          avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100',
-          text: randomReply,
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          isSelf: false
+      try {
+        await addDoc(collection(db, "messages"), {
+          text: text,
+          senderName: currentUser.displayName || currentUser.email.split('@')[0],
+          senderUid: currentUser.uid,
+          createdAt: serverTimestamp()
         });
-        renderActiveMessages();
+      } catch (err) {
+        console.error("Mesaj gönderilemedi:", err);
       }
-    }
+    };
 
-    function renderStories() {
-      const bar = document.getElementById('stories-bar');
-      bar.innerHTML = '';
-      mockStories.forEach(s => {
-        const div = document.createElement('div');
-        div.className = 'flex flex-col items-center gap-1 shrink-0 cursor-pointer';
-        div.onclick = () => openStoryModal(s);
-        div.innerHTML = `
-          <div class="story-ring">
-            <img src="${s.avatar}" class="w-12 h-12 rounded-full object-cover border-2 border-brand-dark">
-          </div>
-          <span class="text-[10px] text-slate-300 font-medium truncate w-12 text-center">${s.name}</span>
-        `;
-        bar.appendChild(div);
+    // Real-time Chat Listener
+    function listenToMessages() {
+      const q = query(collection(db, "messages"), orderBy("createdAt", "asc"));
+      onSnapshot(q, (snapshot) => {
+        const container = document.getElementById('chat-messages');
+        container.innerHTML = '';
+        snapshot.forEach((doc) => {
+          const msg = doc.data();
+          const isSent = msg.senderUid === currentUser?.uid;
+          
+          const msgDiv = document.createElement('div');
+          msgDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+          msgDiv.innerHTML = `
+            <div style="font-size:10px; color:var(--text-muted); margin-left:4px;">${msg.senderName || 'Kullanıcı'}</div>
+            <div class="message-bubble">${msg.text}</div>
+          `;
+          container.appendChild(msgDiv);
+        });
+        container.scrollTop = container.scrollHeight;
       });
     }
 
-    function openStoryModal(s) {
-      document.getElementById('story-modal-avatar').src = s.avatar;
-      document.getElementById('story-modal-name').innerText = s.name;
-      document.getElementById('story-modal-img').src = s.img;
-      document.getElementById('story-modal').classList.remove('hidden');
+    // UI Helpers
+    window.switchAuthTab = (tab) => {
+      hideAlert();
+      if (tab === 'login') {
+        document.getElementById('tab-login').classList.add('active');
+        document.getElementById('tab-register').classList.remove('active');
+        document.getElementById('form-login').style.display = 'flex';
+        document.getElementById('form-register').style.display = 'none';
+      } else {
+        document.getElementById('tab-register').classList.add('active');
+        document.getElementById('tab-login').classList.remove('active');
+        document.getElementById('form-login').style.display = 'none';
+        document.getElementById('form-register').style.display = 'flex';
+      }
+    };
+
+    function showAlert(msg) {
+      const box = document.getElementById('auth-alert');
+      box.innerText = msg;
+      box.style.display = 'block';
     }
 
-    window.closeStoryModal = function() {
-      document.getElementById('story-modal').classList.add('hidden');
-    };
-
-    function renderFeedPosts() {
-      const container = document.getElementById('feed-posts-list');
-      container.innerHTML = '';
-      mockPosts.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'glass-panel rounded-3xl p-5 border border-white/10 space-y-4';
-        card.innerHTML = `
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <img src="${p.avatar}" class="w-10 h-10 rounded-full object-cover">
-              <div>
-                <h4 class="font-bold text-xs text-slate-100">${p.author}</h4>
-                <span class="text-[10px] text-slate-400">${p.handle} • ${p.time}</span>
-              </div>
-            </div>
-            <button class="text-slate-400 hover:text-white"><i class="fa-solid fa-ellipsis"></i></button>
-          </div>
-          <p class="text-xs text-slate-200 leading-relaxed">${p.content}</p>
-          ${p.image ? `<img src="${p.image}" class="w-full h-56 rounded-2xl object-cover border border-white/5">` : ''}
-          <div class="flex items-center justify-between pt-2 text-slate-400 text-xs">
-            <button onclick="togglePostLike(this)" class="flex items-center gap-2 hover:text-brand-pink transition"><i class="fa-regular fa-heart"></i> <span>${p.likes}</span></button>
-            <button class="flex items-center gap-2 hover:text-brand-cyan transition"><i class="fa-regular fa-comment"></i> <span>${p.comments}</span></button>
-            <button class="flex items-center gap-2 hover:text-brand-purple transition"><i class="fa-regular fa-paper-plane"></i> Paylaş</button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function renderExploreGrid() {
-      const grid = document.getElementById('explore-grid');
-      grid.innerHTML = '';
-      const imgs = [
-        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400',
-        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400',
-        'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400',
-        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400',
-        'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=400',
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400'
-      ];
-      imgs.forEach(img => {
-        const item = document.createElement('div');
-        item.className = 'h-40 rounded-2xl overflow-hidden glass-panel relative group cursor-pointer';
-        item.innerHTML = `
-          <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
-          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-bold text-xs gap-3">
-            <span><i class="fa-solid fa-heart"></i> 1.2B</span>
-            <span><i class="fa-solid fa-comment"></i> 45</span>
-          </div>
-        `;
-        grid.appendChild(item);
-      });
-    }
-
-    // UTILITIES & INTERACTIVITY
-    window.filterChats = function(type) {
-      window.activeFilter = type;
-      ['all', 'dm', 'room'].forEach(t => {
-        const btn = document.getElementById(`chat-filter-${t}`);
-        if (t === type) {
-          btn.className = "px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 text-white";
-        } else {
-          btn.className = "px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white";
-        }
-      });
-      renderChatList();
-    };
-
-    window.triggerAudioSim = function() {
-      showToast('Ses kaydı simüle ediliyor...', 'info');
-    };
-
-    window.triggerImageUploadSim = function() {
-      showToast('Görsel seçici simüle ediliyor...', 'info');
-    };
-
-    window.toggleReelLike = function(btn) {
-      btn.classList.toggle('text-brand-pink');
-      showToast('Reels beğenildi!', 'success');
-    };
-
-    window.togglePostLike = function(btn) {
-      const icon = btn.querySelector('i');
-      icon.classList.toggle('fa-solid');
-      icon.classList.toggle('text-brand-pink');
-    };
-
-    window.nextReelSim = function() {
-      const imgs = [
-        'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800',
-        'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800',
-        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800'
-      ];
-      const randomImg = imgs[Math.floor(Math.random() * imgs.length)];
-      document.getElementById('reel-bg').src = randomImg;
-      showToast('Sonraki Reels videosu yüklendi.', 'info');
-    };
-
-    window.createNewPostModal = function() {
-      showToast('Yeni Gönderi Oluşturma Modalı Açılıyor...', 'info');
-    };
-
-    window.triggerNotificationSim = function() {
-      showToast('Yeni bildirim: Ahmet Yılmaz sizinle sohbet başlattı.', 'info');
-    };
-
-    // TOAST NOTIFICATION SYSTEM
-    function showToast(message, type = 'info') {
-      const container = document.getElementById('toast-container');
-      const toast = document.createElement('div');
-      
-      const colors = {
-        success: 'border-emerald-500 text-emerald-300',
-        error: 'border-rose-500 text-rose-300',
-        info: 'border-brand-cyan text-brand-cyan'
-      };
-
-      toast.className = `glass-panel px-4 py-3 rounded-2xl border ${colors[type] || colors.info} text-xs font-semibold shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto`;
-      toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${message}</span>`;
-
-      container.appendChild(toast);
-
-      setTimeout(() => {
-        toast.classList.remove('translate-y-2', 'opacity-0');
-      }, 10);
-
-      setTimeout(() => {
-        toast.classList.add('opacity-0', '-translate-y-2');
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
+    function hideAlert() {
+      document.getElementById('auth-alert').style.display = 'none';
     }
   </script>
 </body>
