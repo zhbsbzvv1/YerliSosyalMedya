@@ -3,186 +3,189 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flow - Social & DM Platform</title>
+  <title>Flow - Instagram Style Social Platform</title>
 
   <!-- Google Fonts & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
-      --bg-dark: #090a0f;
-      --panel-bg: rgba(18, 20, 29, 0.85);
-      --panel-border: rgba(255, 255, 255, 0.08);
-      --primary: #00f2fe;
-      --secondary: #4facfe;
-      --accent-purple: #7f00ff;
-      --text-main: #f0f2f8;
-      --text-muted: #8c93a8;
-      --danger: #ff4b5c;
-      --success: #00e676;
+      --bg-black: #000000;
+      --card-bg: #121212;
+      --border-color: #262626;
+      --text-white: #f5f5f5;
+      --text-gray: #a8a8a8;
+      --accent-blue: #0095f6;
+      --accent-red: #ed4956;
     }
 
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
+      background-color: var(--bg-black);
+      color: var(--text-white);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(127, 0, 255, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.12) 0%, transparent 40%);
     }
 
-    .glass-card {
-      background: var(--panel-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--panel-border);
-      border-radius: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-    }
-
+    /* AUTH SCREEN */
     .auth-container {
       width: 100%;
-      max-width: 420px;
+      max-width: 380px;
       padding: 40px 30px;
-      margin: 20px;
+      background: var(--bg-black);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
       text-align: center;
-      position: relative;
-      z-index: 10;
     }
 
-    .brand-logo {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
-    }
-
-    .brand-logo i {
-      font-size: 32px;
-      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .brand-logo h1 {
-      font-weight: 800;
+    .brand-title {
       font-size: 36px;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #ffffff, var(--primary));
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-    }
-
-    .auth-subtitle {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 32px;
     }
 
     .btn-google {
       width: 100%;
-      padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: var(--accent-blue);
+      color: #fff;
       font-weight: 700;
-      font-size: 15px;
+      font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
 
-    .btn-google:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 242, 254, 0.2);
-    }
-
+    /* MAIN INSTAGRAM LAYOUT */
     #app-screen {
       display: none;
       width: 100vw;
       height: 100vh;
-      max-width: 1400px;
-      max-height: 900px;
-      margin: auto;
-      grid-template-columns: 280px 360px 1fr;
-      gap: 16px;
-      padding: 16px;
+      display: flex;
     }
 
-    .sidebar {
+    /* LEFT SIDEBAR */
+    .insta-sidebar {
+      width: 245px;
+      border-right: 1px solid var(--border-color);
+      padding: 20px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 24px 16px;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      background: var(--bg-black);
+      z-index: 10;
     }
 
-    .nav-menu {
+    .nav-logo {
+      font-size: 24px;
+      font-weight: 800;
+      padding: 12px;
+      margin-bottom: 18px;
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-items {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-top: 24px;
     }
 
-    .nav-item {
+    .nav-btn {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      color: var(--text-muted);
-      text-decoration: none;
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .nav-item:hover, .nav-item.active {
-      color: var(--text-main);
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .nav-item.active i {
-      color: var(--primary);
-    }
-
-    .user-profile-badge {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      gap: 16px;
       padding: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
+      border-radius: 8px;
+      color: var(--text-white);
+      text-decoration: none;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .nav-btn:hover {
+      background: #1a1a1a;
+    }
+
+    .nav-btn i {
+      font-size: 20px;
+      width: 24px;
+    }
+
+    /* MAIN CONTENT FEED AREA */
+    .main-content {
+      margin-left: 245px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding-top: 20px;
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    .feed-container {
+      width: 100%;
+      max-width: 630px;
+      padding: 0 15px;
+    }
+
+    /* STORIES */
+    .stories-bar {
+      display: flex;
+      gap: 18px;
+      padding: 16px 0;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    .story-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
       cursor: pointer;
     }
 
-    .avatar {
-      width: 42px;
-      height: 42px;
+    .story-ring {
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      padding: 2px;
+      background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    }
+
+    .story-ring img, .story-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid var(--bg-black);
+      background: #333;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -190,373 +193,353 @@
       color: #fff;
     }
 
-    .chat-list-panel {
-      padding: 20px;
+    .story-username {
+      font-size: 11px;
+      color: var(--text-white);
+    }
+
+    /* POST CARD */
+    .post-card {
+      background: var(--bg-black);
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+    }
+
+    .post-header {
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+
+    .post-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .post-img {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin: 8px 0;
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 16px;
+      font-size: 20px;
+      padding: 8px 0;
+    }
+
+    .post-actions i {
+      cursor: pointer;
+    }
+
+    /* RIGHT SIDEBAR (SUGGESTIONS) */
+    .right-sidebar {
+      width: 320px;
+      padding: 20px;
+      display: none;
+    }
+
+    @media (min-width: 1000px) {
+      .right-sidebar { display: block; }
+    }
+
+    /* SEARCH DRAWERS / MODALS */
+    .drawer-panel {
+      position: fixed;
+      left: 245px;
+      top: 0;
+      width: 350px;
+      height: 100vh;
+      background: var(--bg-black);
+      border-right: 1px solid var(--border-color);
+      z-index: 9;
+      padding: 24px 16px;
+      display: none;
       flex-direction: column;
       gap: 16px;
-      overflow-y: auto;
     }
 
-    .search-box {
-      position: relative;
-    }
-
-    .search-box input {
+    .search-input-wrap input {
       width: 100%;
-      padding: 12px 14px 12px 40px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      color: var(--text-main);
-      font-size: 13px;
+      padding: 10px 14px;
+      background: #262626;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
       outline: none;
     }
 
-    .search-box i {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-    }
-
-    .search-results {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .user-search-item {
+    .user-search-result {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.03);
-      border-radius: 12px;
-      cursor: pointer;
-    }
-
-    .btn-follow {
-      padding: 6px 12px;
+      padding: 8px;
       border-radius: 8px;
-      border: none;
-      background: var(--primary);
-      color: #000;
-      font-weight: 700;
-      font-size: 11px;
       cursor: pointer;
     }
 
-    .btn-follow.following {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text-main);
+    .user-search-result:hover {
+      background: #121212;
     }
 
-    .chat-items {
+    /* DM CHAT WINDOW */
+    .dm-container {
+      display: none;
+      margin-left: 245px;
+      width: calc(100vw - 245px);
+      height: 100vh;
+    }
+
+    .dm-sidebar {
+      width: 350px;
+      border-right: 1px solid var(--border-color);
+      padding: 20px 12px;
+    }
+
+    .dm-chat-box {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 8px;
     }
 
-    .chat-item {
+    .dm-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: background 0.3s ease;
+      font-weight: 700;
     }
 
-    .chat-item:hover, .chat-item.active {
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .chat-window {
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .chat-header {
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--panel-border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .chat-messages {
+    .dm-messages {
       flex: 1;
-      padding: 24px;
+      padding: 20px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
     }
 
-    .message {
-      max-width: 65%;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .message.sent { align-self: flex-end; }
-    .message.received { align-self: flex-start; }
-
-    .message-bubble {
-      padding: 12px 16px;
-      border-radius: 18px;
+    .msg-bubble {
+      max-width: 60%;
+      padding: 10px 16px;
+      border-radius: 22px;
       font-size: 14px;
       line-height: 1.4;
     }
 
-    .message.sent .message-bubble {
-      background: linear-gradient(135deg, var(--secondary), var(--accent-purple));
+    .msg-bubble.sent {
+      align-self: flex-end;
+      background: var(--accent-blue);
       color: #fff;
-      border-bottom-right-radius: 4px;
     }
 
-    .message.received .message-bubble {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-bottom-left-radius: 4px;
+    .msg-bubble.received {
+      align-self: flex-start;
+      background: #262626;
+      color: #fff;
     }
 
-    .chat-input-area {
-      padding: 16px 24px;
-      border-top: 1px solid var(--panel-border);
+    .dm-input-wrap {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
       display: flex;
-      align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
-    .chat-input-area input {
+    .dm-input-wrap input {
       flex: 1;
-      padding: 12px 18px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      color: var(--text-main);
-      font-size: 14px;
+      padding: 12px 16px;
+      background: #121212;
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      color: #fff;
       outline: none;
     }
 
-    .btn-send {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    .btn-send-dm {
+      background: transparent;
       border: none;
-      color: #000;
+      color: var(--accent-blue);
+      font-weight: 700;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
     }
 
+    /* MODAL */
     .modal-overlay {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.8);
       z-index: 100;
       justify-content: center;
       align-items: center;
     }
 
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .input-group {
-      position: relative;
-      text-align: left;
-    }
-
-    .input-group i {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-muted);
-      font-size: 15px;
-    }
-
-    .input-group input {
-      width: 100%;
-      padding: 14px 16px 14px 48px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      color: var(--text-main);
-      font-size: 14px;
-      outline: none;
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #000;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    .btn-logout {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--danger);
-      background: rgba(255, 75, 92, 0.1);
-      color: var(--danger);
-      font-weight: 700;
+    .modal-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
-      cursor: pointer;
-      margin-top: 14px;
-    }
-
-    .alert-box {
-      background: rgba(255, 75, 92, 0.15);
-      border: 1px solid var(--danger);
-      color: #ff8e9b;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 13px;
-      margin-bottom: 14px;
-      display: none;
+      width: 400px;
+      padding: 24px;
     }
   </style>
 </head>
 <body>
 
-  <!-- AUTH SCREEN (SADECE GOOGLE GİRİŞİ) -->
-  <div id="auth-screen" class="auth-container glass-card">
-    <div class="brand-logo">
-      <i class="fa-solid fa-wind"></i>
-      <h1>Flow</h1>
-    </div>
-    <p class="auth-subtitle">Sosyal Medya ve Özel Mesajlaşma</p>
-
-    <div id="auth-alert" class="alert-box"></div>
-
-    <button class="btn-google" onclick="handleGoogleSignInPopup()">
-      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-      Google ile Giriş Yap
+  <!-- AUTH SCREEN -->
+  <div id="auth-screen" class="auth-container">
+    <div class="brand-title">Flow</div>
+    <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 24px;">Sosyal ortama giriş yapın.</p>
+    <button class="btn-google" onclick="handleGoogleSignIn()">
+      <i class="fa-brands fa-google"></i> Google ile Giriş Yap
     </button>
   </div>
 
-  <!-- GOOGLE INITIAL NICKNAME MODAL -->
-  <div id="google-nickname-modal" class="modal-overlay">
-    <div class="auth-container glass-card">
-      <h2 style="font-size:20px; font-weight:800; margin-bottom:6px;">Kullanıcı Adı Seçin</h2>
-      <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Flow dünyasında görünecek benzersiz bir nickname belirleyin.</p>
-      
-      <form onsubmit="handleGoogleNicknameSet(event)" class="auth-form">
-        <div class="input-group">
-          <i class="fa-solid fa-at"></i>
-          <input type="text" id="google-nickname-input" placeholder="Nickname (Örn: ahmet_01)" required>
-        </div>
-        <button type="submit" class="btn-submit">Devam Et</button>
-      </form>
+  <!-- NICKNAME SET MODAL -->
+  <div id="nickname-modal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 style="margin-bottom: 12px;">Kullanıcı Adı Seçin</h3>
+      <p style="color: var(--text-gray); font-size: 13px; margin-bottom: 16px;">Lütfen benzersiz bir nickname girin.</p>
+      <input type="text" id="initial-nickname-input" placeholder="Nickname" style="width: 100%; padding: 10px; background: #262626; border: none; border-radius: 6px; color: #fff; margin-bottom: 16px; outline: none;">
+      <button class="btn-google" onclick="saveInitialNickname()">Kaydet ve Devam Et</button>
     </div>
   </div>
 
-  <!-- SETTINGS & PROFILE MODAL -->
-  <div id="settings-modal" class="modal-overlay">
-    <div class="auth-container glass-card" style="max-width: 480px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h2 style="font-size:20px; font-weight:800;">Hesap Ayarları</h2>
-        <i class="fa-solid fa-xmark" style="cursor:pointer; font-size:20px; color:var(--text-muted);" onclick="closeSettingsModal()"></i>
+  <!-- PROFILE EDIT MODAL -->
+  <div id="profile-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3>Profili Düzenle</h3>
+        <i class="fa-solid fa-xmark" style="cursor: pointer;" onclick="closeProfileModal()"></i>
       </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <label style="font-size: 12px; color: var(--text-gray);">Ad Soyad</label>
+        <input type="text" id="edit-fullname-input" style="padding: 10px; background: #262626; border: none; border-radius: 6px; color: #fff; outline: none;">
+        
+        <label style="font-size: 12px; color: var(--text-gray);">Kullanıcı Adı (@nickname)</label>
+        <input type="text" id="edit-nickname-input" style="padding: 10px; background: #262626; border: none; border-radius: 6px; color: #fff; outline: none;">
 
-      <form onsubmit="handleUpdateProfile(event)" class="auth-form">
-        <div class="input-group">
-          <i class="fa-regular fa-user"></i>
-          <input type="text" id="set-fullname" placeholder="Ad Soyad" required>
-        </div>
-        <div class="input-group">
-          <i class="fa-solid fa-at"></i>
-          <input type="text" id="set-nickname" placeholder="Nickname" required>
-        </div>
-        <button type="submit" class="btn-submit">Profil Güncelle</button>
-      </form>
-
-      <button class="btn-logout" onclick="handleSignOut()"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
+        <button class="btn-google" style="margin-top: 10px;" onclick="updateUserProfile()">Kaydet (Google'a İşle)</button>
+        <button class="btn-google" style="background: var(--accent-red); margin-top: 6px;" onclick="handleSignOut()">Çıkış Yap</button>
+      </div>
     </div>
   </div>
 
-  <!-- MAIN APP SCREEN -->
+  <!-- APP SCREEN -->
   <div id="app-screen">
     <!-- LEFT SIDEBAR -->
-    <div class="sidebar glass-card">
+    <div class="insta-sidebar">
       <div>
-        <div class="brand-logo">
-          <i class="fa-solid fa-wind"></i>
-          <h1>Flow</h1>
-        </div>
-        <div class="nav-menu">
-          <a class="nav-item active"><i class="fa-regular fa-paper-plane"></i> <span>Mesajlar</span></a>
-          <a class="nav-item" onclick="openSettingsModal()"><i class="fa-solid fa-gear"></i> <span>Hesap Ayarları</span></a>
+        <div class="nav-logo">Flow</div>
+        <div class="nav-items">
+          <a class="nav-btn" onclick="showFeed()"><i class="fa-solid fa-house"></i> <span>Ana Sayfa</span></a>
+          <a class="nav-btn" onclick="toggleSearchDrawer()"><i class="fa-solid fa-magnifying-glass"></i> <span>Arama</span></a>
+          <a class="nav-btn" onclick="showDM()"><i class="fa-regular fa-paper-plane"></i> <span>Mesajlar</span></a>
+          <a class="nav-btn" onclick="openProfileModal()"><i class="fa-regular fa-user"></i> <span>Profil</span></a>
         </div>
       </div>
-
-      <div class="user-profile-badge" onclick="openSettingsModal()">
-        <div class="avatar" id="user-avatar">?</div>
-        <div class="user-info" style="flex:1; overflow:hidden;">
-          <div id="user-display-name" style="font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Kullanıcı</div>
-          <div id="user-nickname-text" style="font-size:11px; color:var(--primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">@nickname</div>
-        </div>
+      <div class="nav-btn" onclick="openProfileModal()">
+        <div class="story-avatar" id="sidebar-avatar" style="width: 28px; height: 28px;">?</div>
+        <span id="sidebar-username" style="font-size: 13px; font-weight: 600;">Profilim</span>
       </div>
     </div>
 
-    <!-- DM & SEARCH LIST PANEL -->
-    <div class="chat-list-panel glass-card">
-      <div style="font-weight:700; font-size:18px;">Direkt Mesajlar</div>
-      
-      <!-- ARAMA ÇUBUĞU -->
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="user-search-input" placeholder="Kullanıcı ara (@nickname)..." oninput="searchUsers(this.value)">
+    <!-- SEARCH DRAWER PANEL -->
+    <div id="search-drawer" class="drawer-panel">
+      <h2>Arama</h2>
+      <div class="search-input-wrap">
+        <input type="text" id="search-input" placeholder="Arama..." oninput="executeUserSearch(this.value)">
       </div>
-
-      <!-- ARAMA SONUÇLARI -->
-      <div id="search-results" class="search-results" style="display:none;"></div>
-
-      <!-- SOHBET LİSTESİ -->
-      <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-top:10px;">SOHBETLERİNİZ</div>
-      <div class="chat-items" id="dm-chats-list"></div>
+      <div id="search-results-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
     </div>
 
-    <!-- MAIN CHAT WINDOW -->
-    <div class="chat-window glass-card">
-      <div class="chat-header" id="active-chat-header">
-        <div style="display:flex; align-items:center; gap:12px;">
-          <div class="avatar" id="active-chat-avatar">?</div>
-          <div>
-            <div style="font-weight:700; font-size:15px;" id="active-chat-title">Sohbet Seçin</div>
-            <div style="font-size:11px; color:var(--text-muted);" id="active-chat-sub">Özel Sohbet</div>
+    <!-- MAIN FEED AREA -->
+    <div id="feed-view" class="main-content">
+      <div class="feed-container">
+        <!-- STORIES BAR -->
+        <div class="stories-bar">
+          <div class="story-item">
+            <div class="story-ring"><div class="story-avatar">A</div></div>
+            <span class="story-username">amedsk</span>
+          </div>
+          <div class="story-item">
+            <div class="story-ring"><div class="story-avatar">B</div></div>
+            <span class="story-username">azize21</span>
+          </div>
+          <div class="story-item">
+            <div class="story-ring"><div class="story-avatar">C</div></div>
+            <span class="story-username">ozger_ozer</span>
           </div>
         </div>
+
+        <!-- POST 1 -->
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-user">
+              <div class="story-avatar" style="width: 32px; height: 32px;">A</div>
+              <span>amedskofficial</span>
+            </div>
+            <i class="fa-solid fa-ellipsis"></i>
+          </div>
+          <img src="https://picsum.photos/600/400" class="post-img" alt="Post">
+          <div class="post-actions">
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-regular fa-comment"></i>
+            <i class="fa-regular fa-paper-plane"></i>
+          </div>
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 4px;">16.534 beğenme</div>
+          <div style="font-size: 13px;"><b>amedskofficial</b> DEVRE ARASI! 1 - 0</div>
+        </div>
       </div>
 
-      <div class="chat-messages" id="chat-messages">
-        <div style="margin:auto; color:var(--text-muted); font-size:13px;">Mesajlaşmak için soldan bir sohbet seçin veya kullanıcı arayın.</div>
+      <!-- RIGHT SIDEBAR -->
+      <div class="right-sidebar">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="story-avatar" id="right-avatar" style="width: 44px; height: 44px;">?</div>
+            <div>
+              <div id="right-fullname" style="font-size: 13px; font-weight: 700;">Kullanıcı</div>
+              <div id="right-nickname" style="font-size: 12px; color: var(--text-gray);">@nickname</div>
+            </div>
+          </div>
+        </div>
+        <div style="color: var(--text-gray); font-size: 12px; font-weight: 700; margin-bottom: 12px;">Senin İçin Önerilenler</div>
+        <div id="suggested-users-list"></div>
       </div>
-
-      <form class="chat-input-area" onsubmit="sendMessage(event)">
-        <input type="text" id="msg-input" placeholder="Mesajınızı yazın..." autocomplete="off">
-        <button type="submit" class="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
-      </form>
     </div>
+
+    <!-- DM CHAT VIEW -->
+    <div id="dm-view" class="dm-container">
+      <div class="dm-sidebar">
+        <h3 style="margin-bottom: 16px;" id="dm-my-nick">Mesajlar</h3>
+        <div id="dm-recent-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      </div>
+
+      <div class="dm-chat-box">
+        <div class="dm-header">
+          <div class="story-avatar" id="dm-active-avatar" style="width: 32px; height: 32px;">?</div>
+          <span id="dm-active-name">Bir sohbet seçin</span>
+        </div>
+        <div class="dm-messages" id="dm-messages-body">
+          <div style="margin: auto; color: var(--text-gray); font-size: 13px;">Sohbet etmek için sol taraftan veya aramadan birini seçin.</div>
+        </div>
+        <form class="dm-input-wrap" onsubmit="sendDirectMessage(event)">
+          <input type="text" id="dm-message-input" placeholder="Mesaj yazın..." autocomplete="off">
+          <button type="submit" class="btn-send-dm">Gönder</button>
+        </form>
+      </div>
+    </div>
+
   </div>
 
   <!-- FIREBASE SDKs -->
@@ -567,6 +550,7 @@
       signInWithPopup, 
       GoogleAuthProvider, 
       onAuthStateChanged, 
+      updateProfile,
       signOut 
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
     import { 
@@ -600,237 +584,209 @@
     const googleProvider = new GoogleAuthProvider();
 
     let currentUserData = null;
-    let pendingGoogleUser = null;
+    let pendingUser = null;
     let activeChatUser = null;
-    let currentUnsubscribe = null;
+    let unsubscribeDM = null;
 
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        try {
-          const userDocRef = doc(db, "users", user.uid);
-          const userDocSnap = await getDoc(userDocRef);
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
 
-          if (userDocSnap.exists()) {
-            currentUserData = userDocSnap.data();
-            loadAppInterface();
-          } else {
-            pendingGoogleUser = user;
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('google-nickname-modal').style.display = 'flex';
-          }
-        } catch (error) {
-          currentUserData = {
-            fullName: user.displayName || "Kullanıcı",
-            nickname: user.email ? user.email.split('@')[0] : "user",
-            uid: user.uid,
-            following: []
-          };
-          loadAppInterface();
+        if (userSnap.exists()) {
+          currentUserData = userSnap.data();
+          renderAppInterface();
+        } else {
+          pendingUser = user;
+          document.getElementById('auth-screen').style.display = 'none';
+          document.getElementById('nickname-modal').style.display = 'flex';
         }
       } else {
-        currentUserData = null;
         document.getElementById('auth-screen').style.display = 'block';
         document.getElementById('app-screen').style.display = 'none';
-        document.getElementById('google-nickname-modal').style.display = 'none';
       }
     });
 
-    window.handleGoogleSignInPopup = async () => {
+    window.handleGoogleSignIn = async () => {
+      try { await signInWithPopup(auth, googleProvider); } catch(e) { alert(e.message); }
+    };
+
+    window.saveInitialNickname = async () => {
+      const nick = document.getElementById('initial-nickname-input').value.trim().toLowerCase();
+      if(!nick || !pendingUser) return;
+
+      const userData = {
+        uid: pendingUser.uid,
+        fullName: pendingUser.displayName || "Flow Kullanıcısı",
+        nickname: nick,
+        email: pendingUser.email,
+        createdAt: serverTimestamp()
+      };
+
+      await setDoc(doc(db, "users", pendingUser.uid), userData);
+      currentUserData = userData;
+      document.getElementById('nickname-modal').style.display = 'none';
+      renderAppInterface();
+    };
+
+    /* PROFİL GÜNCELLEME (GOOGLE HESABI İLE EŞLEŞTİRME) */
+    window.updateUserProfile = async () => {
+      const newName = document.getElementById('edit-fullname-input').value.trim();
+      const newNick = document.getElementById('edit-nickname-input').value.trim().toLowerCase();
+
+      if(!newName || !newNick) return;
+
       try {
-        await signInWithPopup(auth, googleProvider);
-      } catch (err) {
-        showAuthAlert("Google Giriş Hatası: " + err.message);
+        // Google Profilini Güncelle
+        if (auth.currentUser) {
+          await updateProfile(auth.currentUser, { displayName: newName });
+        }
+
+        // Firestore Verilerini Güncelle
+        await updateDoc(doc(db, "users", currentUserData.uid), {
+          fullName: newName,
+          nickname: newNick
+        });
+
+        currentUserData.fullName = newName;
+        currentUserData.nickname = newNick;
+
+        renderAppInterface();
+        closeProfileModal();
+        alert("Profiliniz başarıyla Google hesabınız ve veritabanıyla senkronize edildi!");
+
+      } catch(e) {
+        alert("Güncelleme hatası: " + e.message);
       }
     };
 
-    window.handleGoogleNicknameSet = async (e) => {
-      e.preventDefault();
-      const nickname = document.getElementById('google-nickname-input').value.trim().toLowerCase();
-      if (!pendingGoogleUser) return;
-
-      const uid = pendingGoogleUser.uid;
-      const fullName = pendingGoogleUser.displayName || "Flow Kullanıcısı";
-      const email = pendingGoogleUser.email;
-
-      currentUserData = { uid, fullName, nickname, email, following: [] };
-
-      try {
-        await setDoc(doc(db, "users", uid), currentUserData);
-      } catch (err) {}
-
-      document.getElementById('google-nickname-modal').style.display = 'none';
-      loadAppInterface();
-    };
-
-    window.handleUpdateProfile = async (e) => {
-      e.preventDefault();
-      const newFullName = document.getElementById('set-fullname').value.trim();
-      const newNickname = document.getElementById('set-nickname').value.trim().toLowerCase();
-
-      currentUserData.fullName = newFullName;
-      currentUserData.nickname = newNickname;
-
-      try {
-        await updateDoc(doc(db, "users", currentUserData.uid), {
-          fullName: newFullName,
-          nickname: newNickname
-        });
-      } catch (err) {}
-
-      loadAppInterface();
-      closeSettingsModal();
-    };
-
-    function loadAppInterface() {
+    function renderAppInterface() {
       document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('app-screen').style.display = 'grid';
+      document.getElementById('app-screen').style.display = 'flex';
 
-      document.getElementById('user-display-name').innerText = currentUserData.fullName;
-      document.getElementById('user-nickname-text').innerText = '@' + currentUserData.nickname;
-      document.getElementById('user-avatar').innerText = currentUserData.fullName.charAt(0).toUpperCase();
+      const initial = currentUserData.fullName.charAt(0).toUpperCase();
+      document.getElementById('sidebar-avatar').innerText = initial;
+      document.getElementById('sidebar-username').innerText = '@' + currentUserData.nickname;
 
-      loadRecentDMChats();
+      document.getElementById('right-avatar').innerText = initial;
+      document.getElementById('right-fullname').innerText = currentUserData.fullName;
+      document.getElementById('right-nickname').innerText = '@' + currentUserData.nickname;
+
+      loadRecentChats();
     }
 
-    /* KULLANICI ARAMA SİSTEMİ */
-    window.searchUsers = async (val) => {
-      const resultsDiv = document.getElementById('search-results');
-      if(!val || val.length < 2) {
-        resultsDiv.style.display = 'none';
-        return;
-      }
+    /* ARAMA DRAWER KONTROLÜ */
+    window.toggleSearchDrawer = () => {
+      const drawer = document.getElementById('search-drawer');
+      drawer.style.display = drawer.style.display === 'flex' ? 'none' : 'flex';
+    };
 
-      try {
-        const q = query(collection(db, "users"));
-        const querySnapshot = await getDocs(q);
-        resultsDiv.innerHTML = '';
-        resultsDiv.style.display = 'flex';
+    window.executeUserSearch = async (val) => {
+      const list = document.getElementById('search-results-list');
+      if(!val || val.length < 2) { list.innerHTML = ''; return; }
 
-        querySnapshot.forEach((docSnap) => {
-          const user = docSnap.data();
-          if(user.uid !== currentUserData.uid && (user.nickname.includes(val.toLowerCase()) || user.fullName.toLowerCase().includes(val.toLowerCase()))) {
-            const isFollowing = currentUserData.following && currentUserData.following.includes(user.uid);
-            
-            const item = document.createElement('div');
-            item.className = 'user-search-item';
-            item.innerHTML = `
-              <div style="display:flex; align-items:center; gap:10px;" onclick="openDMChat('${user.uid}', '${user.fullName}', '${user.nickname}')">
-                <div class="avatar" style="width:32px; height:32px; font-size:12px;">${user.fullName.charAt(0).toUpperCase()}</div>
-                <div>
-                  <div style="font-size:12px; font-weight:700;">${user.fullName}</div>
-                  <div style="font-size:10px; color:var(--text-muted);">@${user.nickname}</div>
-                </div>
+      const q = query(collection(db, "users"));
+      const snap = await getDocs(q);
+      list.innerHTML = '';
+
+      snap.forEach(docSnap => {
+        const u = docSnap.data();
+        if(u.uid !== currentUserData.uid && (u.nickname.includes(val.toLowerCase()) || u.fullName.toLowerCase().includes(val.toLowerCase()))) {
+          const item = document.createElement('div');
+          item.className = 'user-search-result';
+          item.onclick = () => {
+            toggleSearchDrawer();
+            openDirectMessage(u.uid, u.fullName, u.nickname);
+          };
+          item.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="story-avatar" style="width:32px; height:32px;">${u.fullName.charAt(0).toUpperCase()}</div>
+              <div>
+                <div style="font-size:13px; font-weight:700;">${u.fullName}</div>
+                <div style="font-size:11px; color:var(--text-gray);">@${u.nickname}</div>
               </div>
-              <button class="btn-follow ${isFollowing ? 'following' : ''}" onclick="toggleFollow('${user.uid}')">
-                ${isFollowing ? 'Takip Ediliyor' : 'Takip Et'}
-              </button>
-            `;
-            resultsDiv.appendChild(item);
-          }
-        });
-      } catch(e) { console.log(e); }
+            </div>
+          `;
+          list.appendChild(item);
+        }
+      });
     };
 
-    /* TAKİP ET SİSTEMİ */
-    window.toggleFollow = async (targetUid) => {
-      if(!currentUserData.following) currentUserData.following = [];
-      
-      const idx = currentUserData.following.indexOf(targetUid);
-      if(idx > -1) {
-        currentUserData.following.splice(idx, 1);
-      } else {
-        currentUserData.following.push(targetUid);
-      }
-
-      try {
-        await updateDoc(doc(db, "users", currentUserData.uid), {
-          following: currentUserData.following
-        });
-      } catch(e) {}
-
-      searchUsers(document.getElementById('user-search-input').value);
-    };
-
-    /* ÖZEL SOHBET ODA ID SİSTEMİ */
-    function getChatRoomId(uid1, uid2) {
-      return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
+    /* DM MESAJLAŞMA SİSTEMİ (SAYFA YENİLENSE DE SİLİNMEYEN KALICI SOHBET) */
+    function getRoomId(id1, id2) {
+      return id1 < id2 ? `${id1}_${id2}` : `${id2}_${id1}`;
     }
 
-    window.openDMChat = (targetUid, targetName, targetNick) => {
+    window.openDirectMessage = (targetUid, targetName, targetNick) => {
       activeChatUser = { uid: targetUid, fullName: targetName, nickname: targetNick };
-      
-      document.getElementById('active-chat-title').innerText = targetName;
-      document.getElementById('active-chat-sub').innerText = '@' + targetNick;
-      document.getElementById('active-chat-avatar').innerText = targetName.charAt(0).toUpperCase();
+      showDM();
 
-      listenToPrivateMessages();
-    };
+      document.getElementById('dm-active-name').innerText = targetName + ' (@' + targetNick + ')';
+      document.getElementById('dm-active-avatar').innerText = targetName.charAt(0).toUpperCase();
 
-    function listenToPrivateMessages() {
-      if(!activeChatUser) return;
-      if(currentUnsubscribe) currentUnsubscribe();
+      if(unsubscribeDM) unsubscribeDM();
 
-      const roomId = getChatRoomId(currentUserData.uid, activeChatUser.uid);
-      const q = query(collection(db, "direct_messages", roomId, "messages"), orderBy("createdAt", "asc"));
+      const roomId = getRoomId(currentUserData.uid, targetUid);
+      const q = query(collection(db, "chats", roomId, "messages"), orderBy("createdAt", "asc"));
 
-      currentUnsubscribe = onSnapshot(q, (snapshot) => {
-        const container = document.getElementById('chat-messages');
-        container.innerHTML = '';
-        snapshot.forEach((docSnap) => {
+      unsubscribeDM = onSnapshot(q, (snapshot) => {
+        const body = document.getElementById('dm-messages-body');
+        body.innerHTML = '';
+        snapshot.forEach(docSnap => {
           const msg = docSnap.data();
           const isSent = msg.senderUid === currentUserData.uid;
 
           const msgDiv = document.createElement('div');
-          msgDiv.className = `message ${isSent ? 'sent' : 'received'}`;
-          msgDiv.innerHTML = `<div class="message-bubble">${msg.text}</div>`;
-          container.appendChild(msgDiv);
+          msgDiv.className = `msg-bubble ${isSent ? 'sent' : 'received'}`;
+          msgDiv.innerText = msg.text;
+          body.appendChild(msgDiv);
         });
-        container.scrollTop = container.scrollHeight;
+        body.scrollTop = body.scrollHeight;
       });
-    }
-
-    window.sendMessage = async (e) => {
-      e.preventDefault();
-      const input = document.getElementById('msg-input');
-      const text = input.value.trim();
-      if (!text || !activeChatUser) return;
-
-      input.value = '';
-      const roomId = getChatRoomId(currentUserData.uid, activeChatUser.uid);
-
-      try {
-        await addDoc(collection(db, "direct_messages", roomId, "messages"), {
-          text: text,
-          senderUid: currentUserData.uid,
-          createdAt: serverTimestamp()
-        });
-
-        await setDoc(doc(db, "users", currentUserData.uid, "recent_chats", activeChatUser.uid), {
-          targetUid: activeChatUser.uid,
-          targetName: activeChatUser.fullName,
-          targetNick: activeChatUser.nickname,
-          lastMsg: text,
-          updatedAt: serverTimestamp()
-        });
-
-      } catch(err) { console.error(err); }
     };
 
-    function loadRecentDMChats() {
-      const q = query(collection(db, "users", currentUserData.uid, "recent_chats"), orderBy("updatedAt", "desc"));
-      onSnapshot(q, (snapshot) => {
-        const list = document.getElementById('dm-chats-list');
+    window.sendDirectMessage = async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('dm-message-input');
+      const text = input.value.trim();
+      if(!text || !activeChatUser) return;
+
+      input.value = '';
+      const roomId = getRoomId(currentUserData.uid, activeChatUser.uid);
+
+      await addDoc(collection(db, "chats", roomId, "messages"), {
+        text: text,
+        senderUid: currentUserData.uid,
+        createdAt: serverTimestamp()
+      });
+
+      // Recent DM Ekle
+      await setDoc(doc(db, "users", currentUserData.uid, "recent_dms", activeChatUser.uid), {
+        targetUid: activeChatUser.uid,
+        targetName: activeChatUser.fullName,
+        targetNick: activeChatUser.nickname,
+        lastMsg: text,
+        updatedAt: serverTimestamp()
+      });
+    };
+
+    function loadRecentChats() {
+      const q = query(collection(db, "users", currentUserData.uid, "recent_dms"), orderBy("updatedAt", "desc"));
+      onSnapshot(q, (snap) => {
+        const list = document.getElementById('dm-recent-list');
         list.innerHTML = '';
-        snapshot.forEach((docSnap) => {
-          const chat = docSnap.data();
+        snap.forEach(docSnap => {
+          const c = docSnap.data();
           const item = document.createElement('div');
-          item.className = 'chat-item';
-          item.onclick = () => openDMChat(chat.targetUid, chat.targetName, chat.targetNick);
+          item.className = 'user-search-result';
+          item.onclick = () => openDirectMessage(c.targetUid, c.targetName, c.targetNick);
           item.innerHTML = `
-            <div class="avatar">${chat.targetName.charAt(0).toUpperCase()}</div>
-            <div>
-              <div style="font-size:13px; font-weight:700;">${chat.targetName}</div>
-              <div style="font-size:11px; color:var(--text-muted);">${chat.lastMsg || '@' + chat.targetNick}</div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="story-avatar" style="width:36px; height:36px;">${c.targetName.charAt(0).toUpperCase()}</div>
+              <div>
+                <div style="font-size:13px; font-weight:700;">${c.targetName}</div>
+                <div style="font-size:11px; color:var(--text-gray);">${c.lastMsg}</div>
+              </div>
             </div>
           `;
           list.appendChild(item);
@@ -838,26 +794,28 @@
       });
     }
 
-    window.openSettingsModal = () => {
-      document.getElementById('set-fullname').value = currentUserData.fullName;
-      document.getElementById('set-nickname').value = currentUserData.nickname;
-      document.getElementById('settings-modal').style.display = 'flex';
+    /* VİEW KONTROLLERİ */
+    window.showFeed = () => {
+      document.getElementById('feed-view').style.display = 'flex';
+      document.getElementById('dm-view').style.display = 'none';
     };
 
-    window.closeSettingsModal = () => {
-      document.getElementById('settings-modal').style.display = 'none';
+    window.showDM = () => {
+      document.getElementById('feed-view').style.display = 'none';
+      document.getElementById('dm-view').style.display = 'flex';
     };
 
-    window.handleSignOut = () => {
-      closeSettingsModal();
-      signOut(auth);
+    window.openProfileModal = () => {
+      document.getElementById('edit-fullname-input').value = currentUserData.fullName;
+      document.getElementById('edit-nickname-input').value = currentUserData.nickname;
+      document.getElementById('profile-modal').style.display = 'flex';
     };
 
-    function showAuthAlert(msg) {
-      const box = document.getElementById('auth-alert');
-      box.innerText = msg;
-      box.style.display = 'block';
-    }
+    window.closeProfileModal = () => {
+      document.getElementById('profile-modal').style.display = 'none';
+    };
+
+    window.handleSignOut = () => signOut(auth);
   </script>
 </body>
 </html>
