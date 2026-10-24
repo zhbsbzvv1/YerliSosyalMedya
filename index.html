@@ -638,47 +638,65 @@
 
       try {
         await setDoc(doc(db, "users", uid), currentUserData, { merge: true });
+        document.getElementById('google-nickname-modal').style.display = 'none';
+        loadAppInterface();
       } catch (err) {
         console.error("Kullanıcı oluşturma hatası:", err);
+        alert("Profil oluşturulamadı: " + (err.code || err.message) +
+          "\nFirebase Console > Firestore Database > Rules izinlerini kontrol edin.");
       }
-
-      document.getElementById('google-nickname-modal').style.display = 'none';
-      loadAppInterface();
     };
 
-    /* DOĞRUDAN DİNLEYİCİ İLE ÇALIŞAN VE HATASIZ PROFİL GÜNCELLEME */
+    // Profil güncelleme: Firebase Auth ve Firestore hatalarını açıkça gösterir.
     document.getElementById('btn-save-profile').addEventListener('click', async () => {
+      const button = document.getElementById('btn-save-profile');
       const newFullName = document.getElementById('set-fullname').value.trim();
-      const newNickname = document.getElementById('set-nickname').value.trim().toLowerCase();
+      const newNickname = document.getElementById('set-nickname').value.trim()
+        .toLowerCase().replace(/^@/, '');
+
+      if (!auth.currentUser || !currentUserData) {
+        alert("Oturum bilgisi henüz yüklenmedi. Sayfayı yenileyip tekrar deneyin.");
+        return;
+      }
 
       if (!newFullName || !newNickname) {
         alert("Lütfen Ad Soyad ve Nickname alanlarını boş bırakmayın!");
         return;
       }
 
-      try {
-        if (auth.currentUser) {
-          await updateProfile(auth.currentUser, { displayName: newFullName });
-        }
+      if (!/^[a-z0-9_.]{3,20}$/.test(newNickname)) {
+        alert("Nickname 3-20 karakter olmalı; yalnızca küçük harf, rakam, nokta ve alt çizgi kullanın.");
+        return;
+      }
 
-        const userDocRef = doc(db, "users", currentUserData.uid);
+      button.disabled = true;
+      button.textContent = "Kaydediliyor...";
+
+      try {
+        const uid = auth.currentUser.uid;
+        const userDocRef = doc(db, "users", uid);
         const updatedObj = {
-          uid: currentUserData.uid,
+          uid,
           fullName: newFullName,
           nickname: newNickname,
-          email: currentUserData.email || ""
+          email: auth.currentUser.email || currentUserData.email || ""
         };
 
+        // Önce Firestore'a kaydet; başarısızsa arayüzde başarı gösterme.
         await setDoc(userDocRef, updatedObj, { merge: true });
+        await updateProfile(auth.currentUser, { displayName: newFullName });
 
-        currentUserData.fullName = newFullName;
-        currentUserData.nickname = newNickname;
-
+        currentUserData = { ...currentUserData, ...updatedObj };
         loadAppInterface();
         closeSettingsModal();
-        alert("Profiliniz ve kullanıcı adınız (@" + newNickname + ") başarıyla güncellendi!");
+        alert("Profil başarıyla güncellendi: @" + newNickname);
       } catch (err) {
-        alert("Güncelleme Hatası: " + err.message);
+        console.error("Profil güncelleme hatası:", err);
+        alert("Profil güncellenemedi: " + (err.code || err.message) +
+          "\nFirebase Console > Firestore Database > Rules bölümünü de kontrol edin.");
+      } finally {
+        button.disabled = false;
+        button.textContent = "Profil Güncelle";
       }
     });
 
@@ -741,7 +759,10 @@
           resultsDiv.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:8px;">Kullanıcı bulunamadı.</div>';
         }
       } catch (e) {
-        console.error("Arama Hatası:", e);
+        console.error("Kullanıcı arama hatası:", e);
+        resultsDiv.style.display = 'flex';
+        resultsDiv.innerHTML = '<div style="font-size:12px;color:var(--danger);padding:8px;">Kullanıcılar yüklenemedi. Firestore Rules izinlerini kontrol edin. (' +
+          String(e.code || e.message).replace(/[<>&"]/g, '') + ')</div>';
       }
     };
 
