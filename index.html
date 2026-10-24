@@ -124,11 +124,12 @@
       border: 1px solid var(--danger);
       color: #ff8e99;
       font-size: 13px;
-      padding: 10px 14px;
+      padding: 12px 14px;
       border-radius: 12px;
       margin-bottom: 16px;
       text-align: left;
       line-height: 1.4;
+      word-break: break-all;
     }
 
     #app-screen {
@@ -603,7 +604,6 @@
     let activeChatUser = null;
     let currentUnsubscribe = null;
 
-    // DOM Elements
     const authScreen = document.getElementById('auth-screen');
     const appScreen = document.getElementById('app-screen');
     const nickModal = document.getElementById('google-nickname-modal');
@@ -637,8 +637,8 @@
             nickModal.style.display = 'flex';
           }
         } catch (error) {
-          console.error("Kullanıcı verisi çekilemedi:", error);
-          showError("Veritabanına bağlanılamadı. Firestore Rules izinlerini kontrol edin.");
+          console.error("Firebase Hatası:", error);
+          showError(`<b>Firebase Veritabanı Hatası:</b> [${error.code || 'Bilinmeyen Kod'}] ${error.message}`);
         }
       } else {
         currentUserData = null;
@@ -655,11 +655,10 @@
         await signInWithPopup(auth, googleProvider);
       } catch (err) {
         console.error("Giriş Hatası:", err);
-        showError("<b>Giriş Başarısız:</b> " + (err.message || err.code));
+        showError(`<b>Giriş Hatası:</b> [${err.code || 'Bilinmeyen Kod'}] ${err.message}`);
       }
     });
 
-    // CLAIM NICKNAME IN FIRESTORE
     async function reserveNickname(cleanNick, uid) {
       const nickRef = doc(db, "nicknames", cleanNick);
       await runTransaction(db, async (transaction) => {
@@ -696,10 +695,10 @@
         loadAppInterface();
       } catch (err) {
         if (err.message === "NICK_TAKEN") {
-          alert("Bu nickname (" + cleanNick + ") başka bir kullanıcı tarafından alınmış. Lütfen farklı bir tane deneyin!");
+          alert("Bu nickname (" + cleanNick + ") başka bir kullanıcı tarafından alınmış.");
         } else {
-          console.error("Nickname kaydetme hatası:", err);
-          alert("Kayıt oluşturulamadı: " + err.message);
+          console.error("Kayıt hatası:", err);
+          alert("Kayıt oluşturulamadı: [" + (err.code || '') + "] " + err.message);
         }
       }
     });
@@ -745,7 +744,7 @@
         if (err.message === "NICK_TAKEN") {
           alert("Bu nickname (" + newNickname + ") zaten kullanımda!");
         } else {
-          alert("Hata: " + err.message);
+          alert("Hata: [" + (err.code || '') + "] " + err.message);
         }
       } finally {
         btn.disabled = false;
@@ -816,12 +815,10 @@
       }
     });
 
-    // CHAT ROOM ID GENERATOR
     function getChatRoomId(uid1, uid2) {
       return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
     }
 
-    // OPEN DM CHAT
     window.openDMChat = (targetUid, targetName, targetNick) => {
       activeChatUser = { uid: targetUid, fullName: targetName, nickname: targetNick };
 
@@ -855,7 +852,6 @@
       });
     }
 
-    // SEND MESSAGE
     document.getElementById('chat-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const input = document.getElementById('msg-input');
@@ -872,7 +868,6 @@
           createdAt: serverTimestamp()
         });
 
-        // Update sender recent chats
         await setDoc(doc(db, "users", currentUserData.uid, "recent_chats", activeChatUser.uid), {
           targetUid: activeChatUser.uid,
           targetName: activeChatUser.fullName,
@@ -881,7 +876,6 @@
           updatedAt: serverTimestamp()
         }, { merge: true });
 
-        // Update receiver recent chats
         await setDoc(doc(db, "users", activeChatUser.uid, "recent_chats", currentUserData.uid), {
           targetUid: currentUserData.uid,
           targetName: currentUserData.fullName,
@@ -917,7 +911,6 @@
       });
     }
 
-    // SETTINGS MODAL CONTROLS
     const openSettings = () => {
       document.getElementById('set-fullname').value = currentUserData.fullName || '';
       document.getElementById('set-nickname').value = currentUserData.nickname || '';
