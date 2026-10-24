@@ -223,7 +223,7 @@
     }
 
     /* =========================================================
-       NICKNAME BELİRLEME MODALI
+       MODALLER (NICKNAME & AYARLAR / PROFİL DÜZENLEME)
        ========================================================= */
     .modal-backdrop {
       position: fixed;
@@ -246,72 +246,246 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-glass);
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       border-radius: var(--radius-lg);
-      padding: 34px;
+      padding: 32px;
       box-shadow: var(--shadow-soft), 0 0 40px rgba(30, 111, 255, 0.25);
       animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .modal-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
     .modal-card h2 {
       font-family: var(--font-display);
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 8px;
       color: #fff;
     }
-    .modal-card p {
+    .modal-card p.modal-desc {
       color: var(--text-muted);
       font-size: 0.9rem;
       margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .btn-close-modal {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 1.25rem;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      transition: color 0.2s, background 0.2s;
+    }
+    .btn-close-modal:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Form Elemanları */
+    .form-field {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .input-group {
       position: relative;
-      margin-bottom: 12px;
     }
     .input-prefix {
       position: absolute;
-      left: 16px;
+      left: 14px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--accent-secondary);
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       pointer-events: none;
     }
-    .input-group input {
+    .form-input {
       width: 100%;
       background: var(--bg-surface-elevated);
-      border: 1.5px solid rgba(56, 189, 248, 0.25);
-      padding: 14px 16px 14px 40px;
+      border: 1.5px solid rgba(56, 189, 248, 0.2);
+      padding: 12px 16px;
       border-radius: var(--radius-md);
       color: #fff;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-family: var(--font-body);
       outline: none;
       transition: all 0.2s;
     }
-    .input-group input:focus {
-      border-color: var(--accent-secondary);
-      box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+    .input-group .form-input {
+      padding-left: 36px;
     }
-    .helper-text {
-      font-size: 0.78rem;
+    .form-input:focus {
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 16px rgba(0, 210, 255, 0.25);
+    }
+    .field-hint {
+      font-size: 0.74rem;
       color: var(--text-dim);
-      margin-bottom: 22px;
+      margin-top: 5px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
+    }
+
+    /* Avatar Düzenleme Bölümü */
+    .edit-avatar-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 18px;
+    }
+    .edit-avatar-preview {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-full);
+      flex-shrink: 0;
+      position: relative;
+    }
+    .edit-avatar-preview img {
+      width: 100%;
+      height: 100%;
+      border-radius: var(--radius-full);
+      object-fit: cover;
+      border: 2.5px solid var(--accent-secondary);
+      box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+    }
+    .edit-avatar-controls {
+      flex: 1;
+      overflow: hidden;
+    }
+    .avatar-presets {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .avatar-preset-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      border: 2px solid transparent;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+    .avatar-preset-btn:hover {
+      transform: scale(1.15);
+    }
+    .avatar-preset-btn.selected {
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 10px var(--accent-secondary);
+    }
+    .avatar-preset-btn img {
+      width: 100%;
+      height: 100%;
+      border-radius: var(--radius-full);
+      object-fit: cover;
+    }
+
+    /* Ayar Toggle Switch */
+    .settings-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 20px;
+    }
+    .toggle-info {
+      text-align: left;
+    }
+    .toggle-title {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .toggle-sub {
+      display: block;
+      font-size: 0.74rem;
+      color: var(--text-dim);
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #334155;
+      transition: .3s;
+      border-radius: 24px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background: var(--accent-gradient);
+    }
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Butonlar */
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
     }
     .btn-primary {
-      width: 100%;
+      flex: 1;
       background: var(--accent-gradient);
       color: #fff;
       border: none;
-      padding: 14px 20px;
+      padding: 13px 20px;
       border-radius: var(--radius-md);
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -328,6 +502,21 @@
       opacity: 0.6;
       cursor: not-allowed;
       transform: none;
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 13px 20px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.14);
     }
 
     /* =========================================================
@@ -401,16 +590,12 @@
       text-transform: uppercase;
     }
 
-    .user-profile-summary {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
     .avatar-wrapper {
       position: relative;
       width: 38px;
       height: 38px;
       border-radius: var(--radius-full);
+      flex-shrink: 0;
     }
     .avatar-img {
       width: 100%;
@@ -428,23 +613,6 @@
       background: var(--status-online);
       border: 2px solid var(--bg-surface);
       border-radius: 50%;
-    }
-    .btn-icon {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      width: 34px;
-      height: 34px;
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-    .btn-icon:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.08);
     }
 
     /* Arama Alanı (Nickname Arama) */
@@ -641,26 +809,36 @@
       color: #bae6fd;
     }
 
-    /* Sidebar Alt Bölüm (My Profile Bar) */
+    /* Sidebar Alt Bölüm: Profil & Ayarlar (Gmail yerine Nickname!) */
     .sidebar-footer {
-      padding: 14px 18px;
+      padding: 12px 16px;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(8, 14, 29, 0.7);
+      background: rgba(8, 14, 29, 0.85);
     }
     .current-user-info {
       display: flex;
       align-items: center;
       gap: 10px;
       overflow: hidden;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: var(--radius-md);
+      transition: background 0.2s;
+      flex: 1;
+      min-width: 0;
+    }
+    .current-user-info:hover {
+      background: rgba(255, 255, 255, 0.06);
     }
     .current-user-text {
       line-height: 1.25;
       overflow: hidden;
+      min-width: 0;
     }
-    .current-user-nickname {
+    .current-user-name {
       font-weight: 700;
       font-size: 0.92rem;
       color: #fff;
@@ -668,28 +846,39 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .current-user-email {
-      font-size: 0.72rem;
-      color: var(--text-dim);
+    .current-user-nickname {
+      font-size: 0.78rem;
+      color: var(--accent-secondary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-weight: 600;
     }
-    .btn-logout {
-      color: var(--text-dim);
+    .sidebar-footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-footer-action {
+      color: var(--text-muted);
       background: none;
       border: none;
       cursor: pointer;
-      padding: 8px;
+      width: 34px;
+      height: 34px;
       border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
     }
-    .btn-logout:hover {
+    .btn-footer-action:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.09);
+    }
+    .btn-footer-action.btn-logout:hover {
       color: var(--danger);
-      background: rgba(239, 68, 68, 0.12);
+      background: rgba(239, 68, 68, 0.15);
     }
 
     /* =========================================================
@@ -1092,23 +1281,26 @@
     </div>
 
     <!-- =========================================================
-         2. NICKNAME BELİRLEME MODALI
+         2. GİRİŞTE NICKNAME BELİRLEME MODALI (İLK KAYIT)
          ========================================================= -->
     <div id="nicknameModal" class="modal-backdrop hidden">
       <div class="modal-card">
-        <h2>Kullanıcı Adı Belirle</h2>
-        <p>Arkadaşlarının seni kolayca bulup mesaj atabilmesi için benzersiz bir nickname seç.</p>
+        <h2>Flow Kullanıcı Adını Belirle</h2>
+        <p class="modal-desc">Flow'a hoş geldin! Arkadaşlarının seni kolayca arayıp mesaj atabilmesi için benzersiz bir nickname seç.</p>
         
-        <div class="input-group">
-          <span class="input-prefix">@</span>
-          <input type="text" id="nicknameInput" placeholder="ornek: ekrem" maxlength="20" autocomplete="off">
-        </div>
-        <div class="helper-text">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          Sadece harf, rakam ve alt çizgi (_) içerebilir (3-20 karakter).
+        <div class="form-field">
+          <label class="form-label">Kullanıcı Adı</label>
+          <div class="input-group">
+            <span class="input-prefix">@</span>
+            <input type="text" id="nicknameInput" class="form-input" placeholder="ornek: ekrem" maxlength="20" autocomplete="off">
+          </div>
+          <div class="field-hint">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            Harf, rakam ve alt çizgi (_) içerebilir (3-20 karakter).
+          </div>
         </div>
 
-        <button id="btnSaveNickname" class="btn-primary">
+        <button id="btnSaveNickname" class="btn-primary" style="margin-top: 18px;">
           <span>Flow'a Başla</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </button>
@@ -1116,7 +1308,83 @@
     </div>
 
     <!-- =========================================================
-         3. ANA SOHBET UYGULAMASI (FLOW MAIN UI)
+         3. PROFİL DÜZENLEME VE AYARLAR MODALI
+         ========================================================= -->
+    <div id="settingsModal" class="modal-backdrop hidden">
+      <div class="modal-card" style="max-width: 460px;">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-secondary)">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <h2>Profil & Ayarlar</h2>
+          </div>
+          <button id="btnCloseSettings" class="btn-close-modal" title="Kapat">✕</button>
+        </div>
+
+        <!-- Avatar Değiştirme -->
+        <div class="edit-avatar-section">
+          <div class="edit-avatar-preview">
+            <img id="editAvatarPreview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar">
+          </div>
+          <div class="edit-avatar-controls">
+            <label class="form-label">Avatarını Seç</label>
+            <div class="avatar-presets" id="avatarPresetsContainer">
+              <!-- Dinamik Hazır Avatarlar -->
+            </div>
+          </div>
+        </div>
+
+        <form id="editProfileForm">
+          <!-- Nickname Alanı -->
+          <div class="form-field">
+            <label class="form-label">Nickname (Kullanıcı Adı)</label>
+            <div class="input-group">
+              <span class="input-prefix">@</span>
+              <input type="text" id="editNicknameInput" class="form-input" placeholder="ekrem" maxlength="20" required autocomplete="off">
+            </div>
+            <div class="field-hint">Aramalarda arkadaşlarınız sizi bu nickname ile bulur.</div>
+          </div>
+
+          <!-- Görünen İsim -->
+          <div class="form-field">
+            <label class="form-label">Görünen Ad / İsim</label>
+            <input type="text" id="editDisplayNameInput" class="form-input" placeholder="Adınız Soyadınız" maxlength="30" required>
+          </div>
+
+          <!-- Durum / Hakkımda -->
+          <div class="form-field">
+            <label class="form-label">Durum Mesajı</label>
+            <input type="text" id="editBioInput" class="form-input" placeholder="Örn: Flow'da anlık mesajlaşıyor 🌊" maxlength="50">
+          </div>
+
+          <!-- Ses Bildirimi Switch -->
+          <div class="settings-toggle-row">
+            <div class="toggle-info">
+              <span class="toggle-title">Bildirim Sesleri</span>
+              <span class="toggle-sub">Yeni mesajlarda bildirim sesi çal</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="soundToggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- Butonlar -->
+          <div class="modal-actions">
+            <button type="button" id="btnCancelSettings" class="btn-secondary">İptal</button>
+            <button type="submit" id="btnSaveSettings" class="btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Kaydet</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         4. ANA SOHBET UYGULAMASI (FLOW MAIN UI)
          ========================================================= -->
     <div class="app-layout">
       <!-- SOL PANEL: SOHBETLER & ARAMA -->
@@ -1162,25 +1430,37 @@
           </div>
         </div>
 
-        <!-- Alt Bölüm: Profil & Çıkış -->
+        <!-- Alt Bölüm: Profil & Ayarlar Butonları (Gmail yerine Nickname yazıyor!) -->
         <div class="sidebar-footer">
-          <div class="current-user-info">
+          <div class="current-user-info" id="currentUserProfileTrigger" title="Profilini düzenlemek için tıkla">
             <div class="avatar-wrapper">
               <img id="myAvatar" class="avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar">
               <span class="status-dot"></span>
             </div>
             <div class="current-user-text">
-              <div id="myNickname" class="current-user-nickname">@kullanici</div>
-              <div id="myEmail" class="current-user-email">email@gmail.com</div>
+              <div id="myDisplayName" class="current-user-name">Kullanıcı</div>
+              <div id="myNickname" class="current-user-nickname">@nickname</div>
             </div>
           </div>
-          <button id="btnLogout" class="btn-logout" title="Çıkış Yap">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-              <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-          </button>
+
+          <div class="sidebar-footer-actions">
+            <!-- Ayarlar Butonu -->
+            <button id="btnSettings" class="btn-footer-action" title="Profil ve Ayarlar">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </button>
+
+            <!-- Çıkış Butonu -->
+            <button id="btnLogout" class="btn-footer-action btn-logout" title="Çıkış Yap">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -1299,19 +1579,50 @@
     let currentUserProfile = null;
     let activeChatId = null;
     let activeTargetUser = null;
+    let soundEnabled = true;
+    let selectedAvatarUrl = null;
     let unsubscribeMessages = null;
     let unsubscribeConversations = null;
+
+    // Hazır Popüler Avatar Listesi (Seçim İçin)
+    const presetAvatars = [
+      "https://api.dicebear.com/7.x/bottts/svg?seed=Felix",
+      "https://api.dicebear.com/7.x/bottts/svg?seed=Cyber",
+      "https://api.dicebear.com/7.x/bottts/svg?seed=FlowBlue",
+      "https://api.dicebear.com/7.x/bottts/svg?seed=Astra",
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100",
+      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100",
+      "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100"
+    ];
 
     // DOM Elemanları
     const authScreen = document.getElementById('authScreen');
     const nicknameModal = document.getElementById('nicknameModal');
+    const settingsModal = document.getElementById('settingsModal');
     const btnGoogleLogin = document.getElementById('btnGoogleLogin');
     const nicknameInput = document.getElementById('nicknameInput');
     const btnSaveNickname = document.getElementById('btnSaveNickname');
+    
+    // Sidebar Footer (Kullanıcı Bilgileri & Butonlar)
+    const currentUserProfileTrigger = document.getElementById('currentUserProfileTrigger');
     const myAvatar = document.getElementById('myAvatar');
+    const myDisplayName = document.getElementById('myDisplayName');
     const myNickname = document.getElementById('myNickname');
-    const myEmail = document.getElementById('myEmail');
+    const btnSettings = document.getElementById('btnSettings');
     const btnLogout = document.getElementById('btnLogout');
+    
+    // Profil & Ayarlar Modalı Elemanları
+    const btnCloseSettings = document.getElementById('btnCloseSettings');
+    const btnCancelSettings = document.getElementById('btnCancelSettings');
+    const editProfileForm = document.getElementById('editProfileForm');
+    const editNicknameInput = document.getElementById('editNicknameInput');
+    const editDisplayNameInput = document.getElementById('editDisplayNameInput');
+    const editBioInput = document.getElementById('editBioInput');
+    const editAvatarPreview = document.getElementById('editAvatarPreview');
+    const avatarPresetsContainer = document.getElementById('avatarPresetsContainer');
+    const soundToggle = document.getElementById('soundToggle');
+
+    // Arama & Sohbet Elemanları
     const userSearchInput = document.getElementById('userSearchInput');
     const btnClearSearch = document.getElementById('btnClearSearch');
     const searchResultsPanel = document.getElementById('searchResultsPanel');
@@ -1327,8 +1638,9 @@
     const btnMobileBack = document.getElementById('btnMobileBack');
     const sidebar = document.getElementById('sidebar');
 
-    // Ses Efektleri (Web Audio API ile harici dosya gerektirmez)
+    // Ses Efektleri (Web Audio API)
     function playTone(freq = 600, type = 'sine', duration = 0.1) {
+      if (!soundEnabled) return;
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = audioCtx.createOscillator();
@@ -1342,7 +1654,7 @@
         osc.start();
         osc.stop(audioCtx.currentTime + duration);
       } catch (e) {
-        // Tarayıcı otomatik ses politikasını tolere et
+        // Otomatik oynatma politikasını tolere et
       }
     }
 
@@ -1358,14 +1670,14 @@
     }
 
     // =========================================================
-    // GOOGLE AUTHENTICATION
+    // 1. GOOGLE AUTHENTICATION & GİRİŞ AKIŞI
     // =========================================================
     btnGoogleLogin.addEventListener('click', async () => {
       try {
         btnGoogleLogin.style.opacity = '0.7';
         btnGoogleLogin.disabled = true;
-        const result = await signInWithPopup(auth, googleProvider);
-        showToast("Google girişi başarılı!");
+        await signInWithPopup(auth, googleProvider);
+        showToast("Google ile bağlanıldı.");
       } catch (error) {
         console.error("Giriş Hatası:", error);
         showToast("Giriş yapılamadı: " + (error.message || "Lütfen tekrar deneyin"));
@@ -1390,7 +1702,7 @@
       }
     });
 
-    // Oturum Durumu Değişikliğini Dinle
+    // Oturum Durumunu Dinle
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         currentUser = user;
@@ -1401,11 +1713,12 @@
         currentUserProfile = null;
         authScreen.classList.remove('hidden');
         nicknameModal.classList.add('hidden');
+        settingsModal.classList.add('hidden');
       }
     });
 
     // =========================================================
-    // NICKNAME KONTROLÜ VE KAYDI
+    // 2. GİRİŞ YAPINCA NICKNAME KONTROLÜ & SORMASI
     // =========================================================
     async function checkUserProfile(user) {
       try {
@@ -1418,9 +1731,8 @@
           renderCurrentUserUI();
           listenToConversations();
         } else {
-          // Nickname henüz yok -> Nickname modalını aç
+          // Nickname henüz yok -> Girişte hemen nickname sor!
           nicknameModal.classList.remove('hidden');
-          // Varsayılan öneri (isimden türetilmiş)
           if (user.displayName) {
             const suggested = user.displayName.toLowerCase().replace(/[^a-z0-9]/g, '');
             nicknameInput.value = suggested.slice(0, 15);
@@ -1429,16 +1741,15 @@
         }
       } catch (error) {
         console.error("Profil Okuma Hatası:", error);
-        showToast("Profil yüklenirken bir sorun oluştu.");
+        showToast("Profil kontrol edilirken bir sorun oluştu.");
       }
     }
 
-    // Nickname Kaydet Butonu
+    // İlk Girişte Nickname Kaydet Butonu
     btnSaveNickname.addEventListener('click', async () => {
       const rawNickname = nicknameInput.value.trim();
       const cleanNick = rawNickname.replace('@', '').toLowerCase();
 
-      // Doğrulama kuralları
       if (!cleanNick || cleanNick.length < 3 || cleanNick.length > 20) {
         showToast("Nickname 3 ile 20 karakter arasında olmalıdır!");
         return;
@@ -1452,19 +1763,19 @@
       btnSaveNickname.textContent = "Kontrol ediliyor...";
 
       try {
-        // 1. Nickname benzersizlik (uniqueness) kontrolü
+        // Nickname benzersizlik kontrolü
         const q = query(collection(db, 'users'), where('nickname_lower', '==', cleanNick));
         const snap = await getDocs(q);
 
-        const isTakenByOther = snap.docs.some(d => d.id !== currentUser.uid);
-        if (isTakenByOther) {
+        const isTaken = snap.docs.some(d => d.id !== currentUser.uid);
+        if (isTaken) {
           showToast(`@${cleanNick} nickname'i maalesef alınmış. Farklı bir tane seçin!`);
           btnSaveNickname.disabled = false;
           btnSaveNickname.textContent = "Flow'a Başla";
           return;
         }
 
-        // 2. Firebase Firestore'a Kaydet
+        // Firebase Firestore'a Kaydet
         const userDocRef = doc(db, 'users', currentUser.uid);
         const newProfile = {
           uid: currentUser.uid,
@@ -1473,6 +1784,7 @@
           photoURL: currentUser.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${cleanNick}`,
           nickname: cleanNick,
           nickname_lower: cleanNick,
+          bio: "Flow'da anlık mesajlaşıyor 🌊",
           createdAt: serverTimestamp(),
           lastSeen: serverTimestamp(),
           status: 'online'
@@ -1485,7 +1797,7 @@
         nicknameModal.classList.add('hidden');
         renderCurrentUserUI();
         listenToConversations();
-        showToast(`Hoş geldin @${cleanNick}! Artık sohbet edebilirsin.`);
+        showToast(`Hoş geldin @${cleanNick}!`);
       } catch (err) {
         console.error("Nickname Kaydetme Hatası:", err);
         showToast("Kayıt sırasında hata: " + err.message);
@@ -1495,17 +1807,148 @@
       }
     });
 
+    // Kullanıcı Bilgilerini Sidebar'a Yansıtma (GMAIL YERİNE NICKNAME!)
     function renderCurrentUserUI() {
       if (!currentUserProfile) return;
       myNickname.textContent = '@' + currentUserProfile.nickname;
-      myEmail.textContent = currentUserProfile.email || currentUserProfile.displayName;
+      myDisplayName.textContent = currentUserProfile.displayName || currentUserProfile.nickname;
       if (currentUserProfile.photoURL) {
         myAvatar.src = currentUserProfile.photoURL;
       }
     }
 
     // =========================================================
-    // NICKNAME ARAMA (ÖRN: EKREM)
+    // 3. PROFİL DÜZENLEME & AYARLAR MODALI
+    // =========================================================
+    // Hazır Avatar Seçeneklerini Oluştur
+    function initAvatarPresets() {
+      avatarPresetsContainer.innerHTML = '';
+      presetAvatars.forEach(url => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `avatar-preset-btn ${selectedAvatarUrl === url ? 'selected' : ''}`;
+        btn.innerHTML = `<img src="${url}" alt="Avatar">`;
+        btn.addEventListener('click', () => {
+          selectedAvatarUrl = url;
+          editAvatarPreview.src = url;
+          document.querySelectorAll('.avatar-preset-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+        });
+        avatarPresetsContainer.appendChild(btn);
+      });
+    }
+
+    // Ayarlar Modalını Aç
+    function openSettingsModal() {
+      if (!currentUserProfile) return;
+      editNicknameInput.value = currentUserProfile.nickname;
+      editDisplayNameInput.value = currentUserProfile.displayName || '';
+      editBioInput.value = currentUserProfile.bio || '';
+      selectedAvatarUrl = currentUserProfile.photoURL || presetAvatars[0];
+      editAvatarPreview.src = selectedAvatarUrl;
+      soundToggle.checked = soundEnabled;
+
+      initAvatarPresets();
+      settingsModal.classList.remove('hidden');
+    }
+
+    function closeSettingsModal() {
+      settingsModal.classList.add('hidden');
+    }
+
+    // Ayarlar butonları tetikleyicileri
+    btnSettings.addEventListener('click', openSettingsModal);
+    currentUserProfileTrigger.addEventListener('click', openSettingsModal);
+    btnCloseSettings.addEventListener('click', closeSettingsModal);
+    btnCancelSettings.addEventListener('click', closeSettingsModal);
+
+    // Ses Bildirimi Toggle
+    soundToggle.addEventListener('change', (e) => {
+      soundEnabled = e.target.checked;
+      if (soundEnabled) playTone(700, 'sine', 0.1);
+    });
+
+    // Profil Düzenleme Formunu Kaydet
+    editProfileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rawNick = editNicknameInput.value.trim();
+      const newNick = rawNick.replace('@', '').toLowerCase();
+      const newDisplayName = editDisplayNameInput.value.trim();
+      const newBio = editBioInput.value.trim();
+
+      // Doğrulama
+      if (!newNick || newNick.length < 3 || newNick.length > 20) {
+        showToast("Nickname 3 ile 20 karakter arasında olmalıdır!");
+        return;
+      }
+      if (!/^[a-zA-Z0-9_]+$/.test(newNick)) {
+        showToast("Nickname yalnızca harf, rakam ve alt çizgi (_) içerebilir!");
+        return;
+      }
+
+      const saveBtn = document.getElementById('btnSaveSettings');
+      saveBtn.disabled = true;
+      saveBtn.querySelector('span').textContent = "Kaydediliyor...";
+
+      try {
+        // Nickname değiştiyse benzersizlik kontrolü yap
+        if (newNick !== currentUserProfile.nickname) {
+          const q = query(collection(db, 'users'), where('nickname_lower', '==', newNick));
+          const snap = await getDocs(q);
+          const isTaken = snap.docs.some(d => d.id !== currentUser.uid);
+          if (isTaken) {
+            showToast(`@${newNick} zaten kullanılıyor, lütfen başka bir nickname seçin!`);
+            saveBtn.disabled = false;
+            saveBtn.querySelector('span').textContent = "Kaydet";
+            return;
+          }
+        }
+
+        // Firestore'da Profil Güncelle
+        const updatedData = {
+          nickname: newNick,
+          nickname_lower: newNick,
+          displayName: newDisplayName,
+          bio: newBio,
+          photoURL: selectedAvatarUrl || currentUserProfile.photoURL,
+          updatedAt: serverTimestamp()
+        };
+
+        await setDoc(doc(db, 'users', currentUser.uid), updatedData, { merge: true });
+
+        // State & Arayüzü Güncelle
+        currentUserProfile = { ...currentUserProfile, ...updatedData };
+        renderCurrentUserUI();
+
+        // Eğer açık bir DM varsa başlığı yenile
+        if (activeChatId && activeTargetUser) {
+          try {
+            await setDoc(doc(db, 'chats', activeChatId), {
+              [`participantMeta.${currentUser.uid}`]: {
+                nickname: newNick,
+                displayName: newDisplayName,
+                photoURL: updatedData.photoURL
+              }
+            }, { merge: true });
+          } catch (err) {
+            console.warn(err);
+          }
+        }
+
+        playTone(900, 'sine', 0.15);
+        showToast("Profiliniz başarıyla güncellendi!");
+        closeSettingsModal();
+      } catch (err) {
+        console.error("Profil güncelleme hatası:", err);
+        showToast("Profil güncellenemedi: " + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.querySelector('span').textContent = "Kaydet";
+      }
+    });
+
+    // =========================================================
+    // 4. NICKNAME ARAMA (ÖRN: EKREM)
     // =========================================================
     let searchTimeout = null;
     userSearchInput.addEventListener('input', (e) => {
@@ -1531,7 +1974,6 @@
 
     async function executeUserSearch(term) {
       try {
-        // Firestore'da nickname_lower prefix araması
         const q = query(
           collection(db, 'users'),
           where('nickname_lower', '>=', term),
@@ -1545,7 +1987,6 @@
         const results = [];
         snap.forEach(docSnap => {
           const data = docSnap.data();
-          // Kendimizi arama sonuçlarında göstermeyelim
           if (data.uid !== currentUser.uid) {
             results.push(data);
           }
@@ -1591,7 +2032,6 @@
       }
     }
 
-    // Arama dışına tıklanınca paneli kapat
     document.addEventListener('click', (e) => {
       if (!userSearchInput.contains(e.target) && !searchResultsPanel.contains(e.target)) {
         searchResultsPanel.classList.remove('open');
@@ -1599,10 +2039,9 @@
     });
 
     // =========================================================
-    // DİREKT MESAJ (DM) BAŞLATMA & SOHBET ID ÜRETİMİ
+    // 5. DİREKT MESAJ (DM) BAŞLATMA
     // =========================================================
     function getDirectChatId(uid1, uid2) {
-      // İki kullanıcının uid'sini alfabetik sıralayarak tekil chatId üretir
       return [uid1, uid2].sort().join('_');
     }
 
@@ -1611,20 +2050,16 @@
       activeTargetUser = targetUser;
       activeChatId = getDirectChatId(currentUser.uid, targetUser.uid);
 
-      // Başlığı güncelle
       targetUserNickname.textContent = '@' + targetUser.nickname;
       targetUserAvatar.src = targetUser.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100';
 
-      // UI Geçişi
       emptyChatState.classList.add('hidden');
       activeChatContainer.classList.remove('hidden');
 
-      // Mobilde sohbet açılınca sidebar'ı gizle
       if (window.innerWidth <= 768) {
         sidebar.classList.add('mobile-hidden');
       }
 
-      // Sohbet dökümanını hazırla / güncelle
       try {
         const chatDocRef = doc(db, 'chats', activeChatId);
         await setDoc(chatDocRef, {
@@ -1648,23 +2083,19 @@
         console.warn("Chat meta güncellenirken:", e);
       }
 
-      // Aktif sohbetteki mesajları dinlemeye başla
       listenToActiveChatMessages(activeChatId);
       messageInput.focus();
     };
 
-    // Mobilde geri butonu
     btnMobileBack.addEventListener('click', () => {
       sidebar.classList.remove('mobile-hidden');
     });
 
     // =========================================================
-    // GERÇEK ZAMANLI MESAJLARI DİNLEME (onSnapshot)
+    // 6. GERÇEK ZAMANLI MESAJLARI DİNLEME (onSnapshot)
     // =========================================================
     function listenToActiveChatMessages(chatId) {
-      if (unsubscribeMessages) {
-        unsubscribeMessages();
-      }
+      if (unsubscribeMessages) unsubscribeMessages();
 
       messagesContainer.innerHTML = `
         <div style="padding: 20px; text-align: center; color: var(--text-dim); font-size: 0.85rem;">
@@ -1717,43 +2148,33 @@
           messagesContainer.appendChild(row);
         });
 
-        // En alta yumuşakça kaydır
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Yeni gelen karşı taraf mesajı için ses çal (ilk açılış hariç)
         if (!initialLoad) {
           const lastChange = snapshot.docChanges().slice(-1)[0];
           if (lastChange && lastChange.type === 'added') {
             const data = lastChange.doc.data();
             if (data.senderId !== currentUser.uid) {
-              playTone(880, 'sine', 0.15); // Gelen mesaj tonu
+              playTone(880, 'sine', 0.15);
             }
           }
         }
         initialLoad = false;
       }, (error) => {
         console.error("Mesaj dinleme hatası:", error);
-        messagesContainer.innerHTML = `
-          <div style="padding: 20px; text-align: center; color: var(--danger); font-size: 0.85rem;">
-            Mesajlar yüklenemedi: Firestore kurallarınızı kontrol edin.
-          </div>
-        `;
       });
     }
 
-    // =========================================================
-    // MESAJ GÖNDERME
-    // =========================================================
+    // Mesaj Gönderme
     messageForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const text = messageInput.value.trim();
       if (!text || !activeChatId || !currentUserProfile) return;
 
       messageInput.value = '';
-      playTone(480, 'triangle', 0.08); // Gönderme pıt sesi
+      playTone(480, 'triangle', 0.08);
 
       try {
-        // 1. Alt koleksiyona mesajı ekle
         await addDoc(collection(db, 'chats', activeChatId, 'messages'), {
           senderId: currentUser.uid,
           senderNickname: currentUserProfile.nickname,
@@ -1762,7 +2183,6 @@
           timestamp: serverTimestamp()
         });
 
-        // 2. Ana sohbet dökümanının son mesajını güncelle
         await setDoc(doc(db, 'chats', activeChatId), {
           lastMessage: text,
           lastSenderId: currentUser.uid,
@@ -1775,7 +2195,6 @@
       }
     });
 
-    // Hızlı Emojiler
     document.querySelectorAll('.btn-quick-emoji').forEach(btn => {
       btn.addEventListener('click', () => {
         messageInput.value += btn.getAttribute('data-emoji');
@@ -1784,7 +2203,7 @@
     });
 
     // =========================================================
-    // SOL PANEL: SOHBET LİSTESİNİ CANLI DİNLEME
+    // 7. SOL PANEL: SOHBET LİSTESİNİ DİNLEME
     // =========================================================
     function listenToConversations() {
       if (unsubscribeConversations) unsubscribeConversations();
@@ -1810,7 +2229,6 @@
           chats.push({ id: docSnap.id, ...docSnap.data() });
         });
 
-        // Zamana göre sırala (en yeni üstte)
         chats.sort((a, b) => {
           const tA = a.lastMessageTime?.seconds || 0;
           const tB = b.lastMessageTime?.seconds || 0;
@@ -1818,7 +2236,6 @@
         });
 
         chats.forEach(chat => {
-          // Sohbet edilen diğer kişiyi bul
           const otherUid = chat.participants.find(u => u !== currentUser.uid);
           const otherMeta = chat.participantMeta?.[otherUid] || {
             nickname: 'kullanici',
@@ -1863,7 +2280,6 @@
       });
     }
 
-    // XSS Koruması
     function escapeHtml(string) {
       if (!string) return '';
       const div = document.createElement('div');
