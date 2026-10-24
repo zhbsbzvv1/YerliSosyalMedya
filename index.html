@@ -196,7 +196,6 @@
       flex-shrink: 0;
     }
 
-    /* LEFT CHAT LIST PANEL */
     .chat-list-panel {
       padding: 20px;
       display: flex;
@@ -232,8 +231,6 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-height: 220px;
-      overflow-y: auto;
     }
 
     .user-search-item {
@@ -272,7 +269,6 @@
       background: rgba(255, 255, 255, 0.05);
     }
 
-    /* CHAT WINDOW */
     .chat-window {
       display: flex;
       flex-direction: column;
@@ -311,7 +307,6 @@
       border-radius: 18px;
       font-size: 14px;
       line-height: 1.4;
-      word-break: break-word;
     }
 
     .message.sent .message-bubble {
@@ -357,14 +352,8 @@
       align-items: center;
       justify-content: center;
       font-size: 16px;
-      transition: transform 0.2s;
     }
 
-    .btn-send:hover {
-      transform: scale(1.05);
-    }
-
-    /* MODAL OVERLAY */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -434,7 +423,7 @@
 </head>
 <body>
 
-  <!-- LOGIN SCREEN (GOOGLE ONLY) -->
+  <!-- LOGIN SCREEN -->
   <div id="auth-screen" class="auth-container glass-card">
     <div class="brand-logo">
       <i class="fa-solid fa-wind"></i>
@@ -448,7 +437,7 @@
     </button>
   </div>
 
-  <!-- INITIAL NICKNAME SET MODAL -->
+  <!-- INITIAL NICKNAME MODAL -->
   <div id="google-nickname-modal" class="modal-overlay">
     <div class="auth-container glass-card">
       <h2 style="font-size:20px; font-weight:800; margin-bottom:6px;">Kullanıcı Adı Seçin</h2>
@@ -616,7 +605,6 @@
           currentUserData = {
             fullName: user.displayName || "Kullanıcı",
             nickname: user.email ? user.email.split('@')[0] : "user",
-            nickname_lowercase: user.email ? user.email.split('@')[0].toLowerCase() : "user",
             uid: user.uid
           };
           loadAppInterface();
@@ -639,36 +627,28 @@
 
     window.handleGoogleNicknameSet = async (e) => {
       e.preventDefault();
-      const nickname = document.getElementById('google-nickname-input').value.trim();
-      if (!nickname || !pendingGoogleUser) return;
+      const nickname = document.getElementById('google-nickname-input').value.trim().toLowerCase();
+      if (!pendingGoogleUser) return;
 
       const uid = pendingGoogleUser.uid;
       const fullName = pendingGoogleUser.displayName || "Flow Kullanıcısı";
-      const email = pendingGoogleUser.email || "";
+      const email = pendingGoogleUser.email;
 
-      currentUserData = {
-        uid: uid,
-        fullName: fullName,
-        nickname: nickname,
-        nickname_lowercase: nickname.toLowerCase(),
-        email: email
-      };
+      currentUserData = { uid, fullName, nickname, email };
 
       try {
         await setDoc(doc(db, "users", uid), currentUserData, { merge: true });
-      } catch (err) {
-        console.error("Nickname kayıt hatası:", err);
-      }
+      } catch (err) {}
 
       document.getElementById('google-nickname-modal').style.display = 'none';
       loadAppInterface();
     };
 
-    /* PROFİL VE NICKNAME GÜNCELLEME (EXPLICIT SETDOC MERGE) */
+    /* PROFİL GÜNCELLEME (GARANTİLİ FIRESTORE YAZIMI) */
     window.handleUpdateProfile = async (e) => {
       e.preventDefault();
       const newFullName = document.getElementById('set-fullname').value.trim();
-      const newNickname = document.getElementById('set-nickname').value.trim();
+      const newNickname = document.getElementById('set-nickname').value.trim().toLowerCase();
 
       if (!newFullName || !newNickname) return;
 
@@ -677,19 +657,17 @@
           await updateProfile(auth.currentUser, { displayName: newFullName });
         }
 
-        const updatedData = {
+        const userDocRef = doc(db, "users", currentUserData.uid);
+        await setDoc(userDocRef, {
           uid: currentUserData.uid,
           fullName: newFullName,
           nickname: newNickname,
-          nickname_lowercase: newNickname.toLowerCase(),
           email: currentUserData.email || ""
-        };
+        }, { merge: true });
 
-        // Persist all fields to Firestore explicitly
-        await setDoc(doc(db, "users", currentUserData.uid), updatedData, { merge: true });
+        currentUserData.fullName = newFullName;
+        currentUserData.nickname = newNickname;
 
-        // Update local state and UI immediately
-        currentUserData = updatedData;
         loadAppInterface();
         closeSettingsModal();
         alert("Profiliniz ve kullanıcı adınız başarıyla güncellendi!");
@@ -709,7 +687,7 @@
       loadRecentDMChats();
     }
 
-    /* BÜYÜK/KÜÇÜK HARF DUYARSIZ KULLANICI ARAMA SİSTEMİ */
+    /* KULLANICI ARAMA (BÜTÜN KULLANICILARI TARAMA) */
     window.searchUsers = async (val) => {
       const resultsDiv = document.getElementById('search-results');
       const valClean = val.trim().toLowerCase();
@@ -729,7 +707,7 @@
         querySnapshot.forEach((docSnap) => {
           const u = docSnap.data();
           if (u.uid !== currentUserData.uid) {
-            const nick = (u.nickname || u.nickname_lowercase || '').toLowerCase();
+            const nick = (u.nickname || '').toLowerCase();
             const name = (u.fullName || '').toLowerCase();
 
             if (nick.includes(valClean) || name.includes(valClean)) {
@@ -737,7 +715,7 @@
               const item = document.createElement('div');
               item.className = 'user-search-item';
               item.onclick = () => {
-                openDMChat(u.uid, u.fullName, u.nickname || u.nickname_lowercase || 'user');
+                openDMChat(u.uid, u.fullName, u.nickname);
                 resultsDiv.style.display = 'none';
                 document.getElementById('user-search-input').value = '';
               };
@@ -745,7 +723,7 @@
                 <div class="avatar" style="width:34px; height:34px; font-size:13px;">${(u.fullName || 'K').charAt(0).toUpperCase()}</div>
                 <div>
                   <div style="font-size:13px; font-weight:700;">${u.fullName}</div>
-                  <div style="font-size:11px; color:var(--primary);">@${u.nickname || u.nickname_lowercase}</div>
+                  <div style="font-size:11px; color:var(--primary);">@${u.nickname}</div>
                 </div>
               `;
               resultsDiv.appendChild(item);
@@ -761,7 +739,7 @@
       }
     };
 
-    /* KALICI DM SOHBET SİSTEMİ */
+    /* KALICI DM MESAJLAŞMA */
     function getChatRoomId(uid1, uid2) {
       return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
     }
@@ -815,7 +793,6 @@
           createdAt: serverTimestamp()
         });
 
-        // Add to recent chats for both sender & recipient
         await setDoc(doc(db, "users", currentUserData.uid, "recent_chats", activeChatUser.uid), {
           targetUid: activeChatUser.uid,
           targetName: activeChatUser.fullName,
