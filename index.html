@@ -1,22 +1,1875 @@
-Firebasede Tüm Ayarları Yaptım,Firebase Apim Burada Bu Apilere Göre Bana Flow İsiminde Mavi Temalı Chat Programı Yap, Google İle Giriş Yapalım Önce ,Yaptıktan Sonra Nickname Belirleyelim(nicknameyi,mesajları firebaseye kayıt etsin) , Ve Nickname Arayabilelim, Örnek Arkadaşımın Google Hesabıyla Giriş Yaptı,Nickname belirledi örnek:ekrem ekrem nicknamesini aratınca o çıksın dm (özel mesaj) atabilelim
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow — Modern & Akıcı Anlık Mesajlaşma</title>
+  
+  <!-- Modern Tipografi (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCahsCXVjAJ-Qx-tHcxDX9xiCdqd4GOv-4",
-  authDomain: "zhbsbzvv-6f910.firebaseapp.com",
-  projectId: "zhbsbzvv-6f910",
-  storageBucket: "zhbsbzvv-6f910.firebasestorage.app",
-  messagingSenderId: "1050863909513",
-  appId: "1:1050863909513:web:5c149cedd80a77758c6458",
-  measurementId: "G-7ZHJ34D9X4"
-};
+  <style>
+    /* =========================================================
+       FLOW CHAT - ULTRA MODERN MAVİ TEMA & DESIGN SYSTEM
+       ========================================================= */
+    :root {
+      --bg-dark: #060b17;
+      --bg-surface: #0c162d;
+      --bg-surface-elevated: #111e3d;
+      --bg-glass: rgba(13, 25, 52, 0.72);
+      --border-glass: rgba(56, 189, 248, 0.16);
+      --border-hover: rgba(56, 189, 248, 0.35);
+      
+      --accent-primary: #1e6fff;
+      --accent-secondary: #00d2ff;
+      --accent-gradient: linear-gradient(135deg, #1e6fff 0%, #00d2ff 100%);
+      --accent-glow: 0 0 25px rgba(0, 210, 255, 0.35);
+      
+      --bubble-me: linear-gradient(135deg, #1e6fff 0%, #0088ff 100%);
+      --bubble-friend: rgba(18, 32, 64, 0.85);
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --status-online: #10b981;
+      --status-offline: #64748b;
+      --danger: #ef4444;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.37);
+    }
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Arka Plan Hareketli Mavi Işık Efektleri */
+    .ambient-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.55;
+    }
+    .ambient-1 {
+      top: -10%;
+      left: -5%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #0051ff, transparent 70%);
+      animation: floatGlow 14s ease-in-out infinite alternate;
+    }
+    .ambient-2 {
+      bottom: -10%;
+      right: -5%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, #00b4d8, transparent 70%);
+      animation: floatGlow 18s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes floatGlow {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, 40px) scale(1.15); }
+    }
+
+    /* Container */
+    #app {
+      position: relative;
+      z-index: 1;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+    }
+
+    /* =========================================================
+       GİRİŞ EKRANI (LOGIN SCREEN)
+       ========================================================= */
+    .auth-container {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      background: rgba(6, 11, 23, 0.85);
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    .auth-container.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .auth-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      backdrop-filter: blur(24px);
+      padding: 42px 36px;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 440px;
+      box-shadow: var(--shadow-soft), var(--accent-glow);
+      text-align: center;
+      animation: scaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .brand-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 76px;
+      height: 76px;
+      border-radius: 24px;
+      background: var(--accent-gradient);
+      box-shadow: 0 10px 30px rgba(0, 210, 255, 0.4);
+      margin-bottom: 22px;
+      color: #fff;
+    }
+    .brand-logo svg {
+      width: 42px;
+      height: 42px;
+    }
+    .auth-card h1 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 40%, #7dd3fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .auth-card p.subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+    .btn-google {
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #ffffff;
+      color: #0f172a;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: var(--font-body);
+      padding: 14px 24px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(255, 255, 255, 0.2);
+      transition: all 0.25s ease;
+    }
+    .btn-google:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 255, 255, 0.35);
+    }
+    .btn-google:active {
+      transform: translateY(0);
+    }
+    .btn-google svg {
+      width: 22px;
+      height: 22px;
+    }
+    .auth-features {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .feature-item {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .feature-item svg {
+      color: var(--accent-secondary);
+      width: 18px;
+      height: 18px;
+    }
+
+    /* =========================================================
+       NICKNAME BELİRLEME MODALI
+       ========================================================= */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 9, 20, 0.88);
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 100;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal-backdrop.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glass);
+      width: 100%;
+      max-width: 420px;
+      border-radius: var(--radius-lg);
+      padding: 34px;
+      box-shadow: var(--shadow-soft), 0 0 40px rgba(30, 111, 255, 0.25);
+      animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .modal-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 12px;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent-secondary);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+    .input-group input {
+      width: 100%;
+      background: var(--bg-surface-elevated);
+      border: 1.5px solid rgba(56, 189, 248, 0.25);
+      padding: 14px 16px 14px 40px;
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-size: 1rem;
+      font-family: var(--font-body);
+      outline: none;
+      transition: all 0.2s;
+    }
+    .input-group input:focus {
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 15px rgba(0, 210, 255, 0.3);
+    }
+    .helper-text {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-primary {
+      width: 100%;
+      background: var(--accent-gradient);
+      color: #fff;
+      border: none;
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 18px rgba(30, 111, 255, 0.4);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1.5px);
+      box-shadow: 0 8px 24px rgba(0, 210, 255, 0.5);
+    }
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* =========================================================
+       ANA UYGULAMA (APP LAYOUT)
+       ========================================================= */
+    .app-layout {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      background: rgba(6, 11, 23, 0.85);
+      backdrop-filter: blur(18px);
+    }
+
+    /* SOL PANEL (SIDEBAR) */
+    .sidebar {
+      width: 360px;
+      min-width: 320px;
+      height: 100%;
+      background: var(--bg-glass);
+      border-right: 1px solid var(--border-glass);
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(20px);
+      z-index: 20;
+      transition: transform 0.3s ease;
+    }
+
+    /* Sidebar Üst Bar */
+    .sidebar-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--accent-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0, 210, 255, 0.35);
+    }
+    .sidebar-logo-icon svg {
+      width: 20px;
+      height: 20px;
+      color: #fff;
+    }
+    .sidebar-brand-name {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .sidebar-brand-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      background: rgba(0, 210, 255, 0.15);
+      color: var(--accent-secondary);
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(0, 210, 255, 0.3);
+      text-transform: uppercase;
+    }
+
+    .user-profile-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .avatar-wrapper {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-full);
+    }
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: var(--radius-full);
+      object-fit: cover;
+      border: 2px solid var(--accent-secondary);
+    }
+    .status-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--status-online);
+      border: 2px solid var(--bg-surface);
+      border-radius: 50%;
+    }
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-icon:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Arama Alanı (Nickname Arama) */
+    .search-box-container {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+    .search-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-input-wrapper svg.search-icon {
+      position: absolute;
+      left: 14px;
+      width: 17px;
+      height: 17px;
+      color: var(--text-dim);
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    .search-input-wrapper input {
+      width: 100%;
+      background: var(--bg-surface-elevated);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 10px 36px 10px 40px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .search-input-wrapper input:focus {
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 16px rgba(0, 210, 255, 0.2);
+    }
+    .search-input-wrapper input:focus ~ svg.search-icon {
+      color: var(--accent-secondary);
+    }
+    .btn-clear-search {
+      position: absolute;
+      right: 10px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: none;
+      padding: 4px;
+    }
+    .btn-clear-search.visible {
+      display: block;
+    }
+
+    /* Arama Sonuçları Paneli */
+    .search-results-panel {
+      position: absolute;
+      top: 68px;
+      left: 18px;
+      right: 18px;
+      background: #0f1c3a;
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6);
+      max-height: 320px;
+      overflow-y: auto;
+      z-index: 40;
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+    .search-results-panel.open {
+      display: block;
+    }
+    .search-results-header {
+      padding: 10px 14px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent-secondary);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.15);
+    }
+    .search-user-card {
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .search-user-card:hover {
+      background: rgba(0, 210, 255, 0.08);
+    }
+    .search-user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .search-user-text .nick {
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: #fff;
+    }
+    .search-user-text .fullname {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .btn-dm-start {
+      background: rgba(0, 210, 255, 0.15);
+      border: 1px solid rgba(0, 210, 255, 0.35);
+      color: #7dd3fc;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .search-user-card:hover .btn-dm-start {
+      background: var(--accent-gradient);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 2px 10px rgba(0, 210, 255, 0.4);
+    }
+
+    /* Sohbet Listesi (Recent Chats) */
+    .conversations-section {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 10px;
+    }
+    .section-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+      padding: 10px 12px 6px;
+    }
+    .conversation-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      margin-bottom: 3px;
+    }
+    .conversation-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .conversation-item.active {
+      background: rgba(30, 111, 255, 0.22);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .conversation-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .conversation-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3px;
+    }
+    .conversation-nick {
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .conversation-time {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+    .conversation-snippet {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .conversation-item.active .conversation-snippet {
+      color: #bae6fd;
+    }
+
+    /* Sidebar Alt Bölüm (My Profile Bar) */
+    .sidebar-footer {
+      padding: 14px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8, 14, 29, 0.7);
+    }
+    .current-user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .current-user-text {
+      line-height: 1.25;
+      overflow: hidden;
+    }
+    .current-user-nickname {
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .current-user-email {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .btn-logout {
+      color: var(--text-dim);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover {
+      color: var(--danger);
+      background: rgba(239, 68, 68, 0.12);
+    }
+
+    /* =========================================================
+       SAĞ PANEL (CHAT ALANI)
+       ========================================================= */
+    .chat-area {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: radial-gradient(circle at 80% 20%, rgba(14, 34, 77, 0.35) 0%, transparent 60%);
+      position: relative;
+    }
+
+    /* Boş Durum (Hiç Sohbet Seçili Değilken) */
+    .empty-chat-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+      color: var(--text-muted);
+    }
+    .empty-chat-state.hidden {
+      display: none;
+    }
+    .empty-illustration {
+      width: 88px;
+      height: 88px;
+      border-radius: 28px;
+      background: rgba(30, 111, 255, 0.1);
+      border: 1px dashed rgba(56, 189, 248, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-secondary);
+      margin-bottom: 20px;
+      box-shadow: 0 0 40px rgba(0, 210, 255, 0.15);
+    }
+    .empty-chat-state h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .empty-chat-state p {
+      max-width: 360px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .search-suggestion-btn {
+      margin-top: 20px;
+      background: var(--accent-gradient);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0, 210, 255, 0.35);
+      transition: all 0.2s;
+    }
+    .search-suggestion-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Aktif Sohbet Paneli */
+    .active-chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+    }
+    .active-chat-container.hidden {
+      display: none;
+    }
+
+    /* Sohbet Başlığı */
+    .chat-header {
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--border-glass);
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+    .chat-target-user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chat-target-details h4 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .chat-target-status {
+      font-size: 0.78rem;
+      color: var(--accent-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--status-online);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--status-online);
+    }
+    .btn-mobile-back {
+      display: none;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      margin-right: 6px;
+    }
+
+    /* Mesajlar Listesi */
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .message-row {
+      display: flex;
+      gap: 10px;
+      max-width: 75%;
+      animation: messageSlideIn 0.25s ease;
+    }
+    @keyframes messageSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .message-row.me {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+    .message-row.friend {
+      align-self: flex-start;
+    }
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      object-fit: cover;
+      flex-shrink: 0;
+      align-self: flex-end;
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+    }
+    .message-bubble-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+    .message-bubble {
+      padding: 12px 18px;
+      border-radius: 18px;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      word-break: break-word;
+      position: relative;
+    }
+    .message-row.me .message-bubble {
+      background: var(--bubble-me);
+      color: #ffffff;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0, 114, 255, 0.35);
+    }
+    .message-row.friend .message-bubble {
+      background: var(--bubble-friend);
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom-left-radius: 4px;
+      backdrop-filter: blur(10px);
+    }
+    .message-meta {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .message-row.me .message-meta {
+      justify-content: flex-end;
+      color: #93c5fd;
+    }
+    .message-row.friend .message-meta {
+      justify-content: flex-start;
+    }
+
+    /* Mesaj Yazma Alanı */
+    .chat-input-area {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-glass);
+      background: var(--bg-glass);
+      backdrop-filter: blur(18px);
+    }
+    .input-form {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-surface-elevated);
+      border: 1.5px solid rgba(56, 189, 248, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 6px 8px 6px 18px;
+      transition: all 0.2s;
+    }
+    .input-form:focus-within {
+      border-color: var(--accent-secondary);
+      box-shadow: 0 0 20px rgba(0, 210, 255, 0.25);
+    }
+    .input-form input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: var(--font-body);
+      outline: none;
+    }
+    .input-form input::placeholder {
+      color: var(--text-dim);
+    }
+    .emoji-pill-container {
+      display: flex;
+      gap: 4px;
+    }
+    .btn-quick-emoji {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      transition: transform 0.15s;
+    }
+    .btn-quick-emoji:hover {
+      transform: scale(1.25);
+    }
+    .btn-send {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: var(--accent-gradient);
+      border: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 210, 255, 0.4);
+      transition: all 0.2s;
+    }
+    .btn-send:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 210, 255, 0.6);
+    }
+    .btn-send:active {
+      transform: scale(0.96);
+    }
+    .btn-send svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Bildirim Toast */
+    .toast-notice {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: rgba(12, 22, 45, 0.95);
+      border: 1px solid var(--accent-secondary);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), var(--accent-glow);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      animation: fadeIn 0.3s ease;
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .toast-notice.hidden {
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Scrollbar Tasarımı */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.2);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(56, 189, 248, 0.4);
+    }
+
+    /* Mobil Duyarlılık */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+      .sidebar.mobile-hidden {
+        transform: translateX(-100%);
+      }
+      .btn-mobile-back {
+        display: block;
+      }
+      .chat-area {
+        width: 100%;
+      }
+      .message-row {
+        max-width: 88%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Arka Plan Mavi Küreleri -->
+  <div class="ambient-glow ambient-1"></div>
+  <div class="ambient-glow ambient-2"></div>
+
+  <!-- Toast Bildirim -->
+  <div id="toast" class="toast-notice hidden">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-secondary)">
+      <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <span id="toastMessage">Bildirim mesajı</span>
+  </div>
+
+  <div id="app">
+    <!-- =========================================================
+         1. GİRİŞ EKRANI (GOOGLE AUTH)
+         ========================================================= -->
+    <div id="authScreen" class="auth-container">
+      <div class="auth-card">
+        <div class="brand-logo">
+          <!-- Flow Dalga İkonu -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 12c3-4 6-4 9 0s6 4 9 0 3-4 3-4"></path>
+            <path d="M2 17c3-3 6-3 9 0s6 3 9 0"></path>
+          </svg>
+        </div>
+        <h1>Flow</h1>
+        <p class="subtitle">Akıcı, modern ve mavi temalı anlık sohbet deneyimi. Google ile hemen bağlanın.</p>
+
+        <button id="btnGoogleLogin" class="btn-google">
+          <!-- Google Resmi SVG Logosu -->
+          <svg viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          Google ile Giriş Yap
+        </button>
+
+        <div class="auth-features">
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Özel Nickname</span>
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <span>Kullanıcı Ara</span>
+          </div>
+          <div class="feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>Anlık DM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         2. NICKNAME BELİRLEME MODALI
+         ========================================================= -->
+    <div id="nicknameModal" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <h2>Kullanıcı Adı Belirle</h2>
+        <p>Arkadaşlarının seni kolayca bulup mesaj atabilmesi için benzersiz bir nickname seç.</p>
+        
+        <div class="input-group">
+          <span class="input-prefix">@</span>
+          <input type="text" id="nicknameInput" placeholder="ornek: ekrem" maxlength="20" autocomplete="off">
+        </div>
+        <div class="helper-text">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          Sadece harf, rakam ve alt çizgi (_) içerebilir (3-20 karakter).
+        </div>
+
+        <button id="btnSaveNickname" class="btn-primary">
+          <span>Flow'a Başla</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- =========================================================
+         3. ANA SOHBET UYGULAMASI (FLOW MAIN UI)
+         ========================================================= -->
+    <div class="app-layout">
+      <!-- SOL PANEL: SOHBETLER & ARAMA -->
+      <aside id="sidebar" class="sidebar">
+        <!-- Marka & Header -->
+        <div class="sidebar-header">
+          <div class="sidebar-brand">
+            <div class="sidebar-logo-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12c3-4 6-4 9 0s6 4 9 0 3-4 3-4"></path>
+                <path d="M2 17c3-3 6-3 9 0s6 3 9 0"></path>
+              </svg>
+            </div>
+            <span class="sidebar-brand-name">Flow</span>
+            <span class="sidebar-brand-badge">PRO</span>
+          </div>
+        </div>
+
+        <!-- Nickname Arama Kutusu -->
+        <div class="search-box-container">
+          <div class="search-input-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="userSearchInput" placeholder="Kullanıcı adı ara (örn: ekrem)..." autocomplete="off">
+            <button id="btnClearSearch" class="btn-clear-search">✕</button>
+          </div>
+
+          <!-- Arama Sonuç Açılır Listesi -->
+          <div id="searchResultsPanel" class="search-results-panel">
+            <div class="search-results-header">Arama Sonuçları</div>
+            <div id="searchResultsList"></div>
+          </div>
+        </div>
+
+        <!-- Sohbetler Listesi -->
+        <div class="conversations-section">
+          <div class="section-title">Mesajlar & DM'ler</div>
+          <div id="conversationsList">
+            <div style="padding: 24px; text-align: center; color: var(--text-dim); font-size: 0.85rem;">
+              Henüz bir sohbet yok.<br>Yukarıdan bir kullanıcı aratıp DM başlatabilirsiniz.
+            </div>
+          </div>
+        </div>
+
+        <!-- Alt Bölüm: Profil & Çıkış -->
+        <div class="sidebar-footer">
+          <div class="current-user-info">
+            <div class="avatar-wrapper">
+              <img id="myAvatar" class="avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar">
+              <span class="status-dot"></span>
+            </div>
+            <div class="current-user-text">
+              <div id="myNickname" class="current-user-nickname">@kullanici</div>
+              <div id="myEmail" class="current-user-email">email@gmail.com</div>
+            </div>
+          </div>
+          <button id="btnLogout" class="btn-logout" title="Çıkış Yap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- SAĞ PANEL: SOHBET PENCERESİ -->
+      <main class="chat-area">
+        <!-- Boş Durum (Sohbet Seçilmediğinde) -->
+        <div id="emptyChatState" class="empty-chat-state">
+          <div class="empty-illustration">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <h3>Sohbete Başla</h3>
+          <p>Sol taraftaki arama çubuğuna arkadaşının kullanıcı adını (örneğin: <strong>ekrem</strong>) yazarak doğrudan özel mesaj (DM) başlatabilirsin.</p>
+          <button class="search-suggestion-btn" onclick="document.getElementById('userSearchInput').focus()">Arkadaşını Ara</button>
+        </div>
+
+        <!-- Aktif Sohbet Paneli -->
+        <div id="activeChatContainer" class="active-chat-container hidden">
+          <!-- Başlık -->
+          <div class="chat-header">
+            <div class="chat-target-user">
+              <button id="btnMobileBack" class="btn-mobile-back" title="Geri">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <div class="avatar-wrapper">
+                <img id="targetUserAvatar" class="avatar-img" src="" alt="Avatar">
+                <span class="status-dot"></span>
+              </div>
+              <div class="chat-target-details">
+                <h4 id="targetUserNickname">@arkadas</h4>
+                <div class="chat-target-status">
+                  <span class="pulse-dot"></span>
+                  <span id="targetUserStatus">Çevrimiçi (DM)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mesaj Akışı -->
+          <div id="messagesContainer" class="messages-container">
+            <!-- Dinamik Mesajlar -->
+          </div>
+
+          <!-- Mesaj Gönderme Çubuğu -->
+          <div class="chat-input-area">
+            <form id="messageForm" class="input-form">
+              <input type="text" id="messageInput" placeholder="Bir mesaj yazın..." autocomplete="off">
+              <div class="emoji-pill-container">
+                <button type="button" class="btn-quick-emoji" data-emoji="👍">👍</button>
+                <button type="button" class="btn-quick-emoji" data-emoji="🔥">🔥</button>
+                <button type="button" class="btn-quick-emoji" data-emoji="❤️">❤️</button>
+              </div>
+              <button type="submit" class="btn-send" title="Gönder">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       FIREBASE 10 MODULAR SDK & UYGULAMA MANTIĞI
+       ========================================================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithPopup, 
+      GoogleAuthProvider, 
+      signOut, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      doc, 
+      getDoc, 
+      setDoc, 
+      collection, 
+      query, 
+      where, 
+      orderBy, 
+      limit, 
+      onSnapshot, 
+      addDoc, 
+      serverTimestamp, 
+      getDocs 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // 1. Kullanıcının sağladığı Firebase Ayarları
+    const firebaseConfig = {
+      apiKey: "AIzaSyCahsCXVjAJ-Qx-tHcxDX9xiCdqd4GOv-4",
+      authDomain: "zhbsbzvv-6f910.firebaseapp.com",
+      projectId: "zhbsbzvv-6f910",
+      storageBucket: "zhbsbzvv-6f910.firebasestorage.app",
+      messagingSenderId: "1050863909513",
+      appId: "1:1050863909513:web:5c149cedd80a77758c6458",
+      measurementId: "G-7ZHJ34D9X4"
+    };
+
+    // Firebase Servislerini Başlat
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    // Uygulama Durumu (State)
+    let currentUser = null;
+    let currentUserProfile = null;
+    let activeChatId = null;
+    let activeTargetUser = null;
+    let unsubscribeMessages = null;
+    let unsubscribeConversations = null;
+
+    // DOM Elemanları
+    const authScreen = document.getElementById('authScreen');
+    const nicknameModal = document.getElementById('nicknameModal');
+    const btnGoogleLogin = document.getElementById('btnGoogleLogin');
+    const nicknameInput = document.getElementById('nicknameInput');
+    const btnSaveNickname = document.getElementById('btnSaveNickname');
+    const myAvatar = document.getElementById('myAvatar');
+    const myNickname = document.getElementById('myNickname');
+    const myEmail = document.getElementById('myEmail');
+    const btnLogout = document.getElementById('btnLogout');
+    const userSearchInput = document.getElementById('userSearchInput');
+    const btnClearSearch = document.getElementById('btnClearSearch');
+    const searchResultsPanel = document.getElementById('searchResultsPanel');
+    const searchResultsList = document.getElementById('searchResultsList');
+    const conversationsList = document.getElementById('conversationsList');
+    const emptyChatState = document.getElementById('emptyChatState');
+    const activeChatContainer = document.getElementById('activeChatContainer');
+    const targetUserAvatar = document.getElementById('targetUserAvatar');
+    const targetUserNickname = document.getElementById('targetUserNickname');
+    const messagesContainer = document.getElementById('messagesContainer');
+    const messageForm = document.getElementById('messageForm');
+    const messageInput = document.getElementById('messageInput');
+    const btnMobileBack = document.getElementById('btnMobileBack');
+    const sidebar = document.getElementById('sidebar');
+
+    // Ses Efektleri (Web Audio API ile harici dosya gerektirmez)
+    function playTone(freq = 600, type = 'sine', duration = 0.1) {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Tarayıcı otomatik ses politikasını tolere et
+      }
+    }
+
+    // Bildirim Toast Mesajı
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      toastMessage.textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3500);
+    }
+
+    // =========================================================
+    // GOOGLE AUTHENTICATION
+    // =========================================================
+    btnGoogleLogin.addEventListener('click', async () => {
+      try {
+        btnGoogleLogin.style.opacity = '0.7';
+        btnGoogleLogin.disabled = true;
+        const result = await signInWithPopup(auth, googleProvider);
+        showToast("Google girişi başarılı!");
+      } catch (error) {
+        console.error("Giriş Hatası:", error);
+        showToast("Giriş yapılamadı: " + (error.message || "Lütfen tekrar deneyin"));
+      } finally {
+        btnGoogleLogin.style.opacity = '1';
+        btnGoogleLogin.disabled = false;
+      }
+    });
+
+    btnLogout.addEventListener('click', async () => {
+      try {
+        if (unsubscribeMessages) unsubscribeMessages();
+        if (unsubscribeConversations) unsubscribeConversations();
+        await signOut(auth);
+        currentUser = null;
+        currentUserProfile = null;
+        activeChatId = null;
+        activeTargetUser = null;
+        showToast("Başarıyla çıkış yapıldı.");
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    // Oturum Durumu Değişikliğini Dinle
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        authScreen.classList.add('hidden');
+        await checkUserProfile(user);
+      } else {
+        currentUser = null;
+        currentUserProfile = null;
+        authScreen.classList.remove('hidden');
+        nicknameModal.classList.add('hidden');
+      }
+    });
+
+    // =========================================================
+    // NICKNAME KONTROLÜ VE KAYDI
+    // =========================================================
+    async function checkUserProfile(user) {
+      try {
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists() && userDocSnap.data().nickname) {
+          // Kullanıcının nickname'i var, profili yükle
+          currentUserProfile = userDocSnap.data();
+          renderCurrentUserUI();
+          listenToConversations();
+        } else {
+          // Nickname henüz yok -> Nickname modalını aç
+          nicknameModal.classList.remove('hidden');
+          // Varsayılan öneri (isimden türetilmiş)
+          if (user.displayName) {
+            const suggested = user.displayName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            nicknameInput.value = suggested.slice(0, 15);
+          }
+          nicknameInput.focus();
+        }
+      } catch (error) {
+        console.error("Profil Okuma Hatası:", error);
+        showToast("Profil yüklenirken bir sorun oluştu.");
+      }
+    }
+
+    // Nickname Kaydet Butonu
+    btnSaveNickname.addEventListener('click', async () => {
+      const rawNickname = nicknameInput.value.trim();
+      const cleanNick = rawNickname.replace('@', '').toLowerCase();
+
+      // Doğrulama kuralları
+      if (!cleanNick || cleanNick.length < 3 || cleanNick.length > 20) {
+        showToast("Nickname 3 ile 20 karakter arasında olmalıdır!");
+        return;
+      }
+      if (!/^[a-zA-Z0-9_]+$/.test(cleanNick)) {
+        showToast("Nickname yalnızca harf, rakam ve alt çizgi (_) içerebilir!");
+        return;
+      }
+
+      btnSaveNickname.disabled = true;
+      btnSaveNickname.textContent = "Kontrol ediliyor...";
+
+      try {
+        // 1. Nickname benzersizlik (uniqueness) kontrolü
+        const q = query(collection(db, 'users'), where('nickname_lower', '==', cleanNick));
+        const snap = await getDocs(q);
+
+        const isTakenByOther = snap.docs.some(d => d.id !== currentUser.uid);
+        if (isTakenByOther) {
+          showToast(`@${cleanNick} nickname'i maalesef alınmış. Farklı bir tane seçin!`);
+          btnSaveNickname.disabled = false;
+          btnSaveNickname.textContent = "Flow'a Başla";
+          return;
+        }
+
+        // 2. Firebase Firestore'a Kaydet
+        const userDocRef = doc(db, 'users', currentUser.uid);
+        const newProfile = {
+          uid: currentUser.uid,
+          displayName: currentUser.displayName || cleanNick,
+          email: currentUser.email || '',
+          photoURL: currentUser.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${cleanNick}`,
+          nickname: cleanNick,
+          nickname_lower: cleanNick,
+          createdAt: serverTimestamp(),
+          lastSeen: serverTimestamp(),
+          status: 'online'
+        };
+
+        await setDoc(userDocRef, newProfile, { merge: true });
+        currentUserProfile = newProfile;
+        
+        playTone(800, 'sine', 0.2);
+        nicknameModal.classList.add('hidden');
+        renderCurrentUserUI();
+        listenToConversations();
+        showToast(`Hoş geldin @${cleanNick}! Artık sohbet edebilirsin.`);
+      } catch (err) {
+        console.error("Nickname Kaydetme Hatası:", err);
+        showToast("Kayıt sırasında hata: " + err.message);
+      } finally {
+        btnSaveNickname.disabled = false;
+        btnSaveNickname.textContent = "Flow'a Başla";
+      }
+    });
+
+    function renderCurrentUserUI() {
+      if (!currentUserProfile) return;
+      myNickname.textContent = '@' + currentUserProfile.nickname;
+      myEmail.textContent = currentUserProfile.email || currentUserProfile.displayName;
+      if (currentUserProfile.photoURL) {
+        myAvatar.src = currentUserProfile.photoURL;
+      }
+    }
+
+    // =========================================================
+    // NICKNAME ARAMA (ÖRN: EKREM)
+    // =========================================================
+    let searchTimeout = null;
+    userSearchInput.addEventListener('input', (e) => {
+      const term = e.target.value.trim();
+      btnClearSearch.classList.toggle('visible', term.length > 0);
+      
+      clearTimeout(searchTimeout);
+      if (!term) {
+        searchResultsPanel.classList.remove('open');
+        return;
+      }
+
+      searchTimeout = setTimeout(() => {
+        executeUserSearch(term.toLowerCase());
+      }, 250);
+    });
+
+    btnClearSearch.addEventListener('click', () => {
+      userSearchInput.value = '';
+      btnClearSearch.classList.remove('visible');
+      searchResultsPanel.classList.remove('open');
+    });
+
+    async function executeUserSearch(term) {
+      try {
+        // Firestore'da nickname_lower prefix araması
+        const q = query(
+          collection(db, 'users'),
+          where('nickname_lower', '>=', term),
+          where('nickname_lower', '<=', term + '\uf8ff'),
+          limit(8)
+        );
+
+        const snap = await getDocs(q);
+        searchResultsList.innerHTML = '';
+
+        const results = [];
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          // Kendimizi arama sonuçlarında göstermeyelim
+          if (data.uid !== currentUser.uid) {
+            results.push(data);
+          }
+        });
+
+        if (results.length === 0) {
+          searchResultsList.innerHTML = `
+            <div style="padding: 16px; text-align: center; color: var(--text-dim); font-size: 0.84rem;">
+              "@${term}" ile eşleşen kullanıcı bulunamadı.
+            </div>
+          `;
+        } else {
+          results.forEach(target => {
+            const card = document.createElement('div');
+            card.className = 'search-user-card';
+            card.innerHTML = `
+              <div class="search-user-info">
+                <img src="${target.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}" 
+                     class="avatar-img" style="width: 36px; height: 36px;" alt="${target.nickname}">
+                <div class="search-user-text">
+                  <div class="nick">@${target.nickname}</div>
+                  <div class="fullname">${target.displayName || ''}</div>
+                </div>
+              </div>
+              <button class="btn-dm-start">
+                <span>DM At</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            `;
+            card.addEventListener('click', () => {
+              openDirectMessage(target);
+              searchResultsPanel.classList.remove('open');
+              userSearchInput.value = '';
+              btnClearSearch.classList.remove('visible');
+            });
+            searchResultsList.appendChild(card);
+          });
+        }
+
+        searchResultsPanel.classList.add('open');
+      } catch (err) {
+        console.error("Arama Hatası:", err);
+      }
+    }
+
+    // Arama dışına tıklanınca paneli kapat
+    document.addEventListener('click', (e) => {
+      if (!userSearchInput.contains(e.target) && !searchResultsPanel.contains(e.target)) {
+        searchResultsPanel.classList.remove('open');
+      }
+    });
+
+    // =========================================================
+    // DİREKT MESAJ (DM) BAŞLATMA & SOHBET ID ÜRETİMİ
+    // =========================================================
+    function getDirectChatId(uid1, uid2) {
+      // İki kullanıcının uid'sini alfabetik sıralayarak tekil chatId üretir
+      return [uid1, uid2].sort().join('_');
+    }
+
+    window.openDirectMessage = async function(targetUser) {
+      if (!currentUserProfile) return;
+      activeTargetUser = targetUser;
+      activeChatId = getDirectChatId(currentUser.uid, targetUser.uid);
+
+      // Başlığı güncelle
+      targetUserNickname.textContent = '@' + targetUser.nickname;
+      targetUserAvatar.src = targetUser.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100';
+
+      // UI Geçişi
+      emptyChatState.classList.add('hidden');
+      activeChatContainer.classList.remove('hidden');
+
+      // Mobilde sohbet açılınca sidebar'ı gizle
+      if (window.innerWidth <= 768) {
+        sidebar.classList.add('mobile-hidden');
+      }
+
+      // Sohbet dökümanını hazırla / güncelle
+      try {
+        const chatDocRef = doc(db, 'chats', activeChatId);
+        await setDoc(chatDocRef, {
+          chatId: activeChatId,
+          participants: [currentUser.uid, targetUser.uid],
+          participantMeta: {
+            [currentUser.uid]: {
+              nickname: currentUserProfile.nickname,
+              displayName: currentUserProfile.displayName,
+              photoURL: currentUserProfile.photoURL
+            },
+            [targetUser.uid]: {
+              nickname: targetUser.nickname,
+              displayName: targetUser.displayName,
+              photoURL: targetUser.photoURL
+            }
+          },
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      } catch (e) {
+        console.warn("Chat meta güncellenirken:", e);
+      }
+
+      // Aktif sohbetteki mesajları dinlemeye başla
+      listenToActiveChatMessages(activeChatId);
+      messageInput.focus();
+    };
+
+    // Mobilde geri butonu
+    btnMobileBack.addEventListener('click', () => {
+      sidebar.classList.remove('mobile-hidden');
+    });
+
+    // =========================================================
+    // GERÇEK ZAMANLI MESAJLARI DİNLEME (onSnapshot)
+    // =========================================================
+    function listenToActiveChatMessages(chatId) {
+      if (unsubscribeMessages) {
+        unsubscribeMessages();
+      }
+
+      messagesContainer.innerHTML = `
+        <div style="padding: 20px; text-align: center; color: var(--text-dim); font-size: 0.85rem;">
+          Mesajlar yükleniyor...
+        </div>
+      `;
+
+      const msgQuery = query(
+        collection(db, 'chats', chatId, 'messages'),
+        orderBy('timestamp', 'asc'),
+        limit(100)
+      );
+
+      let initialLoad = true;
+      unsubscribeMessages = onSnapshot(msgQuery, (snapshot) => {
+        messagesContainer.innerHTML = '';
+
+        if (snapshot.empty) {
+          messagesContainer.innerHTML = `
+            <div style="padding: 30px; text-align: center; color: var(--text-dim); font-size: 0.9rem;">
+              👋 @${activeTargetUser.nickname} ile sohbeti ilk başlatan sen ol!
+            </div>
+          `;
+          return;
+        }
+
+        snapshot.forEach((docSnap) => {
+          const msg = docSnap.data();
+          const isMe = msg.senderId === currentUser.uid;
+
+          const row = document.createElement('div');
+          row.className = `message-row ${isMe ? 'me' : 'friend'}`;
+
+          let timeStr = '';
+          if (msg.timestamp && msg.timestamp.toDate) {
+            const date = msg.timestamp.toDate();
+            timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          }
+
+          row.innerHTML = `
+            <img src="${msg.senderPhoto || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}" class="message-avatar" alt="Avatar">
+            <div class="message-bubble-wrapper">
+              <div class="message-bubble">${escapeHtml(msg.text)}</div>
+              <div class="message-meta">
+                <span>${timeStr}</span>
+                ${isMe ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ''}
+              </div>
+            </div>
+          `;
+          messagesContainer.appendChild(row);
+        });
+
+        // En alta yumuşakça kaydır
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+        // Yeni gelen karşı taraf mesajı için ses çal (ilk açılış hariç)
+        if (!initialLoad) {
+          const lastChange = snapshot.docChanges().slice(-1)[0];
+          if (lastChange && lastChange.type === 'added') {
+            const data = lastChange.doc.data();
+            if (data.senderId !== currentUser.uid) {
+              playTone(880, 'sine', 0.15); // Gelen mesaj tonu
+            }
+          }
+        }
+        initialLoad = false;
+      }, (error) => {
+        console.error("Mesaj dinleme hatası:", error);
+        messagesContainer.innerHTML = `
+          <div style="padding: 20px; text-align: center; color: var(--danger); font-size: 0.85rem;">
+            Mesajlar yüklenemedi: Firestore kurallarınızı kontrol edin.
+          </div>
+        `;
+      });
+    }
+
+    // =========================================================
+    // MESAJ GÖNDERME
+    // =========================================================
+    messageForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = messageInput.value.trim();
+      if (!text || !activeChatId || !currentUserProfile) return;
+
+      messageInput.value = '';
+      playTone(480, 'triangle', 0.08); // Gönderme pıt sesi
+
+      try {
+        // 1. Alt koleksiyona mesajı ekle
+        await addDoc(collection(db, 'chats', activeChatId, 'messages'), {
+          senderId: currentUser.uid,
+          senderNickname: currentUserProfile.nickname,
+          senderPhoto: currentUserProfile.photoURL,
+          text: text,
+          timestamp: serverTimestamp()
+        });
+
+        // 2. Ana sohbet dökümanının son mesajını güncelle
+        await setDoc(doc(db, 'chats', activeChatId), {
+          lastMessage: text,
+          lastSenderId: currentUser.uid,
+          lastMessageTime: serverTimestamp()
+        }, { merge: true });
+
+      } catch (err) {
+        console.error("Mesaj gönderilemedi:", err);
+        showToast("Mesaj gönderilemedi: " + err.message);
+      }
+    });
+
+    // Hızlı Emojiler
+    document.querySelectorAll('.btn-quick-emoji').forEach(btn => {
+      btn.addEventListener('click', () => {
+        messageInput.value += btn.getAttribute('data-emoji');
+        messageInput.focus();
+      });
+    });
+
+    // =========================================================
+    // SOL PANEL: SOHBET LİSTESİNİ CANLI DİNLEME
+    // =========================================================
+    function listenToConversations() {
+      if (unsubscribeConversations) unsubscribeConversations();
+
+      const q = query(
+        collection(db, 'chats'),
+        where('participants', 'array-contains', currentUser.uid)
+      );
+
+      unsubscribeConversations = onSnapshot(q, (snapshot) => {
+        if (snapshot.empty) {
+          conversationsList.innerHTML = `
+            <div style="padding: 24px; text-align: center; color: var(--text-dim); font-size: 0.85rem;">
+              Henüz bir sohbet yok.<br>Yukarıdan bir kullanıcı aratıp DM başlatabilirsiniz.
+            </div>
+          `;
+          return;
+        }
+
+        conversationsList.innerHTML = '';
+        const chats = [];
+        snapshot.forEach(docSnap => {
+          chats.push({ id: docSnap.id, ...docSnap.data() });
+        });
+
+        // Zamana göre sırala (en yeni üstte)
+        chats.sort((a, b) => {
+          const tA = a.lastMessageTime?.seconds || 0;
+          const tB = b.lastMessageTime?.seconds || 0;
+          return tB - tA;
+        });
+
+        chats.forEach(chat => {
+          // Sohbet edilen diğer kişiyi bul
+          const otherUid = chat.participants.find(u => u !== currentUser.uid);
+          const otherMeta = chat.participantMeta?.[otherUid] || {
+            nickname: 'kullanici',
+            photoURL: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'
+          };
+
+          const item = document.createElement('div');
+          item.className = `conversation-item ${chat.id === activeChatId ? 'active' : ''}`;
+          
+          let timeText = '';
+          if (chat.lastMessageTime?.toDate) {
+            timeText = chat.lastMessageTime.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          }
+
+          item.innerHTML = `
+            <div class="avatar-wrapper">
+              <img src="${otherMeta.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'}" class="avatar-img" alt="${otherMeta.nickname}">
+              <span class="status-dot"></span>
+            </div>
+            <div class="conversation-info">
+              <div class="conversation-header-row">
+                <div class="conversation-nick">@${otherMeta.nickname}</div>
+                <div class="conversation-time">${timeText}</div>
+              </div>
+              <div class="conversation-snippet">${escapeHtml(chat.lastMessage || 'Sohbet başlatıldı')}</div>
+            </div>
+          `;
+
+          item.addEventListener('click', () => {
+            openDirectMessage({
+              uid: otherUid,
+              nickname: otherMeta.nickname,
+              displayName: otherMeta.displayName,
+              photoURL: otherMeta.photoURL
+            });
+          });
+
+          conversationsList.appendChild(item);
+        });
+      }, (err) => {
+        console.warn("Sohbetler listelenirken:", err);
+      });
+    }
+
+    // XSS Koruması
+    function escapeHtml(string) {
+      if (!string) return '';
+      const div = document.createElement('div');
+      div.textContent = string;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>
